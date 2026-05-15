@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chabila Borkar — Payments & eCommerce Specialist</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --paper: #f5f3ee;
+    --cream: #ede9e1;
+    --mid: #7a7670;
+    --accent: #1a3a5c;
+    --gold: #b8965a;
+    --rule: #d4cfc5;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; pointer-events: none; z-index: 999;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.25rem 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid transparent;
+    transition: background 0.3s, border-color 0.3s, backdrop-filter 0.3s;
+  }
+  nav.scrolled {
+    background: rgba(245,243,238,0.88);
+    backdrop-filter: blur(12px);
+    border-color: var(--rule);
+  }
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--mid);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 8rem 4rem 6rem 5rem;
+    position: relative; z-index: 2;
+  }
+  .hero-eyebrow {
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+    opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block;
+    width: 32px; height: 1px; background: var(--gold);
+  }
+  .hero-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 5vw, 4.5rem);
+    line-height: 1.05; letter-spacing: -0.01em;
+    color: var(--ink);
+    opacity: 0; animation: fadeUp 0.8s 0.35s forwards;
+  }
+  .hero-name em {
+    font-style: italic; color: var(--accent);
+  }
+  .hero-title {
+    font-size: 1rem; font-weight: 300; color: var(--mid);
+    margin-top: 1.25rem; max-width: 380px;
+    opacity: 0; animation: fadeUp 0.8s 0.5s forwards;
+  }
+  .hero-cta {
+    margin-top: 3rem; display: flex; gap: 1rem; align-items: center;
+    opacity: 0; animation: fadeUp 0.8s 0.65s forwards;
+  }
+  .btn-primary {
+    background: var(--accent); color: #fff;
+    padding: 0.85rem 2rem; border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
+    font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+    text-decoration: none; transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: #0f2840; transform: translateY(-1px); }
+  .btn-ghost {
+    color: var(--ink); font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    text-decoration: none; border-bottom: 1px solid var(--rule);
+    padding-bottom: 2px; transition: border-color 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--ink); }
+
+  .hero-right {
+    position: relative; overflow: hidden;
+    background: var(--accent);
+    display: flex; align-items: flex-end;
+  }
+  .hero-graphic {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 4rem 3.5rem;
+    opacity: 0; animation: fadeIn 1s 0.8s forwards;
+  }
+  .stat-list { list-style: none; }
+  .stat-item {
+    padding: 2rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    display: flex; gap: 1.5rem; align-items: flex-start;
+  }
+  .stat-item:first-child { padding-top: 0; border-top: 1px solid rgba(255,255,255,0.12); }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem; line-height: 1;
+    color: var(--gold); flex-shrink: 0;
+  }
+  .stat-label { color: rgba(255,255,255,0.7); font-size: 0.88rem; font-weight: 300; padding-top: 0.5rem; }
+  .stat-label strong { display: block; color: #fff; font-weight: 500; font-size: 1rem; margin-bottom: 0.2rem; }
+
+  .hero-tag {
+    position: absolute; bottom: 2.5rem; left: 3.5rem;
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(255,255,255,0.35);
+  }
+
+  /* ── SECTION BASE ── */
+  section { padding: 7rem 5rem; }
+  .section-label {
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .section-label::before {
+    content: ''; width: 28px; height: 1px; background: var(--gold);
+  }
+  .section-heading {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    line-height: 1.1; letter-spacing: -0.01em;
+    color: var(--ink); margin-bottom: 1rem;
+  }
+  .section-heading em { font-style: italic; color: var(--accent); }
+
+  /* ── ABOUT ── */
+  .about { background: var(--cream); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 6rem; align-items: start; margin-top: 4rem; }
+  .about-intro { font-size: 1.15rem; font-weight: 300; line-height: 1.75; color: var(--ink); }
+  .about-intro p + p { margin-top: 1.25rem; }
+  .about-details { display: flex; flex-direction: column; gap: 0.5rem; }
+  .detail-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 0.85rem 0; border-bottom: 1px solid var(--rule);
+    font-size: 0.9rem;
+  }
+  .detail-row:first-child { border-top: 1px solid var(--rule); }
+  .detail-key { color: var(--mid); font-weight: 500; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  .detail-val { color: var(--ink); text-align: right; }
+
+  /* ── EXPERTISE ── */
+  .expertise-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; background: var(--rule); margin-top: 4rem; }
+  .expertise-card {
+    background: var(--paper); padding: 2.5rem 2rem;
+    transition: background 0.2s;
+  }
+  .expertise-card:hover { background: var(--cream); }
+  .exp-icon {
+    font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 1.25rem;
+    border: 1px solid var(--gold); display: inline-block;
+    padding: 0.3rem 0.75rem;
+  }
+  .exp-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.35rem; margin-bottom: 1rem; color: var(--ink);
+  }
+  .exp-desc { font-size: 0.88rem; color: var(--mid); line-height: 1.7; }
+  .exp-tags { margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tag {
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.05em;
+    background: var(--cream); color: var(--mid);
+    padding: 0.25rem 0.65rem; border: 1px solid var(--rule);
+  }
+
+  /* ── EXPERIENCE ── */
+  .experience { background: var(--cream); }
+  .exp-timeline { margin-top: 4rem; }
+  .exp-entry {
+    display: grid; grid-template-columns: 200px 1fr;
+    gap: 3rem; padding: 3rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .exp-entry:first-child { border-top: 1px solid var(--rule); }
+  .exp-meta { }
+  .exp-date { font-size: 0.78rem; font-weight: 500; letter-spacing: 0.08em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.5rem; }
+  .exp-co { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--accent); }
+  .exp-content {}
+  .exp-role { font-size: 1.1rem; font-weight: 500; color: var(--ink); margin-bottom: 0.75rem; }
+  .exp-body { font-size: 0.9rem; color: var(--mid); line-height: 1.75; }
+  .exp-wins { margin-top: 1.25rem; display: flex; flex-wrap: wrap; gap: 0.65rem; }
+  .win-pill {
+    font-size: 0.8rem; font-weight: 500;
+    background: var(--accent); color: #fff;
+    padding: 0.3rem 0.85rem;
+  }
+
+  /* ── ACHIEVEMENTS ── */
+  .achievements-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--rule); margin-top: 4rem; }
+  .achievement-card {
+    background: var(--paper);
+    padding: 3rem 2.5rem;
+  }
+  .ach-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 4rem; line-height: 1; color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .ach-title { font-size: 1rem; font-weight: 500; color: var(--ink); margin-bottom: 0.5rem; }
+  .ach-desc { font-size: 0.85rem; color: var(--mid); line-height: 1.65; }
+
+  /* ── SKILLS ── */
+  .skills { background: var(--cream); }
+  .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--rule); margin-top: 4rem; }
+  .skill-group { background: var(--cream); padding: 2.5rem 2rem; }
+  .skill-group-title { font-size: 0.78rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem; }
+  .skill-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .skill-chip {
+    font-size: 0.82rem; color: var(--ink);
+    background: var(--paper); border: 1px solid var(--rule);
+    padding: 0.3rem 0.75rem; transition: border-color 0.2s, background 0.2s;
+  }
+  .skill-chip:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* ── CONTACT ── */
+  .contact {
+    background: var(--accent); color: #fff;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 6rem; align-items: center;
+  }
+  .contact .section-label { color: var(--gold); }
+  .contact .section-label::before { background: var(--gold); }
+  .contact .section-heading { color: #fff; }
+  .contact-tagline { color: rgba(255,255,255,0.65); font-weight: 300; font-size: 1.05rem; margin-top: 1rem; line-height: 1.7; }
+  .contact-links { display: flex; flex-direction: column; gap: 0; }
+  .contact-link {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.12);
+    text-decoration: none; color: #fff;
+    font-size: 0.95rem; transition: padding-left 0.2s;
+  }
+  .contact-link:first-child { border-top: 1px solid rgba(255,255,255,0.12); }
+  .contact-link:hover { padding-left: 0.5rem; }
+  .contact-link-label { color: rgba(255,255,255,0.45); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
+  .contact-arrow { font-size: 1.1rem; opacity: 0.4; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink); color: rgba(255,255,255,0.35);
+    padding: 2rem 5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.78rem;
+  }
+  footer a { color: rgba(255,255,255,0.35); text-decoration: none; }
+  footer a:hover { color: rgba(255,255,255,0.7); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-left { padding: 7rem 1.5rem 4rem; }
+    .hero-right { display: none; }
+    section { padding: 5rem 1.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .expertise-grid { grid-template-columns: 1fr; }
+    .exp-entry { grid-template-columns: 1fr; gap: 1rem; }
+    .achievements-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .contact { grid-template-columns: 1fr; gap: 3rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Chabila Borkar</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#expertise">Expertise</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-left">
+    <div class="hero-eyebrow">London, UK · Full UK Work Authorisation</div>
+    <h1 class="hero-name">
+      Chabila<br>
+      <em>Borkar</em>
+    </h1>
+    <p class="hero-title">
+      Payments &amp; eCommerce Specialist · 7+ years delivering digital transformation across order management, checkout, and payment ecosystems for global retail clients.
+    </p>
+    <div class="hero-cta">
+      <a href="#contact" class="btn-primary">Get in touch</a>
+      <a href="#experience" class="btn-ghost">View experience</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-graphic">
+      <ul class="stat-list">
+        <li class="stat-item">
+          <div class="stat-num">67%</div>
+          <div class="stat-label">
+            <strong>Operational effort reduced</strong>
+            Automated order processing workflows for a multi-region retail client
+          </div>
+        </li>
+        <li class="stat-item">
+          <div class="stat-num">40%</div>
+          <div class="stat-label">
+            <strong>Platform performance uplift</strong>
+            Delivered via 50+ optimised queries on high-traffic eCommerce systems
+          </div>
+        </li>
+        <li class="stat-item">
+          <div class="stat-num">25%</div>
+          <div class="stat-label">
+            <strong>Order accuracy improved</strong>
+            Through OMS validation and fulfilment process redesign
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="hero-tag">Selected achievements</div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="section-label">About me</div>
+  <h2 class="section-heading">Bridging <em>strategy</em><br>and execution</h2>
+  <div class="about-grid">
+    <div class="about-intro reveal">
+      <p>I'm a technology consultant with 7+ years of experience delivering large-scale digital transformation programmes across payments, eCommerce, and order management systems. I've worked at Accenture embedded in global retail clients, and at Infosys before that — always at the intersection of business strategy and engineering delivery.</p>
+      <p>My strength is translating complexity into clear, deliverable outcomes. Whether that's defining a product roadmap, owning a backlog, shaping requirements into user stories, or presenting data-driven recommendations to C-suite stakeholders — I work end-to-end, not just in one lane.</p>
+      <p>I'm currently based in London and open to Product Analyst, Product Manager, and Senior Business Analyst roles in payments, fintech, and eCommerce.</p>
+    </div>
+    <div class="about-details reveal reveal-delay-1">
+      <div class="detail-row">
+        <span class="detail-key">Location</span>
+        <span class="detail-val">London, UK</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key">Right to work</span>
+        <span class="detail-val">Full UK authorisation · No sponsorship needed</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key">Experience</span>
+        <span class="detail-val">7+ years</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key">Current employer</span>
+        <span class="detail-val">Accenture (client: H&amp;M / global retail)</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key">Target roles</span>
+        <span class="detail-val">Product Analyst · Product Manager · Senior BA</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key">Education</span>
+        <span class="detail-val">M.Tech Software Engineering, BITS Pilani</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key">Certifications</span>
+        <span class="detail-val">AWS · Azure AZ-900 · AI-900 · Linux</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key">Email</span>
+        <span class="detail-val"><a href="mailto:chabilaborkar@gmail.com" style="color:var(--accent)">chabilaborkar@gmail.com</a></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERTISE -->
+<section id="expertise">
+  <div class="section-label">What I do</div>
+  <h2 class="section-heading">Core <em>expertise</em></h2>
+  <div class="expertise-grid">
+    <div class="expertise-card reveal">
+      <div class="exp-icon">01</div>
+      <h3 class="exp-title">Payments &amp; eCommerce Delivery</h3>
+      <p class="exp-desc">End-to-end ownership of checkout, payment integration, and order lifecycle capabilities — from requirements definition through to live release. Deep familiarity with how payment flows work across acquiring, OMS, and fulfilment layers.</p>
+      <div class="exp-tags">
+        <span class="tag">Checkout flows</span>
+        <span class="tag">Payment architecture</span>
+        <span class="tag">Order-to-cash</span>
+        <span class="tag">OMS</span>
+        <span class="tag">SAP Commerce</span>
+      </div>
+    </div>
+    <div class="expertise-card reveal reveal-delay-1">
+      <div class="exp-icon">02</div>
+      <h3 class="exp-title">Product &amp; BA Leadership</h3>
+      <p class="exp-desc">Backlog ownership, acceptance criteria definition, sprint planning, and workshop facilitation across Agile cross-functional teams. Translating complex business needs into clear, development-ready requirements that engineering teams can actually build.</p>
+      <div class="exp-tags">
+        <span class="tag">Backlog management</span>
+        <span class="tag">User stories</span>
+        <span class="tag">BRD / FRD</span>
+        <span class="tag">UAT</span>
+        <span class="tag">Agile / Scrum</span>
+      </div>
+    </div>
+    <div class="expertise-card reveal reveal-delay-2">
+      <div class="exp-icon">03</div>
+      <h3 class="exp-title">Stakeholder &amp; Client Engagement</h3>
+      <p class="exp-desc">Comfortable at every level — from engineering stand-ups to C-suite steering committees. Experienced in pre-sales solutioning, executive communications, and facilitating client workshops that actually move things forward.</p>
+      <div class="exp-tags">
+        <span class="tag">Executive comms</span>
+        <span class="tag">Client workshops</span>
+        <span class="tag">Pre-sales</span>
+        <span class="tag">EMEA delivery</span>
+      </div>
+    </div>
+    <div class="expertise-card reveal">
+      <div class="exp-icon">04</div>
+      <h3 class="exp-title">Data &amp; Performance Analysis</h3>
+      <p class="exp-desc">Designing and maintaining performance reporting frameworks, identifying trends in transaction flows, and translating data into commercial recommendations. SQL query optimisation across high-traffic payment and eCommerce platforms.</p>
+      <div class="exp-tags">
+        <span class="tag">MI reporting</span>
+        <span class="tag">SQL</span>
+        <span class="tag">KPI frameworks</span>
+        <span class="tag">Dashboard design</span>
+        <span class="tag">Root cause analysis</span>
+      </div>
+    </div>
+    <div class="expertise-card reveal reveal-delay-1">
+      <div class="exp-icon">05</div>
+      <h3 class="exp-title">Programme Governance &amp; Risk</h3>
+      <p class="exp-desc">Designing governance structures, managing risk and dependency registers, supporting audit and compliance requirements, and reporting programme health to senior stakeholders across complex, multi-workstream EMEA delivery environments.</p>
+      <div class="exp-tags">
+        <span class="tag">Risk management</span>
+        <span class="tag">Governance</span>
+        <span class="tag">Compliance</span>
+        <span class="tag">Audit support</span>
+        <span class="tag">Delivery assurance</span>
+      </div>
+    </div>
+    <div class="expertise-card reveal reveal-delay-2">
+      <div class="exp-icon">06</div>
+      <h3 class="exp-title">Platform &amp; Systems Architecture</h3>
+      <p class="exp-desc">Solution architecture design for checkout, payments, and order processing across microservices and API-based platforms. Experienced with SAP Commerce Cloud, ERP integrations, and third-party payment and logistics connectors.</p>
+      <div class="exp-tags">
+        <span class="tag">SAP Commerce Cloud</span>
+        <span class="tag">Microservices</span>
+        <span class="tag">REST APIs</span>
+        <span class="tag">ERP integration</span>
+        <span class="tag">AWS · Azure</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="experience" id="experience">
+  <div class="section-label">Career</div>
+  <h2 class="section-heading">Where I've <em>worked</em></h2>
+  <div class="exp-timeline">
+    <div class="exp-entry reveal">
+      <div class="exp-meta">
+        <div class="exp-date">2022 – Present</div>
+        <div class="exp-co">Accenture</div>
+      </div>
+      <div class="exp-content">
+        <div class="exp-role">Business Analyst / Product &amp; Delivery Lead</div>
+        <div class="exp-body">
+          Embedded in cross-functional delivery teams for global retail clients — leading end-to-end product delivery for checkout, payments, and order lifecycle capabilities. Acting as the primary interface between client business stakeholders and engineering teams across OMS, ERP, and payment integrations. Owned backlog management, requirements artefacts, sprint ceremonies, and business readiness for product releases. Delivered programmes across Europe, US, and Asia.
+        </div>
+        <div class="exp-wins">
+          <span class="win-pill">67% effort reduction</span>
+          <span class="win-pill">25% order accuracy improvement</span>
+          <span class="win-pill">40% platform performance uplift</span>
+          <span class="win-pill">SAP Commerce Cloud</span>
+          <span class="win-pill">OMS · ERP · Payments</span>
+        </div>
+      </div>
+    </div>
+    <div class="exp-entry reveal">
+      <div class="exp-meta">
+        <div class="exp-date">2018 – 2022</div>
+        <div class="exp-co">Infosys</div>
+      </div>
+      <div class="exp-content">
+        <div class="exp-role">Senior Systems Engineer</div>
+        <div class="exp-body">
+          Delivered retail and eCommerce system implementations for global clients, building deep foundations in requirements analysis, system integration, and Agile delivery. Introduced structured BA practices that improved sprint velocity and delivery predictability. Supported third-party payment, logistics, and ERP integrations across live client environments.
+        </div>
+        <div class="exp-wins">
+          <span class="win-pill">20+ hrs/week automated</span>
+          <span class="win-pill">Payment integrations</span>
+          <span class="win-pill">Agile transformation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="section-label">Impact</div>
+  <h2 class="section-heading">Measurable <em>outcomes</em></h2>
+  <div class="achievements-grid">
+    <div class="achievement-card reveal">
+      <div class="ach-num">67%</div>
+      <div class="ach-title">Operational effort reduced</div>
+      <div class="ach-desc">Automated order processing workflows for a multi-region retail client, freeing 67% of manual operational overhead — directly improving cost-to-serve and capacity for higher-value work.</div>
+    </div>
+    <div class="achievement-card reveal reveal-delay-1">
+      <div class="ach-num">40%</div>
+      <div class="ach-title">Platform performance uplift</div>
+      <div class="ach-desc">Delivered 50+ SQL query optimisations on high-traffic eCommerce platforms, resulting in a 40% improvement in system performance and response times under peak load.</div>
+    </div>
+    <div class="achievement-card reveal reveal-delay-2">
+      <div class="ach-num">25%</div>
+      <div class="ach-title">Order accuracy improved</div>
+      <div class="ach-desc">Redesigned OMS validation and fulfilment logic through structured requirements analysis — improving order accuracy by 25% and reducing customer-facing errors across a global retail client.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="skills" id="skills">
+  <div class="section-label">Toolkit</div>
+  <h2 class="section-heading">Skills &amp; <em>technologies</em></h2>
+  <div class="skills-grid">
+    <div class="skill-group reveal">
+      <div class="skill-group-title">Payments &amp; Commerce</div>
+      <div class="skill-list">
+        <span class="skill-chip">SAP Commerce Cloud (Hybris)</span>
+        <span class="skill-chip">OMS</span>
+        <span class="skill-chip">Checkout flows</span>
+        <span class="skill-chip">Payment integrations</span>
+        <span class="skill-chip">Order-to-cash</span>
+        <span class="skill-chip">Omnichannel retail</span>
+        <span class="skill-chip">Carrier integrations</span>
+      </div>
+    </div>
+    <div class="skill-group reveal reveal-delay-1">
+      <div class="skill-group-title">Product &amp; BA</div>
+      <div class="skill-list">
+        <span class="skill-chip">Backlog management</span>
+        <span class="skill-chip">User stories</span>
+        <span class="skill-chip">Acceptance criteria</span>
+        <span class="skill-chip">BRD / FRD</span>
+        <span class="skill-chip">UAT</span>
+        <span class="skill-chip">Process mapping</span>
+        <span class="skill-chip">Requirements traceability</span>
+      </div>
+    </div>
+    <div class="skill-group reveal">
+      <div class="skill-group-title">Delivery &amp; Agile</div>
+      <div class="skill-list">
+        <span class="skill-chip">Agile / Scrum</span>
+        <span class="skill-chip">Jira</span>
+        <span class="skill-chip">Confluence</span>
+        <span class="skill-chip">Sprint planning</span>
+        <span class="skill-chip">Risk management</span>
+        <span class="skill-chip">Governance frameworks</span>
+      </div>
+    </div>
+    <div class="skill-group reveal reveal-delay-1">
+      <div class="skill-group-title">Technology</div>
+      <div class="skill-list">
+        <span class="skill-chip">REST APIs</span>
+        <span class="skill-chip">Microservices</span>
+        <span class="skill-chip">SQL</span>
+        <span class="skill-chip">AWS (Certified)</span>
+        <span class="skill-chip">Azure AZ-900</span>
+        <span class="skill-chip">Linux</span>
+        <span class="skill-chip">ERP integrations</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div>
+    <div class="section-label">Get in touch</div>
+    <h2 class="section-heading">Open to the <em>right</em> opportunity</h2>
+    <p class="contact-tagline">I'm actively looking for Product Analyst, Product Manager, and Senior BA roles in payments, fintech, and eCommerce in London. If you think there's a fit, I'd love to hear from you.</p>
+  </div>
+  <div class="contact-links reveal">
+    <a href="mailto:chabilaborkar@gmail.com" class="contact-link">
+      <div>
+        <div class="contact-link-label">Email</div>
+        chabilaborkar@gmail.com
+      </div>
+      <span class="contact-arrow">→</span>
+    </a>
+    <a href="tel:+447586488536" class="contact-link">
+      <div>
+        <div class="contact-link-label">Phone</div>
+        +44 (0)7586 488 536
+      </div>
+      <span class="contact-arrow">→</span>
+    </a>
+    <a href="https://www.linkedin.com/in/chabilaborkar" target="_blank" class="contact-link">
+      <div>
+        <div class="contact-link-label">LinkedIn</div>
+        linkedin.com/in/chabilaborkar
+      </div>
+      <span class="contact-arrow">→</span>
+    </a>
+    <a href="#top" class="contact-link">
+      <div>
+        <div class="contact-link-label">Based in</div>
+        London, UK · Full right to work · No sponsorship needed
+      </div>
+      <span class="contact-arrow">↑</span>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2025 Chabila Borkar</span>
+  <span>Payments &amp; eCommerce · London, UK</span>
+</footer>
+
+<script>
+  // Nav scroll effect
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
