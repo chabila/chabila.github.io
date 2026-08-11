@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI in Business Analysis — Payment Integration | Chabila Borkar</title>
+<meta name="description" content="A working guide to where AI actually helps across a payment integration lifecycle — from PSP discovery through go-live — written from hands-on BA experience, plus a build path in Microsoft Foundry.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12181f;
+    --paper:#eef0ea;
+    --paper-dim:#e2e5dd;
+    --line:#c7cbc0;
+    --green:#2f7a55;
+    --green-dim:#e4ede6;
+    --amber:#b3781f;
+    --amber-dim:#f3e6d2;
+    --ink-soft:#3a4552;
+    --rule: 1px solid var(--line);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--ink);color:var(--paper);font-family:'Inter',sans-serif;line-height:1.6;}
+  ::selection{background:var(--amber);color:var(--ink);}
+  a{color:inherit;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;opacity:0.75;}
+  h1,h2,h3{font-family:'Newsreader',serif;font-weight:500;margin:0;}
+
+  /* Breadcrumb back to main site */
+  .crumb{
+    padding:0.9rem 3rem;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.72rem;
+    color:#8992a0;
+    border-bottom:1px solid rgba(238,240,234,0.1);
+  }
+  @media (max-width:880px){.crumb{padding:0.8rem 1.4rem;}}
+  .crumb a{text-decoration:none;border-bottom:1px dotted #8992a0;}
+  .crumb a:hover{color:var(--paper);}
+
+  .shell{display:grid;grid-template-columns:280px 1fr;max-width:1180px;margin:0 auto;}
+  @media (max-width:880px){.shell{grid-template-columns:1fr;}}
+
+  .rail{position:sticky;top:0;align-self:start;height:100vh;padding:2.2rem 1.4rem;border-right:1px solid rgba(238,240,234,0.14);font-family:'IBM Plex Mono',monospace;display:flex;flex-direction:column;}
+  @media (max-width:880px){.rail{position:sticky;height:auto;top:0;z-index:40;background:var(--ink);border-right:none;border-bottom:1px solid rgba(238,240,234,0.14);padding:0.9rem 1.2rem;}}
+  .rail-head{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:#7d8794;margin-bottom:1.1rem;padding-bottom:1rem;border-bottom:1px dashed rgba(238,240,234,0.25);}
+  @media (max-width:880px){.rail-head{display:none;}}
+  .rail-title{color:var(--paper);font-size:0.75rem;letter-spacing:0.08em;margin-bottom:0.3rem;}
+  .stages{list-style:none;margin:0;padding:0;flex:1;}
+  @media (max-width:880px){.stages{display:flex;gap:0.4rem;overflow-x:auto;padding-bottom:0.2rem;}}
+  .stage{display:flex;align-items:baseline;gap:0.6rem;padding:0.55rem 0;font-size:0.78rem;color:#6c7684;border-bottom:1px dotted rgba(238,240,234,0.14);cursor:pointer;transition:color .3s ease;}
+  @media (max-width:880px){.stage{border-bottom:none;padding:0.4rem 0.6rem;white-space:nowrap;background:rgba(238,240,234,0.05);border-radius:3px;}}
+  .stage .n{opacity:0.55;}
+  .stage.active{color:var(--paper);}
+  .stage.active .dot{background:var(--green);box-shadow:0 0 0 3px rgba(47,122,85,.25);}
+  .dot{width:6px;height:6px;border-radius:50%;background:#4a5461;flex:none;}
+  .rail-foot{font-size:0.66rem;color:#5b6472;padding-top:1rem;border-top:1px dashed rgba(238,240,234,0.25);line-height:1.7;}
+  @media (max-width:880px){.rail-foot{display:none;}}
+
+  main{padding:0;}
+  .section{padding:4.5rem 3rem;border-bottom:1px solid rgba(238,240,234,0.1);}
+  @media (max-width:880px){.section{padding:3rem 1.4rem;}}
+
+  .hero{padding:3.2rem 3rem 3rem;}
+  @media (max-width:880px){.hero{padding:2rem 1.4rem 2rem;}}
+  .hero h1{font-size:clamp(2rem,4vw,3.2rem);line-height:1.1;max-width:15ch;font-style:italic;font-weight:500;}
+  .hero p.lede{max-width:56ch;margin-top:1.3rem;font-size:1.05rem;color:#c7cdd4;}
+  .byline{
+    margin-top:1.8rem;
+    display:flex;
+    align-items:center;
+    gap:0.7rem;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.75rem;
+    color:#9aa3ae;
+  }
+  .byline .name{color:var(--paper);font-family:'Inter',sans-serif;font-weight:600;font-size:0.85rem;}
+  .byline .sep{opacity:0.4;}
+
+  .intro-note{
+    margin-top:2.6rem;
+    padding:1.5rem 1.7rem;
+    border-left:2px solid var(--amber);
+    background:rgba(179,120,31,0.07);
+    max-width:60ch;
+    font-size:0.95rem;
+    color:#dfe1da;
+  }
+  .intro-note p{margin:0 0 0.7rem;}
+  .intro-note p:last-child{margin-bottom:0;}
+  .intro-note .who{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--amber);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.6rem;}
+
+  .panel{background:var(--paper);color:var(--ink);}
+  .panel .section{border-bottom:1px solid var(--line);}
+  .panel h2{color:var(--ink);}
+  .panel .eyebrow{color:var(--ink-soft);opacity:0.6;}
+
+  .section-head{margin-bottom:2.2rem;max-width:62ch;}
+  .section-head h2{font-size:1.85rem;font-style:italic;margin-top:0.5rem;}
+  .section-head p{margin-top:0.8rem;color:var(--ink-soft);}
+  body>main>.section.enh .section-head p, body>main>.section#foundry .section-head p{color:#b7bec7;}
+
+  .funnel-list{display:flex;flex-direction:column;border-top:var(--rule);}
+  .fstage{display:grid;grid-template-columns:100px 1fr 1fr;gap:1.6rem;padding:1.6rem 0;border-bottom:var(--rule);}
+  @media (max-width:720px){.fstage{grid-template-columns:1fr;gap:0.5rem;}}
+  .fstage .tag{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--ink-soft);letter-spacing:0.05em;}
+  .fstage h3{font-size:1.1rem;font-weight:600;font-family:'Inter',sans-serif;margin-bottom:0.35rem;}
+  .col-label{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:#8a9186;margin-bottom:0.4rem;}
+  .fstage p{margin:0;font-size:0.92rem;color:#333f2f;}
+  .fstage .ai-col p{color:#1f4d33;}
+
+  .aside{
+    margin-top:2.6rem;
+    max-width:62ch;
+    font-size:0.93rem;
+    color:#4a5749;
+    font-style:italic;
+    border-top:1px dashed var(--line);
+    padding-top:1.4rem;
+  }
+  .aside b{font-style:normal;font-weight:600;color:var(--ink);}
+
+  .foundations{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);margin-top:1.5rem;border:var(--rule);}
+  @media (max-width:720px){.foundations{grid-template-columns:1fr;}}
+  .fcard{background:var(--paper);padding:1.6rem;}
+  .fcard .num{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--green);}
+  .fcard h4{font-family:'Inter',sans-serif;font-size:1rem;font-weight:600;margin:0.5rem 0 0.4rem;}
+  .fcard p{margin:0;font-size:0.9rem;color:var(--ink-soft);}
+
+  .enh{background:var(--ink);}
+  .enh-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:2rem;}
+  @media (max-width:980px){.enh-grid{grid-template-columns:1fr;}}
+  .enh-card{border:1px solid rgba(238,240,234,0.16);padding:1.7rem 1.5rem;border-radius:2px;background:rgba(238,240,234,0.03);}
+  .enh-card .status{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.22rem 0.5rem;border-radius:2px;margin-bottom:1rem;}
+  .status.amber{background:var(--amber-dim);color:#7a5215;}
+  .status.green{background:var(--green-dim);color:#1f4d33;}
+  .enh-card h3{color:var(--paper);font-size:1.2rem;font-style:italic;margin-bottom:0.7rem;}
+  .enh-card p{color:#b7bec7;font-size:0.91rem;margin:0 0 0.9rem;}
+  .enh-card .maps-to{font-family:'IBM Plex Mono',monospace;font-size:0.67rem;color:#8992a0;border-top:1px dashed rgba(238,240,234,0.2);padding-top:0.8rem;}
+  .enh-card .maps-to b{color:var(--paper);font-weight:500;}
+
+  .steps{counter-reset:step;margin-top:2rem;display:flex;flex-direction:column;}
+  .step{display:grid;grid-template-columns:56px 1fr;gap:1.4rem;padding:1.5rem 0;border-top:1px solid rgba(238,240,234,0.12);}
+  .step:last-child{border-bottom:1px solid rgba(238,240,234,0.12);}
+  .step .idx{counter-increment:step;font-family:'IBM Plex Mono',monospace;color:var(--green);font-size:0.85rem;}
+  .step .idx::before{content:counter(step,decimal-leading-zero);}
+  .step h3{color:var(--paper);font-size:1.02rem;font-family:'Inter',sans-serif;font-weight:600;margin-bottom:0.4rem;}
+  .step p{margin:0;color:#b7bec7;font-size:0.91rem;max-width:65ch;}
+  .step code{font-family:'IBM Plex Mono',monospace;background:rgba(238,240,234,0.08);padding:0.1rem 0.35rem;border-radius:2px;font-size:0.85em;color:#dfe6ee;}
+
+  .signoff{
+    padding:3.2rem 3rem 1rem;
+    max-width:60ch;
+  }
+  @media (max-width:880px){.signoff{padding:2.4rem 1.4rem 1rem;}}
+  .signoff p{font-size:0.95rem;color:#c7cdd4;}
+  .signoff .sig{margin-top:1.4rem;font-family:'Newsreader',serif;font-style:italic;font-size:1.15rem;}
+
+  footer{padding:1.8rem 3rem 3.4rem;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:#6c7684;display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.8rem;}
+  @media (max-width:880px){footer{padding:1.6rem 1.4rem 2.4rem;}}
+  footer a{text-decoration:underline;text-underline-offset:3px;}
+</style>
+</head>
+<body>
+
+<div class="crumb"><a href="../../index.html">← chabila.github.io</a> &nbsp;/&nbsp; guides &nbsp;/&nbsp; payment integration</div>
+
+<div class="shell">
+  <nav class="rail" aria-label="Payment integration lifecycle">
+    <div class="rail-head">
+      <div class="rail-title">INTEGRATION LIFECYCLE</div>
+      GUIDE No. 002 — BA × AI
+    </div>
+    <ul class="stages" id="stageRail">
+      <li class="stage" data-target="discovery"><span class="dot"></span><span class="n">01</span> Discovery & PSP fit</li>
+      <li class="stage" data-target="mapping"><span class="dot"></span><span class="n">02</span> Contract & API mapping</li>
+      <li class="stage" data-target="sandbox"><span class="dot"></span><span class="n">03</span> Sandbox integration</li>
+      <li class="stage" data-target="certification"><span class="dot"></span><span class="n">04</span> Certification & compliance</li>
+      <li class="stage" data-target="golive"><span class="dot"></span><span class="n">05</span> Go-live & reconciliation</li>
+      <li class="stage" data-target="enhance"><span class="dot"></span><span class="n">06</span> Enhancements</li>
+      <li class="stage" data-target="foundry"><span class="dot"></span><span class="n">07</span> Build it</li>
+    </ul>
+    <div class="rail-foot">A living document — I update this as tooling changes.</div>
+  </nav>
+
+  <main>
+    <section class="hero" id="top">
+      <div class="eyebrow">Field notes from a payments BA</div>
+      <h1>Using AI in business analysis for payment integration</h1>
+      <p class="lede">Every PSP integration I've worked on has the same five phases, whether it's Adyen, Klarna, or a legacy gateway. This is where AI has actually saved me hours in each one — and where I still wouldn't let it near the keyboard unsupervised.</p>
+      <div class="byline">
+        <span class="name">Chabila Borkar</span><span class="sep">·</span>
+        <span>Senior Business Analyst, Payments & eCommerce</span>
+      </div>
+
+      <div class="intro-note">
+        <div class="who">A quick note before you dive in</div>
+        <p>I wrote this after one too many conversations where "just use AI for the BRD" turned into three days of untangling a spec that sounded confident and was wrong about half the field-level requirements. It's not a warning against using AI — it's the opposite. I use it constantly. It's a map of exactly where, so you skip the expensive mistakes I didn't.</p>
+        <p>If you've sat through a PSP certification call, you'll recognise most of this. If you haven't yet — welcome, it's a good kind of chaos.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section" id="discovery">
+        <div class="section-head">
+          <div class="eyebrow">Part 1 — Fundamentals</div>
+          <h2>The lifecycle doesn't change. Your leverage in it does.</h2>
+          <p>A payment integration is still discovery, contract mapping, sandbox, certification, go-live — in that order, no shortcuts. AI doesn't collapse the phases. It changes how much of each one is spent reading versus deciding.</p>
+        </div>
+
+        <div class="funnel-list">
+          <div class="fstage">
+            <div class="tag">01 · DISCOVERY & PSP FIT</div>
+            <div>
+              <div class="col-label">What I'm actually doing</div>
+              <h3>Scoping which PSP covers the markets and methods we need</h3>
+              <p>Comparing settlement currencies, supported local payment methods, and SCA/3DS handling against the markets in scope — usually across three or four vendor docs at once.</p>
+            </div>
+            <div class="ai-col">
+              <div class="col-label">Where AI earns its keep</div>
+              <p>Pulling method and market coverage out of long PSP capability docs into one comparison table I can sanity-check in ten minutes instead of an afternoon. I still open the source doc for anything going in a contract.</p>
+            </div>
+          </div>
+
+          <div class="fstage" id="mapping">
+            <div class="tag">02 · CONTRACT & API MAPPING</div>
+            <div>
+              <div class="col-label">What I'm actually doing</div>
+              <h3>Mapping our data model onto the PSP's API contract</h3>
+              <p>Field-by-field mapping between our order/customer schema and the PSP's request/response objects, flagging every mandatory field we don't currently capture.</p>
+            </div>
+            <div class="ai-col">
+              <div class="col-label">Where AI earns its keep</div>
+              <p>A first-pass mapping table from the API reference, done in minutes rather than a day of manual cross-referencing. It gets maybe 80% right — the remaining 20% is exactly the part that needs a human who's read the small print on optional-but-conditionally-required fields.</p>
+            </div>
+          </div>
+
+          <div class="fstage" id="sandbox">
+            <div class="tag">03 · SANDBOX INTEGRATION</div>
+            <div>
+              <div class="col-label">What I'm actually doing</div>
+              <h3>Running test transactions through every state</h3>
+              <p>Authorised, captured, declined, refunded, disputed — walking each path in sandbox and writing up what actually happened versus what the docs promised.</p>
+            </div>
+            <div class="ai-col">
+              <div class="col-label">Where AI earns its keep</div>
+              <p>Turning a stack of raw Postman responses into a readable test log with plain-English notes on anything that deviated from the expected state — the exact task I used to leave until the end of the day because it was tedious, not because it was hard.</p>
+            </div>
+          </div>
+
+          <div class="fstage" id="certification">
+            <div class="tag">04 · CERTIFICATION & COMPLIANCE</div>
+            <div>
+              <div class="col-label">What I'm actually doing</div>
+              <h3>Walking the PSP's certification checklist and our PCI-DSS scope</h3>
+              <p>Confirming every mandatory certification scenario is covered and that cardholder data handling stays within scope throughout the flow.</p>
+            </div>
+            <div class="ai-col">
+              <div class="col-label">Where AI earns its keep</div>
+              <p>Drafting the evidence write-up for each checklist item from our test logs. Sign-off itself stays entirely human — this is the one phase where I'd rather be slow and right than fast.</p>
+            </div>
+          </div>
+
+          <div class="fstage" id="golive">
+            <div class="tag">05 · GO-LIVE & RECONCILIATION</div>
+            <div>
+              <div class="col-label">What I'm actually doing</div>
+              <h3>Watching the first live transactions reconcile against the ledger</h3>
+              <p>Checking settlement files against internal order records, chasing down anything that doesn't tie out in the first few days live.</p>
+            </div>
+            <div class="ai-col">
+              <div class="col-label">Where AI earns its keep</div>
+              <p>Flagging reconciliation mismatches worth a closer look across thousands of rows, so I'm investigating five real discrepancies instead of scrolling a spreadsheet looking for them.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="aside">
+          None of the above replaces knowing the domain. The mapping AI drafts is only checkable because I know what a mandatory 3DS field looks like. <b>Treat the output as a very fast junior analyst's first draft — helpful, occasionally confidently wrong, always reviewed.</b>
+        </div>
+
+        <div class="section-head" style="margin-top:3.2rem;">
+          <div class="eyebrow">Before you touch a model</div>
+          <h2>What I'd tell someone starting this from scratch</h2>
+        </div>
+        <div class="foundations">
+          <div class="fcard">
+            <div class="num">01</div>
+            <h4>A good prompt is a scoped requirement</h4>
+            <p>If you can't write the acceptance criteria, you can't write the prompt. Same skill, different output format.</p>
+          </div>
+          <div class="fcard">
+            <div class="num">02</div>
+            <h4>PAN and cardholder data don't go in casually</h4>
+            <p>Anything touching PCI-DSS scope needs the same handling rigour whether it's going through a model or a spreadsheet macro. Redact or tokenise before it leaves your system.</p>
+          </div>
+          <div class="fcard">
+            <div class="num">03</div>
+            <h4>PSP docs change under you</h4>
+            <p>API versions and field requirements get deprecated. A model's training data goes stale the moment the PSP ships a changelog — always check the doc date.</p>
+          </div>
+          <div class="fcard">
+            <div class="num">04</div>
+            <h4>You're still the one who signs off</h4>
+            <p>Certification evidence, mapping sign-off, go-live approval — these carry your name. AI drafts the paragraph; you're accountable for the sentence.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section enh" id="enhance">
+      <div class="section-head">
+        <div class="eyebrow">Part 2 — Enhancements</div>
+        <h2>Once the basics are solid, these are worth the setup time</h2>
+        <p>Three techniques that solve specific problems with "just ask the chatbot" once you're doing this at scale — not because they're fashionable, but because each closes a real gap I've hit personally.</p>
+      </div>
+
+      <div class="enh-grid">
+        <div class="enh-card">
+          <span class="status green">Grounding</span>
+          <h3>Retrieval-Augmented Generation</h3>
+          <p>Point the model at your actual PSP API docs, your own past mapping sheets, and prior certification write-ups, and have it answer from those instead of guessing from general training. The difference between "the model assumes a generic 3DS flow" and "the model quotes your PSP's actual mandatory field list from the doc you fed it."</p>
+          <div class="maps-to">Maps to: <b>Contract & API mapping</b> — draft mappings grounded in the current API version, not a remembered one.</div>
+        </div>
+        <div class="enh-card">
+          <span class="status amber">Control</span>
+          <h3>Human-in-the-loop</h3>
+          <p>Certification evidence and go-live sign-off are exactly the checkpoints where an unreviewed AI suggestion could mean a compliance gap or a mis-mapped mandatory field going live. HITL means the workflow pauses and waits for a named reviewer at those points — not everywhere, just where it actually matters.</p>
+          <div class="maps-to">Maps to: <b>Certification & go-live</b> — the two phases where "mostly right" isn't good enough.</div>
+        </div>
+        <div class="enh-card">
+          <span class="status green">Connection</span>
+          <h3>MCP servers</h3>
+          <p>Model Context Protocol gives an AI assistant live, permissioned access to your own systems — a ticketing tool, an internal API catalog, a reconciliation database — instead of you exporting a CSV every time you need current data. It queries the real thing, scoped to your access.</p>
+          <div class="maps-to">Maps to: <b>Sandbox testing & reconciliation</b> — live transaction states pulled on demand instead of stale exports.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="foundry">
+      <div class="section-head">
+        <div class="eyebrow">Part 3 — Hands-on</div>
+        <h2>Building this in Microsoft Foundry</h2>
+        <p>This is the sequence I'd actually follow to wire up the three pieces above as one working assistant, rather than three separate demos. Microsoft Foundry (formerly Azure AI Foundry) is where I'd build it, current as of 2026.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="idx"></div>
+          <div>
+            <h3>Create a Foundry project and connect your source docs</h3>
+            <p>Stand up a project, then connect your PSP API references, past mapping sheets, and certification write-ups — via Azure Blob Storage or a data connection — ready to be indexed.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="idx"></div>
+          <div>
+            <h3>Deploy a model from the catalog</h3>
+            <p>Pick a model (e.g. <code>gpt-4o</code>) from the Foundry model catalog as your reasoning engine — swappable later without rebuilding anything else.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="idx"></div>
+          <div>
+            <h3>Ground it against your own docs (RAG)</h3>
+            <p>Index the PSP references and past write-ups with Azure AI Search, add it to your agent as a knowledge source, so mapping suggestions come back with citations to the actual source doc.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="idx"></div>
+          <div>
+            <h3>Attach live systems via MCP</h3>
+            <p>From the Foundry portal's Tools menu, add an MCP server connection — a catalog server for your ticketing/DevOps tool, or a custom one exposing read access to your reconciliation data.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="idx"></div>
+          <div>
+            <h3>Add a human-approval checkpoint</h3>
+            <p>Flag certification evidence and go-live actions as requiring approval. The workflow pauses on a <code>function_approval_request</code> and only proceeds once a named reviewer signs off.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="idx"></div>
+          <div>
+            <h3>Orchestrate it as a workflow, not a one-shot prompt</h3>
+            <p>Use Foundry's workflow builder to chain retrieval → draft mapping → human review as a repeatable process you can reuse on the next PSP integration.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="idx"></div>
+          <div>
+            <h3>Evaluate before you trust it, then monitor</h3>
+            <p>Run Foundry's built-in groundedness and relevance evaluations before rollout, then use tracing and Application Insights to see what it's actually doing once it's live.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="signoff">
+      <p>If you've got a payment integration coming up and want to compare notes on where this held up in practice versus where it didn't — I'm always up for that conversation.</p>
+      <div class="sig">— Chabila</div>
+    </div>
+
+    <footer>
+      <div>Guide No. 002 in an ongoing series. Guide No. 001 covers <a href="../ai-checkout-funnel/index.html">the checkout funnel</a>.</div>
+      <div><a href="#top">Back to top ↑</a></div>
+    </footer>
+  </main>
+</div>
+
+<script>
+  const stages = document.querySelectorAll('.stage');
+  const targets = Array.from(stages).map(s => document.getElementById(s.dataset.target)).filter(Boolean);
+  stages.forEach(s => {
+    s.addEventListener('click', () => {
+      const el = document.getElementById(s.dataset.target);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = entry.target.id;
+      const stage = document.querySelector('.stage[data-target="'+id+'"]');
+      if(!stage) return;
+      if(entry.isIntersecting){
+        stages.forEach(s => s.classList.remove('active'));
+        stage.classList.add('active');
+      }
+    });
+  }, {rootMargin: "-20% 0px -65% 0px", threshold: 0});
+  targets.forEach(t => io.observe(t));
+</script>
+
+</body>
+</html>
