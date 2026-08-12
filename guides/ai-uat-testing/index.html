@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI in Business Analysis — UAT & Testing | Chabila Borkar</title>
+<meta name="description" content="A working guide to where AI actually helps across test preparation, execution, UAT, and release — written from hands-on BA experience, plus a build path in Microsoft Foundry.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12181f; --paper:#eef0ea; --paper-dim:#e2e5dd; --line:#c7cbc0;
+    --green:#2f7a55; --green-dim:#e4ede6; --amber:#b3781f; --amber-dim:#f3e6d2;
+    --ink-soft:#3a4552; --rule: 1px solid var(--line);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--ink);color:var(--paper);font-family:'Inter',sans-serif;line-height:1.6;}
+  ::selection{background:var(--amber);color:var(--ink);}
+  a{color:inherit;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;opacity:0.75;}
+  h1,h2,h3{font-family:'Newsreader',serif;font-weight:500;margin:0;}
+
+  .crumb{padding:0.9rem 3rem;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:#8992a0;border-bottom:1px solid rgba(238,240,234,0.1);}
+  @media (max-width:880px){.crumb{padding:0.8rem 1.4rem;}}
+  .crumb a{text-decoration:none;border-bottom:1px dotted #8992a0;}
+  .crumb a:hover{color:var(--paper);}
+
+  .shell{display:grid;grid-template-columns:280px 1fr;max-width:1180px;margin:0 auto;}
+  @media (max-width:880px){.shell{grid-template-columns:1fr;}}
+
+  .rail{position:sticky;top:0;align-self:start;height:100vh;padding:2.2rem 1.4rem;border-right:1px solid rgba(238,240,234,0.14);font-family:'IBM Plex Mono',monospace;display:flex;flex-direction:column;}
+  @media (max-width:880px){.rail{position:sticky;height:auto;top:0;z-index:40;background:var(--ink);border-right:none;border-bottom:1px solid rgba(238,240,234,0.14);padding:0.9rem 1.2rem;}}
+  .rail-head{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:#7d8794;margin-bottom:1.1rem;padding-bottom:1rem;border-bottom:1px dashed rgba(238,240,234,0.25);}
+  @media (max-width:880px){.rail-head{display:none;}}
+  .rail-title{color:var(--paper);font-size:0.75rem;letter-spacing:0.08em;margin-bottom:0.3rem;}
+  .stages{list-style:none;margin:0;padding:0;flex:1;}
+  @media (max-width:880px){.stages{display:flex;gap:0.4rem;overflow-x:auto;padding-bottom:0.2rem;}}
+  .stage{display:flex;align-items:baseline;gap:0.6rem;padding:0.55rem 0;font-size:0.78rem;color:#6c7684;border-bottom:1px dotted rgba(238,240,234,0.14);cursor:pointer;transition:color .3s ease;}
+  @media (max-width:880px){.stage{border-bottom:none;padding:0.4rem 0.6rem;white-space:nowrap;background:rgba(238,240,234,0.05);border-radius:3px;}}
+  .stage .n{opacity:0.55;}
+  .stage.active{color:var(--paper);}
+  .stage.active .dot{background:var(--green);box-shadow:0 0 0 3px rgba(47,122,85,.25);}
+  .dot{width:6px;height:6px;border-radius:50%;background:#4a5461;flex:none;}
+  .rail-foot{font-size:0.66rem;color:#5b6472;padding-top:1rem;border-top:1px dashed rgba(238,240,234,0.25);line-height:1.7;}
+  @media (max-width:880px){.rail-foot{display:none;}}
+
+  main{padding:0;}
+  .section{padding:4rem 3rem;border-bottom:1px solid rgba(238,240,234,0.1);}
+  @media (max-width:880px){.section{padding:2.6rem 1.4rem;}}
+
+  .hero{padding:3.2rem 3rem 3rem;}
+  @media (max-width:880px){.hero{padding:2rem 1.4rem 2rem;}}
+  .hero h1{font-size:clamp(2rem,4vw,3.2rem);line-height:1.1;max-width:16ch;font-style:italic;font-weight:500;}
+  .hero p.lede{max-width:56ch;margin-top:1.3rem;font-size:1.05rem;color:#c7cdd4;}
+  .byline{margin-top:1.8rem;display:flex;align-items:center;gap:0.7rem;font-family:'IBM Plex Mono',monospace;font-size:0.75rem;color:#9aa3ae;}
+  .byline .name{color:var(--paper);font-family:'Inter',sans-serif;font-weight:600;font-size:0.85rem;}
+  .byline .sep{opacity:0.4;}
+
+  .intro-note{margin-top:2.6rem;padding:1.5rem 1.7rem;border-left:2px solid var(--amber);background:rgba(179,120,31,0.07);max-width:60ch;font-size:0.95rem;color:#dfe1da;}
+  .intro-note p{margin:0 0 0.7rem;}
+  .intro-note p:last-child{margin-bottom:0;}
+  .intro-note .who{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--amber);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.6rem;}
+
+  .panel{background:var(--paper);color:var(--ink);}
+  .panel .section{border-bottom:1px solid var(--line);}
+  .panel h2{color:var(--ink);}
+  .panel .eyebrow{color:var(--ink-soft);opacity:0.6;}
+
+  .section-head{margin-bottom:1.8rem;max-width:62ch;}
+  .section-head h2{font-size:1.7rem;font-style:italic;margin-top:0.5rem;}
+  .section-head p{margin-top:0.7rem;color:var(--ink-soft);}
+  body>main>.section.enh .section-head p, body>main>.section#foundry .section-head p{color:#b7bec7;}
+
+  .phase-intro{font-size:0.92rem;color:#4a5749;max-width:62ch;margin-bottom:1.6rem;}
+
+  /* Checklist rows */
+  .clist{display:flex;flex-direction:column;border-top:var(--rule);}
+  .crow{display:grid;grid-template-columns:210px 1fr;gap:1.4rem;padding:1.05rem 0;border-bottom:var(--rule);align-items:baseline;}
+  @media (max-width:720px){.crow{grid-template-columns:1fr;gap:0.3rem;}}
+  .crow .item{display:flex;align-items:baseline;gap:0.6rem;}
+  .crow .tick{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--green);flex:none;}
+  .crow .item-name{font-weight:600;font-size:0.94rem;}
+  .crow .ai-note{font-size:0.9rem;color:#333f2f;}
+  .crow .ai-note b{color:#1f4d33;font-weight:600;}
+
+  .aside{margin-top:2.4rem;max-width:62ch;font-size:0.93rem;color:#4a5749;font-style:italic;border-top:1px dashed var(--line);padding-top:1.3rem;}
+  .aside b{font-style:normal;font-weight:600;color:var(--ink);}
+
+  .foundations{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);margin-top:1.5rem;border:var(--rule);}
+  @media (max-width:720px){.foundations{grid-template-columns:1fr;}}
+  .fcard{background:var(--paper);padding:1.6rem;}
+  .fcard .num{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--green);}
+  .fcard h4{font-family:'Inter',sans-serif;font-size:1rem;font-weight:600;margin:0.5rem 0 0.4rem;}
+  .fcard p{margin:0;font-size:0.9rem;color:var(--ink-soft);}
+
+  .enh{background:var(--ink);}
+  .enh-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:2rem;}
+  @media (max-width:980px){.enh-grid{grid-template-columns:1fr;}}
+  .enh-card{border:1px solid rgba(238,240,234,0.16);padding:1.7rem 1.5rem;border-radius:2px;background:rgba(238,240,234,0.03);}
+  .enh-card .status{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.22rem 0.5rem;border-radius:2px;margin-bottom:1rem;}
+  .status.amber{background:var(--amber-dim);color:#7a5215;}
+  .status.green{background:var(--green-dim);color:#1f4d33;}
+  .enh-card h3{color:var(--paper);font-size:1.2rem;font-style:italic;margin-bottom:0.7rem;}
+  .enh-card p{color:#b7bec7;font-size:0.91rem;margin:0 0 0.9rem;}
+  .enh-card .maps-to{font-family:'IBM Plex Mono',monospace;font-size:0.67rem;color:#8992a0;border-top:1px dashed rgba(238,240,234,0.2);padding-top:0.8rem;}
+  .enh-card .maps-to b{color:var(--paper);font-weight:500;}
+
+  .steps{counter-reset:step;margin-top:2rem;display:flex;flex-direction:column;}
+  .step{display:grid;grid-template-columns:56px 1fr;gap:1.4rem;padding:1.5rem 0;border-top:1px solid rgba(238,240,234,0.12);}
+  .step:last-child{border-bottom:1px solid rgba(238,240,234,0.12);}
+  .step .idx{counter-increment:step;font-family:'IBM Plex Mono',monospace;color:var(--green);font-size:0.85rem;}
+  .step .idx::before{content:counter(step,decimal-leading-zero);}
+  .step h3{color:var(--paper);font-size:1.02rem;font-family:'Inter',sans-serif;font-weight:600;margin-bottom:0.4rem;}
+  .step p{margin:0;color:#b7bec7;font-size:0.91rem;max-width:65ch;}
+  .step code{font-family:'IBM Plex Mono',monospace;background:rgba(238,240,234,0.08);padding:0.1rem 0.35rem;border-radius:2px;font-size:0.85em;color:#dfe6ee;}
+
+  .signoff{padding:3rem 3rem 1rem;max-width:60ch;}
+  @media (max-width:880px){.signoff{padding:2.2rem 1.4rem 1rem;}}
+  .signoff p{font-size:0.95rem;color:#c7cdd4;}
+  .signoff .sig{margin-top:1.4rem;font-family:'Newsreader',serif;font-style:italic;font-size:1.15rem;}
+
+  footer{padding:1.8rem 3rem 3.4rem;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:#6c7684;display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.8rem;}
+  @media (max-width:880px){footer{padding:1.6rem 1.4rem 2.4rem;}}
+  footer a{text-decoration:underline;text-underline-offset:3px;}
+</style>
+</head>
+<body>
+
+<div class="crumb"><a href="../../index.html">← chabila.github.io</a> &nbsp;/&nbsp; guides &nbsp;/&nbsp; UAT & testing</div>
+
+<div class="shell">
+  <nav class="rail" aria-label="UAT and testing lifecycle">
+    <div class="rail-head">
+      <div class="rail-title">TEST LIFECYCLE</div>
+      GUIDE No. 003 — BA × AI
+    </div>
+    <ul class="stages" id="stageRail">
+      <li class="stage" data-target="prep"><span class="dot"></span><span class="n">01</span> Test preparation</li>
+      <li class="stage" data-target="execution"><span class="dot"></span><span class="n">02</span> Execution</li>
+      <li class="stage" data-target="uat"><span class="dot"></span><span class="n">03</span> UAT</li>
+      <li class="stage" data-target="release"><span class="dot"></span><span class="n">04</span> Release</li>
+      <li class="stage" data-target="enhance"><span class="dot"></span><span class="n">05</span> Enhancements</li>
+      <li class="stage" data-target="foundry"><span class="dot"></span><span class="n">06</span> Build it</li>
+    </ul>
+    <div class="rail-foot">A living document — I update this as tooling changes.</div>
+  </nav>
+
+  <main>
+    <section class="hero" id="top">
+      <div class="eyebrow">Field notes from a payments BA</div>
+      <h1>Using AI in business analysis for UAT and testing</h1>
+      <p class="lede">Testing is the one phase where "AI drafted it" and "AI verified it" are completely different claims. This is a walk through every stage — prep, execution, UAT, release — with an honest line on which side of that gap each task sits.</p>
+      <div class="byline">
+        <span class="name">Chabila Borkar</span><span class="sep">·</span>
+        <span>Senior Business Analyst, Payments & eCommerce</span>
+      </div>
+
+      <div class="intro-note">
+        <div class="who">A quick note before you dive in</div>
+        <p>I've sat in enough UAT sessions where a stakeholder asks "did we test the case where the refund fails after the customer's already been emailed?" and the honest answer was no, not yet, good catch. That question came from someone who understood the business, not from a scenario generator. AI is genuinely useful across most of what follows — it's just not a substitute for that instinct.</p>
+        <p>This is organised exactly how the work actually happens: preparation, execution, UAT, release. No reordering for the sake of a tidier framework.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section" id="prep">
+        <div class="section-head">
+          <div class="eyebrow">Part 1 — Fundamentals</div>
+          <h2>Test preparation</h2>
+        </div>
+        <p class="phase-intro">This is where AI's leverage is highest — turning specs and tickets into structured test artefacts is exactly the kind of transformation task it's built for. The risk is trusting the output's completeness rather than its speed.</p>
+
+        <div class="clist">
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Requirements</span></div><div class="ai-note">AI drafts a plain-English summary of a spec or ticket thread fast. It's a comprehension check, not a substitute for reading the actual requirement yourself before you sign off on scope.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Acceptance criteria</span></div><div class="ai-note">Turns loose requirements into Given/When/Then drafts in seconds. Check each one is actually <b>testable</b> — AI writes grammatically correct criteria that are sometimes untestable as written.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Happy paths</span></div><div class="ai-note">Reliable territory — the standard successful flow is usually well represented in whatever spec you feed it. Quick to generate, quick to verify.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Negative scenarios</span></div><div class="ai-note">Good first pass on generic failure modes (invalid input, declined payment, timeout). The negative scenarios that came from your <b>actual past incidents</b> won't show up unless you feed that history in.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Edge cases</span></div><div class="ai-note">Strong on textbook boundaries — min/max, null, empty, concurrency. Weak on the edge cases that only exist because of a business rule nobody wrote down. That gap is yours to fill.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Integration scenarios</span></div><div class="ai-note">Can map candidate touchpoints from architecture docs into scenarios, but it's guessing at sequence unless you give it the actual sequence diagram or API contract.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Regression scenarios</span></div><div class="ai-note">Genuinely useful for shortlisting prior defect-prone areas from your defect history — this is a data task AI is well suited to, if the historical data is actually available to it.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Data validation</span></div><div class="ai-note">Drafts field-level checks from a data dictionary reliably. Production data has quirks no dictionary documents — that part still needs someone who's looked at the real data.</div></div>
+        </div>
+
+        <div class="aside">Every item above follows the same shape: <b>AI compresses the first draft; you still own the judgement about whether it's complete.</b> That pattern holds for the rest of this guide too.</div>
+      </div>
+
+      <div class="section" id="execution">
+        <div class="section-head">
+          <h2>Execution</h2>
+        </div>
+        <p class="phase-intro">Less drafting, more pattern-matching against volume — this is where AI's speed at reading through noise (logs, payloads, screenshots) starts to matter more than its writing.</p>
+
+        <div class="clist">
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Execute scenarios</span></div><div class="ai-note">AI doesn't click through your app for you unless you've wired in an agentic testing tool. What it can do is pre-fill test-step scripts and data, so execution is mechanical rather than something you're improvising.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Compare expected vs actual</span></div><div class="ai-note">One of the strongest use cases in this whole guide — diffing large payloads or screens and flagging deviations a tired human eye would skim straight past.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Capture evidence</span></div><div class="ai-note">Summarising screenshots and logs into a readable evidence note attached to the test case — saves the "let me write this up properly later" step that usually never happens.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Reproduce defects</span></div><div class="ai-note">Can suggest a minimal repro path from a messy bug report by cross-referencing the steps described. Still needs a human to actually confirm it reproduces before it goes anywhere near a defect ticket.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Inspect logs/data</span></div><div class="ai-note">The single biggest time-saver on this list — searching thousands of log lines for an anomaly pattern in seconds instead of a grep session that eats your afternoon.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Raise Jira defect</span></div><div class="ai-note">Drafts a structured defect — steps, expected/actual, a suggested severity — from your raw notes. Severity and priority still need someone who knows the business impact, which AI doesn't.</div></div>
+        </div>
+      </div>
+
+      <div class="section" id="uat">
+        <div class="section-head">
+          <h2>UAT</h2>
+        </div>
+        <p class="phase-intro">This is the phase with the least AI leverage, and that's the honest takeaway, not a caveat. UAT exists because business judgement can't be automated — the value here is almost entirely human.</p>
+
+        <div class="clist">
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Identify business scenarios</span></div><div class="ai-note">AI can surface candidate scenarios from usage analytics or support ticket patterns. Which ones actually matter enough for business sign-off is a judgement call that stays with the BA.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Coordinate business users</span></div><div class="ai-note">Purely mechanical — drafting invites, session plans, calendar logistics. Low-risk delegation, hand it over freely.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Facilitate sessions</span></div><div class="ai-note">Not a delegation task. An AI note-taker can transcribe and summarise the session for you afterwards, but reading the room while a stakeholder gets frustrated isn't something to hand off.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Track defects</span></div><div class="ai-note">AI is genuinely helpful at consolidating scattered feedback from multiple users into one deduped, tracked list — the tedious admin part, not the judgement part.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Retest fixes</span></div><div class="ai-note">Can do a first-pass check that a fix's diff actually addresses the reported repro steps. Confirming it resolves the issue <b>for the business scenario</b> that mattered is still a human call.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Obtain sign-off</span></div><div class="ai-note">Entirely human, no exceptions. Sign-off is an accountability act, not a drafting task — there's no version of this AI should touch.</div></div>
+        </div>
+      </div>
+
+      <div class="section" id="release">
+        <div class="section-head">
+          <h2>Release</h2>
+        </div>
+        <p class="phase-intro">Back to AI having real leverage — mostly because this phase is about triage under time pressure, and triage is a pattern-matching problem.</p>
+
+        <div class="clist">
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Regression</span></div><div class="ai-note">Risk-based test selection from the change diff and defect history — a genuinely useful alternative to "run the whole suite because we're not sure what changed."</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Smoke testing</span></div><div class="ai-note">Drafting a lean smoke suite covering the highest-risk paths from the change log — quick to generate, quick to sanity-check.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Production validation</span></div><div class="ai-note">Comparing live output against expected baselines is a solid anomaly-detection use case right after a release window.</div></div>
+          <div class="crow"><div class="item"><span class="tick">✓</span><span class="item-name">Post-release monitoring</span></div><div class="ai-note">Anomaly detection on live metrics and logs, surfacing what's actually worth attention instead of a human staring at a dashboard for two hours.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section enh" id="enhance">
+      <div class="section-head">
+        <div class="eyebrow">Part 2 — Enhancements</div>
+        <h2>Once the basics are solid, these are worth the setup time</h2>
+        <p>Three techniques that solve specific problems once you're doing this at scale across a real release cadence — not because they're fashionable, but because each closes a gap the checklist above runs into eventually.</p>
+      </div>
+
+      <div class="enh-grid">
+        <div class="enh-card">
+          <span class="status green">Grounding</span>
+          <h3>Retrieval-Augmented Generation</h3>
+          <p>Point the model at your actual specs, past defect history, and prior UAT feedback logs, and have it answer from those instead of guessing generically. The difference between "AI invents a plausible edge case" and "AI surfaces the edge case that broke prod in March, because it read the incident report."</p>
+          <div class="maps-to">Maps to: <b>Test preparation & regression</b> — scenarios grounded in what actually broke before, not a generic checklist.</div>
+        </div>
+        <div class="enh-card">
+          <span class="status amber">Control</span>
+          <h3>Human-in-the-loop</h3>
+          <p>Defect severity classification, UAT sign-off, and production release decisions are exactly the checkpoints where an unreviewed AI call is the wrong risk to take. HITL means the workflow pauses at those specific points and waits for a named human — not everywhere, just where it counts.</p>
+          <div class="maps-to">Maps to: <b>UAT sign-off & release</b> — the two places "mostly right" isn't an acceptable bar.</div>
+        </div>
+        <div class="enh-card">
+          <span class="status green">Connection</span>
+          <h3>MCP servers</h3>
+          <p>Model Context Protocol gives an AI assistant live, permissioned access to Jira, your test management tool, or your log platform directly — instead of exporting a CSV every time you want current defect or execution data. It queries the real system, scoped to your access.</p>
+          <div class="maps-to">Maps to: <b>Execution & release</b> — live defect and log data pulled on demand instead of stale exports.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="foundry">
+      <div class="section-head">
+        <div class="eyebrow">Part 3 — Hands-on</div>
+        <h2>Building this in Microsoft Foundry</h2>
+        <p>The sequence I'd actually follow to wire the three pieces above into one assistant that supports the whole test lifecycle, rather than three disconnected demos. Microsoft Foundry (formerly Azure AI Foundry), current as of 2026.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step"><div class="idx"></div><div>
+          <h3>Create a Foundry project and connect your test artefacts</h3>
+          <p>Stand up a project, then connect your specs, defect history, and past UAT feedback logs — via Azure Blob Storage or a data connection — ready to be indexed.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Deploy a model from the catalog</h3>
+          <p>Pick a model (e.g. <code>gpt-4o</code>) from the Foundry model catalog as your reasoning engine — swappable later without touching the rest of the setup.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Ground it against your own history (RAG)</h3>
+          <p>Index specs, defect history, and incident write-ups with Azure AI Search, add it to your agent as a knowledge source, so generated scenarios cite the actual source rather than a generic pattern.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Attach live systems via MCP</h3>
+          <p>From the Foundry portal's Tools menu, add an MCP server connection to Jira or your test management tool, so the agent can read current defect status directly rather than working from a stale export.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Add a human-approval checkpoint</h3>
+          <p>Flag defect severity classification and any release-readiness output as requiring approval. The workflow pauses on a <code>function_approval_request</code> and only proceeds once a named reviewer signs off.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Orchestrate it as a workflow, not a one-shot prompt</h3>
+          <p>Use Foundry's workflow builder to chain retrieval → scenario drafting → execution support → defect drafting → human review, as a repeatable process across every release, not a one-off script.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Evaluate before you trust it, then monitor</h3>
+          <p>Run Foundry's built-in groundedness and relevance evaluations before rollout, then use tracing and Application Insights to see what it's actually doing once it's live.</p>
+        </div></div>
+      </div>
+    </section>
+
+    <div class="signoff">
+      <p>If you've run UAT on something high-stakes and want to compare notes on where AI actually held up versus where you had to pull it back — I'm always up for that conversation.</p>
+      <div class="sig">— Chabila</div>
+    </div>
+
+    <footer>
+      <div>Guide No. 003 in an ongoing series. Also see <a href="../ai-checkout-funnel/index.html">the checkout funnel guide</a> and <a href="../ai-payment-integration/index.html">the payment integration guide</a>.</div>
+      <div><a href="#top">Back to top ↑</a></div>
+    </footer>
+  </main>
+</div>
+
+<script>
+  const stages = document.querySelectorAll('.stage');
+  const targets = Array.from(stages).map(s => document.getElementById(s.dataset.target)).filter(Boolean);
+  stages.forEach(s => {
+    s.addEventListener('click', () => {
+      const el = document.getElementById(s.dataset.target);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = entry.target.id;
+      const stage = document.querySelector('.stage[data-target="'+id+'"]');
+      if(!stage) return;
+      if(entry.isIntersecting){
+        stages.forEach(s => s.classList.remove('active'));
+        stage.classList.add('active');
+      }
+    });
+  }, {rootMargin: "-20% 0px -65% 0px", threshold: 0});
+  targets.forEach(t => io.observe(t));
+</script>
+
+</body>
+</html>
