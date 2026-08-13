@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI in Business Analysis — End-to-End Delivery Lifecycle | Chabila Borkar</title>
+<meta name="description" content="A working guide to the full delivery lifecycle — discovery through operate — across new site features, technical projects, and operational integrations, with AI woven in where it earns its place.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12181f; --paper:#eef0ea; --paper-dim:#e2e5dd; --line:#c7cbc0;
+    --green:#2f7a55; --green-dim:#e4ede6; --amber:#b3781f; --amber-dim:#f3e6d2;
+    --ink-soft:#3a4552; --rule: 1px solid var(--line);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--ink);color:var(--paper);font-family:'Inter',sans-serif;line-height:1.6;}
+  ::selection{background:var(--amber);color:var(--ink);}
+  a{color:inherit;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;opacity:0.75;}
+  h1,h2,h3{font-family:'Newsreader',serif;font-weight:500;margin:0;}
+
+  .crumb{padding:0.9rem 3rem;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:#8992a0;border-bottom:1px solid rgba(238,240,234,0.1);}
+  @media (max-width:880px){.crumb{padding:0.8rem 1.4rem;}}
+  .crumb a{text-decoration:none;border-bottom:1px dotted #8992a0;}
+  .crumb a:hover{color:var(--paper);}
+
+  .shell{display:grid;grid-template-columns:280px 1fr;max-width:1220px;margin:0 auto;}
+  @media (max-width:880px){.shell{grid-template-columns:1fr;}}
+
+  .rail{position:sticky;top:0;align-self:start;height:100vh;padding:2.2rem 1.4rem;border-right:1px solid rgba(238,240,234,0.14);font-family:'IBM Plex Mono',monospace;display:flex;flex-direction:column;}
+  @media (max-width:880px){.rail{position:sticky;height:auto;top:0;z-index:40;background:var(--ink);border-right:none;border-bottom:1px solid rgba(238,240,234,0.14);padding:0.9rem 1.2rem;}}
+  .rail-head{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:#7d8794;margin-bottom:1.1rem;padding-bottom:1rem;border-bottom:1px dashed rgba(238,240,234,0.25);}
+  @media (max-width:880px){.rail-head{display:none;}}
+  .rail-title{color:var(--paper);font-size:0.75rem;letter-spacing:0.08em;margin-bottom:0.3rem;}
+  .stages{list-style:none;margin:0;padding:0;flex:1;}
+  @media (max-width:880px){.stages{display:flex;gap:0.4rem;overflow-x:auto;padding-bottom:0.2rem;}}
+  .stage{display:flex;align-items:baseline;gap:0.6rem;padding:0.5rem 0;font-size:0.76rem;color:#6c7684;border-bottom:1px dotted rgba(238,240,234,0.14);cursor:pointer;transition:color .3s ease;}
+  @media (max-width:880px){.stage{border-bottom:none;padding:0.4rem 0.6rem;white-space:nowrap;background:rgba(238,240,234,0.05);border-radius:3px;}}
+  .stage .n{opacity:0.55;}
+  .stage.active{color:var(--paper);}
+  .stage.active .dot{background:var(--green);box-shadow:0 0 0 3px rgba(47,122,85,.25);}
+  .dot{width:6px;height:6px;border-radius:50%;background:#4a5461;flex:none;}
+  .rail-foot{font-size:0.64rem;color:#5b6472;padding-top:1rem;border-top:1px dashed rgba(238,240,234,0.25);line-height:1.7;}
+  @media (max-width:880px){.rail-foot{display:none;}}
+
+  main{padding:0;}
+  .section{padding:4rem 3rem;border-bottom:1px solid rgba(238,240,234,0.1);}
+  @media (max-width:880px){.section{padding:2.6rem 1.4rem;}}
+
+  .hero{padding:3.2rem 3rem 3rem;}
+  @media (max-width:880px){.hero{padding:2rem 1.4rem 2rem;}}
+  .hero h1{font-size:clamp(1.9rem,3.8vw,3rem);line-height:1.1;max-width:18ch;font-style:italic;font-weight:500;}
+  .hero p.lede{max-width:58ch;margin-top:1.3rem;font-size:1.05rem;color:#c7cdd4;}
+  .byline{margin-top:1.8rem;display:flex;align-items:center;gap:0.7rem;font-family:'IBM Plex Mono',monospace;font-size:0.75rem;color:#9aa3ae;}
+  .byline .name{color:var(--paper);font-family:'Inter',sans-serif;font-weight:600;font-size:0.85rem;}
+  .byline .sep{opacity:0.4;}
+
+  .intro-note{margin-top:2.6rem;padding:1.5rem 1.7rem;border-left:2px solid var(--amber);background:rgba(179,120,31,0.07);max-width:64ch;font-size:0.95rem;color:#dfe1da;}
+  .intro-note p{margin:0 0 0.7rem;}
+  .intro-note p:last-child{margin-bottom:0;}
+  .intro-note .who{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--amber);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.6rem;}
+
+  .series-strip{
+    margin-top:2.2rem;display:flex;gap:0.7rem;flex-wrap:wrap;
+  }
+  .series-chip{
+    font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:#9aa3ae;
+    border:1px solid rgba(238,240,234,0.18);padding:0.4rem 0.7rem;border-radius:2px;
+    text-decoration:none;
+  }
+  .series-chip:hover{color:var(--paper);border-color:rgba(238,240,234,0.4);}
+
+  .panel{background:var(--paper);color:var(--ink);}
+  .panel .section{border-bottom:1px solid var(--line);}
+  .panel h2{color:var(--ink);}
+  .panel .eyebrow{color:var(--ink-soft);opacity:0.6;}
+
+  .section-head{margin-bottom:1.6rem;max-width:66ch;}
+  .section-head h2{font-size:1.7rem;font-style:italic;margin-top:0.5rem;}
+  .section-head p{margin-top:0.7rem;color:var(--ink-soft);}
+  body>main>.section.enh .section-head p, body>main>.section#foundry .section-head p{color:#b7bec7;}
+
+  .phase-intro{font-size:0.92rem;color:#4a5749;max-width:66ch;margin-bottom:1.6rem;}
+
+  /* three-column breakdown table */
+  .vtable{border-top:2px solid var(--ink);margin-top:0.5rem;}
+  .vhead{display:grid;grid-template-columns:170px 1fr 1fr 1fr;gap:1.2rem;padding:0.7rem 0;border-bottom:var(--rule);}
+  @media (max-width:820px){.vhead{display:none;}}
+  .vhead .vh{font-family:'IBM Plex Mono',monospace;font-size:0.66rem;text-transform:uppercase;letter-spacing:0.08em;color:#6b7566;}
+  .vrow{display:grid;grid-template-columns:170px 1fr 1fr 1fr;gap:1.2rem;padding:1rem 0;border-bottom:var(--rule);align-items:start;}
+  @media (max-width:820px){
+    .vrow{grid-template-columns:1fr;gap:0.5rem;padding:1.2rem 0;}
+    .vrow .vcell::before{content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:#8a9186;margin-bottom:0.25rem;}
+  }
+  .vrow .activity{font-weight:600;font-size:0.92rem;padding-top:0.1rem;}
+  .vrow .vcell{font-size:0.87rem;color:#333f2f;}
+
+  .see-also{
+    margin-top:1.6rem;padding:1.2rem 1.4rem;border:1px dashed var(--line);
+    font-size:0.9rem;color:var(--ink-soft);max-width:66ch;
+  }
+  .see-also a{font-weight:600;color:#1f4d33;text-decoration:underline;text-underline-offset:2px;}
+
+  .aside{margin-top:2rem;max-width:66ch;font-size:0.93rem;color:#4a5749;font-style:italic;border-top:1px dashed var(--line);padding-top:1.2rem;}
+  .aside b{font-style:normal;font-weight:600;color:var(--ink);}
+
+  .enh{background:var(--ink);}
+  .enh-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:2rem;}
+  @media (max-width:980px){.enh-grid{grid-template-columns:1fr;}}
+  .enh-card{border:1px solid rgba(238,240,234,0.16);padding:1.7rem 1.5rem;border-radius:2px;background:rgba(238,240,234,0.03);}
+  .enh-card .status{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.22rem 0.5rem;border-radius:2px;margin-bottom:1rem;}
+  .status.amber{background:var(--amber-dim);color:#7a5215;}
+  .status.green{background:var(--green-dim);color:#1f4d33;}
+  .enh-card h3{color:var(--paper);font-size:1.2rem;font-style:italic;margin-bottom:0.7rem;}
+  .enh-card p{color:#b7bec7;font-size:0.91rem;margin:0 0 0.9rem;}
+  .enh-card .maps-to{font-family:'IBM Plex Mono',monospace;font-size:0.67rem;color:#8992a0;border-top:1px dashed rgba(238,240,234,0.2);padding-top:0.8rem;}
+  .enh-card .maps-to b{color:var(--paper);font-weight:500;}
+
+  .steps{counter-reset:step;margin-top:2rem;display:flex;flex-direction:column;}
+  .step{display:grid;grid-template-columns:56px 1fr;gap:1.4rem;padding:1.5rem 0;border-top:1px solid rgba(238,240,234,0.12);}
+  .step:last-child{border-bottom:1px solid rgba(238,240,234,0.12);}
+  .step .idx{counter-increment:step;font-family:'IBM Plex Mono',monospace;color:var(--green);font-size:0.85rem;}
+  .step .idx::before{content:counter(step,decimal-leading-zero);}
+  .step h3{color:var(--paper);font-size:1.02rem;font-family:'Inter',sans-serif;font-weight:600;margin-bottom:0.4rem;}
+  .step p{margin:0;color:#b7bec7;font-size:0.91rem;max-width:68ch;}
+  .step code{font-family:'IBM Plex Mono',monospace;background:rgba(238,240,234,0.08);padding:0.1rem 0.35rem;border-radius:2px;font-size:0.85em;color:#dfe6ee;}
+
+  .signoff{padding:3rem 3rem 1rem;max-width:62ch;}
+  @media (max-width:880px){.signoff{padding:2.2rem 1.4rem 1rem;}}
+  .signoff p{font-size:0.95rem;color:#c7cdd4;}
+  .signoff .sig{margin-top:1.4rem;font-family:'Newsreader',serif;font-style:italic;font-size:1.15rem;}
+
+  footer{padding:1.8rem 3rem 3.4rem;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:#6c7684;display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.8rem;}
+  @media (max-width:880px){footer{padding:1.6rem 1.4rem 2.4rem;}}
+  footer a{text-decoration:underline;text-underline-offset:3px;}
+</style>
+</head>
+<body>
+
+<div class="crumb"><a href="../../index.html">← chabila.github.io</a> &nbsp;/&nbsp; guides &nbsp;/&nbsp; delivery lifecycle</div>
+
+<div class="shell">
+  <nav class="rail" aria-label="Delivery lifecycle phases">
+    <div class="rail-head">
+      <div class="rail-title">DELIVERY LIFECYCLE</div>
+      GUIDE No. 004 — BA × AI
+    </div>
+    <ul class="stages" id="stageRail">
+      <li class="stage" data-target="discovery"><span class="dot"></span><span class="n">01</span> Discovery & framing</li>
+      <li class="stage" data-target="reqdesign"><span class="dot"></span><span class="n">02</span> Requirements & design</li>
+      <li class="stage" data-target="build"><span class="dot"></span><span class="n">03</span> Build</li>
+      <li class="stage" data-target="testuat"><span class="dot"></span><span class="n">04</span> Test & UAT</li>
+      <li class="stage" data-target="release"><span class="dot"></span><span class="n">05</span> Release</li>
+      <li class="stage" data-target="operate"><span class="dot"></span><span class="n">06</span> Operate & monitor</li>
+      <li class="stage" data-target="enhance"><span class="dot"></span><span class="n">07</span> Enhancements</li>
+      <li class="stage" data-target="foundry"><span class="dot"></span><span class="n">08</span> Build it</li>
+    </ul>
+    <div class="rail-foot">A living document — I update this as tooling changes.</div>
+  </nav>
+
+  <main>
+    <section class="hero" id="top">
+      <div class="eyebrow">Field notes from a payments BA</div>
+      <h1>The end-to-end delivery lifecycle, and where AI actually fits</h1>
+      <p class="lede">This is the guide that ties the rest of the series together. Same six phases run underneath a new site feature, a technical project, and an operational integration — what changes is who's in the room, what "done" means, and how much risk sits in the release. This walks all three, phase by phase.</p>
+      <div class="byline">
+        <span class="name">Chabila Borkar</span><span class="sep">·</span>
+        <span>Senior Business Analyst, Payments & eCommerce</span>
+      </div>
+
+      <div class="intro-note">
+        <div class="who">A quick note before you dive in</div>
+        <p>I used to think of these as three different playbooks. They're not — it's one lifecycle wearing different clothes depending on whether you're shipping a UI change, migrating infrastructure, or bolting on a vendor's API. Once I started mapping them side by side, the gaps in each one got a lot easier to spot.</p>
+        <p>Where this guide overlaps with the rest of the series — UAT, payment integration specifics — I've pointed to the deeper dive rather than repeat it here.</p>
+      </div>
+
+      <div class="series-strip">
+        <a class="series-chip" href="../ai-checkout-funnel/index.html">Guide 001 — Checkout funnel</a>
+        <a class="series-chip" href="../ai-payment-integration/index.html">Guide 002 — Payment integration</a>
+        <a class="series-chip" href="../ai-uat-testing/index.html">Guide 003 — UAT & testing</a>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section" id="discovery">
+        <div class="section-head">
+          <div class="eyebrow">Part 1 — Fundamentals</div>
+          <h2>Discovery & framing</h2>
+        </div>
+        <p class="phase-intro">Before anything gets written down formally, someone has to decide this is worth doing and roughly what "it" is. What triggers that conversation — and who's in it — is the first real difference between the three delivery types.</p>
+
+        <div class="vtable">
+          <div class="vhead">
+            <div></div>
+            <div class="vh">New site feature</div>
+            <div class="vh">Technical project</div>
+            <div class="vh">Operational integration</div>
+          </div>
+          <div class="vrow">
+            <div class="activity">What triggers it</div>
+            <div class="vcell" data-label="Feature">User research, analytics, or a product backlog item gaining priority.</div>
+            <div class="vcell" data-label="Technical project">Architecture debt, a scaling ceiling, or a platform roadmap milestone.</div>
+            <div class="vcell" data-label="Integration">A commercial need — a new PSP, carrier, or vendor contract coming into force.</div>
+          </div>
+          <div class="vrow">
+            <div class="activity">Who's in the room</div>
+            <div class="vcell" data-label="Feature">Product owner, UX, engineering lead.</div>
+            <div class="vcell" data-label="Technical project">Enterprise architecture, infra/platform leads, finance (for build vs buy).</div>
+            <div class="vcell" data-label="Integration">Vendor's implementation team, security/compliance, legal for the contract.</div>
+          </div>
+          <div class="vrow">
+            <div class="activity">Business case shape</div>
+            <div class="vcell" data-label="Feature">RICE-scored against the rest of the backlog.</div>
+            <div class="vcell" data-label="Technical project">Cost of inaction vs cost to build — often a multi-year payback case.</div>
+            <div class="vcell" data-label="Integration">Bounded by contract terms and go-live deadline; less discretionary.</div>
+          </div>
+          <div class="vrow">
+            <div class="activity">Where AI helps</div>
+            <div class="vcell" data-label="Feature">Summarising research/analytics into a first-draft opportunity brief.</div>
+            <div class="vcell" data-label="Technical project">Drafting the cost/benefit narrative from raw capacity and incident data.</div>
+            <div class="vcell" data-label="Integration">Turning a vendor's onboarding docs into a scoped first-pass timeline.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="reqdesign">
+        <div class="section-head">
+          <h2>Requirements & design</h2>
+        </div>
+        <p class="phase-intro">This is where scope gets specific enough to build against. The artefacts differ more here than anywhere else in the lifecycle.</p>
+
+        <div class="vtable">
+          <div class="vhead">
+            <div></div>
+            <div class="vh">New site feature</div>
+            <div class="vh">Technical project</div>
+            <div class="vh">Operational integration</div>
+          </div>
+          <div class="vrow">
+            <div class="activity">Core artefact</div>
+            <div class="vcell" data-label="Feature">User stories, wireframes, acceptance criteria.</div>
+            <div class="vcell" data-label="Technical project">Architecture design doc, ADRs, NFRs (performance, scalability).</div>
+            <div class="vcell" data-label="Integration">API/field mapping, data mapping, compliance scope — <a href="../ai-payment-integration/index.html" style="text-decoration:underline;">detailed in Guide 002</a>.</div>
+          </div>
+          <div class="vrow">
+            <div class="activity">RAID log focus</div>
+            <div class="vcell" data-label="Feature">UX/adoption risk, dependency on design system components.</div>
+            <div class="vcell" data-label="Technical project">Migration risk, rollback feasibility, capacity assumptions.</div>
+            <div class="vcell" data-label="Integration">Vendor SLA risk, certification timeline dependency, contract assumptions.</div>
+          </div>
+          <div class="vrow">
+            <div class="activity">Sign-off owner</div>
+            <div class="vcell" data-label="Feature">Product owner.</div>
+            <div class="vcell" data-label="Technical project">Architecture review board / tech lead.</div>
+            <div class="vcell" data-label="Integration">BA + vendor implementation lead jointly.</div>
+          </div>
+          <div class="vrow">
+            <div class="activity">Where AI helps</div>
+            <div class="vcell" data-label="Feature">Drafting Given/When/Then acceptance criteria from a product brief.</div>
+            <div class="vcell" data-label="Technical project">First-pass NFR checklist from similar past architecture docs.</div>
+            <div class="vcell" data-label="Integration">Field-by-field mapping draft from the vendor's API reference.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="build">
+        <div class="section-head">
+          <h2>Build</h2>
+        </div>
+        <p class="phase-intro">The BA's role here is lighter but not absent — mostly keeping scope honest and unblocking ambiguity before it becomes a defect.</p>
+
+        <div class="vtable">
+          <div class="vhead">
+            <div></div>
+            <div class="vh">New site feature</div>
+            <div class="vh">Technical project</div>
+            <div class="vh">Operational integration</div>
+          </div>
+          <div class="vrow">
+            <div class="activity">Rhythm</div>
+            <div class="vcell" data-label="Feature">Sprint-based, frequent demos, feature-flagged incremental release.</div>
+            <div class="vcell" data-label="Technical project">Longer build cycles, infra-as-code changes, parallel-run scaffolding.</div>
+            <div class="vcell" data-label="Integration">Sandbox-first, bounded by the vendor's own release/certification calendar.</div>
+          </div>
+          <div class="vrow">
+            <div class="activity">BA's main job</div>
+            <div class="vcell" data-label="Feature">Clarifying edge cases as devs hit them, keeping scope from creeping.</div>
+            <div class="vcell" data-label="Technical project">Tracking migration/cutover assumptions as they're tested against reality.</div>
+            <div class="vcell" data-label="Integration">Chasing vendor sandbox access, credentials, and certification blockers.</div>
+          </div>
+          <div class="vrow">
+            <div class="activity">Where AI helps</div>
+            <div class="vcell" data-label="Feature">Summarising standup/thread ambiguity into a clean clarifying question.</div>
+            <div class="vcell" data-label="Technical project">Diffing infra-as-code changes against the design doc for drift.</div>
+            <div class="vcell" data-label="Integration">Digesting vendor sandbox error responses into plain-English blockers.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="testuat">
+        <div class="section-head">
+          <h2>Test & UAT</h2>
+        </div>
+        <p class="phase-intro">This phase has enough depth to deserve its own guide, so I won't repeat it here — the short version, then the pointer.</p>
+
+        <div class="vtable">
+          <div class="vhead">
+            <div></div>
+            <div class="vh">New site feature</div>
+            <div class="vh">Technical project</div>
+            <div class="vh">Operational integration</div>
+          </div>
+          <div class="vrow">
+            <div class="activity">Testing emphasis</div>
+            <div class="vcell" data-label="Feature">Usability, A/B validation, cross-browser/device coverage.</div>
+            <div class="vcell" data-label="Technical project">Performance/load testing, migration dry-runs, parallel-run reconciliation.</div>
+            <div class="vcell" data-label="Integration">Vendor certification suite, sandbox-to-prod parity checks.</div>
+          </div>
+        </div>
+
+        <div class="see-also">
+          Full breakdown of test preparation, execution, UAT facilitation, and release testing — with the honest line on where AI helps and where it doesn't across all three delivery types — is in <a href="../ai-uat-testing/index.html">Guide No. 003: UAT & Testing</a>.
+        </div>
+      </div>
+
+      <div class="section" id="release">
+        <div class="section-head">
+          <h2>Release</h2>
+        </div>
+        <p class="phase-intro">Where the risk profile of each delivery type shows up most clearly — a feature flag rollback is a config change; an integration cutover can involve a vendor's operations team on a call with yours.</p>
+
+        <div class="vtable">
+          <div class="vhead">
+            <div></div>
+            <div class="vh">New site feature</div>
+            <div class="vh">Technical project</div>
+            <div class="vh">Operational integration</div>
+          </div>
+          <div class="vrow">
+            <div class="activity">Rollout shape</div>
+            <div class="vcell" data-label="Feature">Phased/flagged ramp-up, monitored against adoption metrics.</div>
+            <div class="vcell" data-label="Technical project">Defined cutover window, often with a change freeze either side.</div>
+            <div class="vcell" data-label="Integration">Coordinated go-live with the vendor, dual-running/verification window.</div>
+          </div>
+          <div class="vrow">
+            <div class="activity">Rollback plan</div>
+            <div class="vcell" data-label="Feature">Toggle the flag off.</div>
+            <div class="vcell" data-label="Technical project">Rehearsed runbook — often the hardest part of the whole project.</div>
+            <div class="vcell" data-label="Integration">Depends on the vendor's own rollback capability — confirm it exists before go-live, not during.</div>
+          </div>
+          <div class="vrow">
+            <div class="activity">Where AI helps</div>
+            <div class="vcell" data-label="Feature">Drafting the go-live checklist and comms from the release notes.</div>
+            <div class="vcell" data-label="Technical project">Flagging gaps in the rollback runbook against the design doc.</div>
+            <div class="vcell" data-label="Integration">Drafting the joint go-live comms and escalation contact sheet.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="operate">
+        <div class="section-head">
+          <h2>Operate & monitor</h2>
+        </div>
+        <p class="phase-intro">The lifecycle doesn't end at go-live. This phase is where a BA's early involvement either pays off in a clean handover, or doesn't.</p>
+
+        <div class="vtable">
+          <div class="vhead">
+            <div></div>
+            <div class="vh">New site feature</div>
+            <div class="vh">Technical project</div>
+            <div class="vh">Operational integration</div>
+          </div>
+          <div class="vrow">
+            <div class="activity">What gets watched</div>
+            <div class="vcell" data-label="Feature">Adoption and conversion metrics against the original business case.</div>
+            <div class="vcell" data-label="Technical project">SLOs, error budgets, capacity headroom.</div>
+            <div class="vcell" data-label="Integration">Reconciliation accuracy, vendor SLA adherence.</div>
+          </div>
+          <div class="vrow">
+            <div class="activity">Feedback loop</div>
+            <div class="vcell" data-label="Feature">User feedback feeds the next backlog iteration.</div>
+            <div class="vcell" data-label="Technical project">Incident learnings feed a tech-debt backlog.</div>
+            <div class="vcell" data-label="Integration">Reconciliation exceptions feed an ongoing defect/escalation log with the vendor.</div>
+          </div>
+          <div class="vrow">
+            <div class="activity">Where AI helps</div>
+            <div class="vcell" data-label="Feature">Summarising qualitative feedback into themes for the next iteration.</div>
+            <div class="vcell" data-label="Technical project">Anomaly detection on capacity/error metrics, surfacing what's worth attention.</div>
+            <div class="vcell" data-label="Integration">Flagging reconciliation mismatches across thousands of rows for investigation.</div>
+          </div>
+        </div>
+
+        <div class="aside">Across all three columns, the same pattern from the rest of the series holds: <b>AI is strongest at compressing volume into something reviewable, and weakest at anything that requires accountability.</b> That's the filter to run every new use case through.</div>
+      </div>
+    </section>
+
+    <section class="section enh" id="enhance">
+      <div class="section-head">
+        <div class="eyebrow">Part 2 — Enhancements</div>
+        <h2>Applied across the whole lifecycle, not one phase</h2>
+        <p>These three show up everywhere above, so it's worth naming them once, properly, rather than repeating the same paragraph six times.</p>
+      </div>
+
+      <div class="enh-grid">
+        <div class="enh-card">
+          <span class="status green">Grounding</span>
+          <h3>Retrieval-Augmented Generation</h3>
+          <p>Every phase above gets more useful when the model is grounded in your actual past projects — ADRs, RAID logs, incident write-ups, prior vendor onboarding docs — instead of answering from general training. The same technique, reused across discovery, design, and operate.</p>
+          <div class="maps-to">Maps to: <b>every phase</b> — grounded on the specific artefact type that phase produces.</div>
+        </div>
+        <div class="enh-card">
+          <span class="status amber">Control</span>
+          <h3>Human-in-the-loop</h3>
+          <p>Business case sign-off, architecture review, go-live decisions, incident severity calls — these repeat across all three delivery types, and every one of them is a checkpoint where an unreviewed AI output is the wrong risk to take.</p>
+          <div class="maps-to">Maps to: <b>every sign-off point</b> — discovery approval, design review, and release go/no-go.</div>
+        </div>
+        <div class="enh-card">
+          <span class="status green">Connection</span>
+          <h3>MCP servers</h3>
+          <p>Jira, Confluence, your monitoring platform, a vendor's sandbox API — an agent with live, permissioned tool access to all of these can support discovery, build, and operate without you exporting data by hand at every phase.</p>
+          <div class="maps-to">Maps to: <b>build, release, and operate</b> — where live system state matters most.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="foundry">
+      <div class="section-head">
+        <div class="eyebrow">Part 3 — Hands-on</div>
+        <h2>Building this in Microsoft Foundry</h2>
+        <p>One assistant, scoped to support the whole lifecycle rather than a single phase — the sequence I'd follow to build it. Microsoft Foundry (formerly Azure AI Foundry), current as of 2026.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step"><div class="idx"></div><div>
+          <h3>Create a Foundry project and connect your delivery archive</h3>
+          <p>Stand up a project, then connect past ADRs, RAID logs, business cases, and incident write-ups across all three delivery types — via Azure Blob Storage or a data connection — ready to be indexed.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Deploy a model from the catalog</h3>
+          <p>Pick a model (e.g. <code>gpt-4o</code>) from the Foundry model catalog as your reasoning engine — swappable later without touching anything downstream.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Ground it against your own delivery history (RAG)</h3>
+          <p>Index the archive with Azure AI Search, add it to your agent as a knowledge source, so drafts across any phase cite your own past decisions rather than a generic pattern.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Attach live systems via MCP</h3>
+          <p>From the Foundry portal's Tools menu, connect Jira/Confluence for live project state, and your monitoring platform for the operate phase — one agent, multiple live tool connections.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Add human-approval checkpoints at every sign-off</h3>
+          <p>Flag business case approval, design review, and go-live decisions as requiring approval. Each pauses on a <code>function_approval_request</code> and only proceeds once a named reviewer signs off.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Orchestrate it as one workflow with phase branches</h3>
+          <p>Use Foundry's workflow builder to model the six phases as stages, with the delivery-type variations (feature / technical project / integration) as branches within each stage rather than three separate workflows.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Evaluate before you trust it, then monitor</h3>
+          <p>Run Foundry's built-in groundedness and relevance evaluations before rollout, then use tracing and Application Insights to see what it's actually doing across a live delivery.</p>
+        </div></div>
+      </div>
+    </section>
+
+    <div class="signoff">
+      <p>If you're mapping your own delivery lifecycle against this and something doesn't fit — that's usually the interesting part, not a sign I've got the framework wrong. Happy to compare notes.</p>
+      <div class="sig">— Chabila</div>
+    </div>
+
+    <footer>
+      <div>Guide No. 004 — the series overview. See also <a href="../ai-checkout-funnel/index.html">Guide 001</a>, <a href="../ai-payment-integration/index.html">Guide 002</a>, and <a href="../ai-uat-testing/index.html">Guide 003</a>.</div>
+      <div><a href="#top">Back to top ↑</a></div>
+    </footer>
+  </main>
+</div>
+
+<script>
+  const stages = document.querySelectorAll('.stage');
+  const targets = Array.from(stages).map(s => document.getElementById(s.dataset.target)).filter(Boolean);
+  stages.forEach(s => {
+    s.addEventListener('click', () => {
+      const el = document.getElementById(s.dataset.target);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = entry.target.id;
+      const stage = document.querySelector('.stage[data-target="'+id+'"]');
+      if(!stage) return;
+      if(entry.isIntersecting){
+        stages.forEach(s => s.classList.remove('active'));
+        stage.classList.add('active');
+      }
+    });
+  }, {rootMargin: "-20% 0px -65% 0px", threshold: 0});
+  targets.forEach(t => io.observe(t));
+</script>
+
+</body>
+</html>
