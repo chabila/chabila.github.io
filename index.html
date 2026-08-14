@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chabila Borkar — Payments & eCommerce Specialist</title>
+<meta name="description" content="Chabila Borkar — Payments & eCommerce Business Analyst with 7+ years delivering checkout, payment integration, and order management transformation across global retail programmes.">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -345,7 +346,7 @@
     <li><a href="#expertise">Expertise</a></li>
     <li><a href="#experience">Experience</a></li>
     <li><a href="#contact">Contact</a></li>
-	<li><a href="guides/">Guides</a></li>
+    <li><a href="guides/">Guides</a></li>
   </ul>
 </nav>
 
@@ -372,21 +373,21 @@
           <div class="stat-num">67%</div>
           <div class="stat-label">
             <strong>Operational effort reduced</strong>
-            Automated carrier and payment gateway integration workflows, reducing manual intervention across retail operations.
+            Automated carrier and payment gateway workflows to cut manual intervention across retail operations.
           </div>
         </li>
         <li class="stat-item">
           <div class="stat-num">40%</div>
           <div class="stat-label">
             <strong>Platform performance uplift</strong>
-            Improved performance and throughput on a high-volume eCommerce platform through database query optimisation.
+            Lifted performance and throughput on a high-volume eCommerce platform through query optimisation.
           </div>
         </li>
         <li class="stat-item">
           <div class="stat-num">25%</div>
           <div class="stat-label">
             <strong>Order accuracy improved</strong>
-            Redesigned OMS data flows and order-processing logic to improve order validation and fulfilment accuracy.
+            Rebuilt OMS data flows to improve order validation and fulfilment accuracy.
           </div>
         </li>
       </ul>
@@ -401,7 +402,7 @@
   <h2 class="section-heading">Bridging <em>strategy</em><br>and execution</h2>
   <div class="about-grid">
     <div class="about-intro reveal">
-      <p>I'm a technology consultant with 8+ years of experience delivering large-scale digital transformation programmes across payments, eCommerce, and order management systems. I've worked at Accenture embedded in global retail clients, and at Infosys before that — always at the intersection of business strategy and engineering delivery.</p>
+      <p>I'm a technology consultant with 7+ years of experience delivering large-scale digital transformation programmes across payments, eCommerce, and order management systems. I've worked at Accenture embedded in global retail clients, and at Infosys before that — always at the intersection of business strategy and engineering delivery.</p>
       <p>My strength is translating complexity into clear, deliverable outcomes. Whether that's defining a product roadmap, owning a backlog, shaping requirements into user stories, or presenting data-driven recommendations to C-suite stakeholders — I work end-to-end, not just in one lane.</p>
       <p>I'm currently based in London and open to Product Analyst, Product Manager, and Business Analyst roles in payments, fintech, and eCommerce.</p>
     </div>
@@ -416,12 +417,8 @@
       </div>
       <div class="detail-row">
         <span class="detail-key">Experience</span>
-        <span class="detail-val">8+ years</span>
+        <span class="detail-val">7+ years</span>
       </div>
-     /* <div class="detail-row">
-        <span class="detail-key">Current employer</span>
-        <span class="detail-val">Accenture (client: H&amp;M / global retail)</span>
-      </div>*/
       <div class="detail-row">
         <span class="detail-key">Target roles</span>
         <span class="detail-val">Product Analyst · Product Manager · Business Analyst</span>
@@ -528,7 +525,7 @@
   <div class="exp-timeline">
     <div class="exp-entry reveal">
       <div class="exp-meta">
-        <div class="exp-date">2022 – Present</div>
+        <div class="exp-date">2022 – 2026</div>
         <div class="exp-co">Accenture</div>
       </div>
       <div class="exp-content">
@@ -658,14 +655,14 @@
       </div>
       <span class="contact-arrow">→</span>
     </a>
-    <a href="tel:+447586488536" class="contact-link">
+    <a href="tel:+447876494564" class="contact-link">
       <div>
         <div class="contact-link-label">Phone</div>
         +44 (0)7876 494 564
       </div>
       <span class="contact-arrow">→</span>
     </a>
-    <a href="https://www.linkedin.com/in/chabilaborkar" target="_blank" class="contact-link">
+    <a href="https://www.linkedin.com/in/chabilaborkar" target="_blank" rel="noopener noreferrer" class="contact-link">
       <div>
         <div class="contact-link-label">LinkedIn</div>
         linkedin.com/in/chabilaborkar
@@ -684,7 +681,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <span>© 2025 Chabila Borkar</span>
+  <span>© <span id="year"></span> Chabila Borkar</span>
   <span>Payments &amp; eCommerce · London, UK</span>
 </footer>
 
@@ -706,6 +703,9 @@
     });
   }, { threshold: 0.12 });
   reveals.forEach(el => observer.observe(el));
+
+  // Footer year, always current
+  document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 </body>
 </html>
