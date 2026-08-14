@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guides — AI in Business Analysis | Chabila Borkar</title>
+<meta name="description" content="A five-part guide series on where AI actually helps a business analyst across payments and eCommerce delivery — checkout, payment integration, testing, the full delivery lifecycle, and the end-to-end customer journey.">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --paper: #f5f3ee;
+    --cream: #ede9e1;
+    --mid: #7a7670;
+    --accent: #1a3a5c;
+    --gold: #b8965a;
+    --rule: #d4cfc5;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0; pointer-events: none; z-index: 999;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.6;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.25rem 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(245,243,238,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--ink); text-decoration: none; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mid); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a.current { color: var(--ink); border-bottom: 1px solid var(--gold); padding-bottom: 3px; }
+
+  .page-hero { padding: 9rem 5rem 5rem; max-width: 900px; }
+  .section-label {
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem;
+  }
+  .section-label::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
+  .page-heading {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+    line-height: 1.1; letter-spacing: -0.01em; color: var(--ink);
+  }
+  .page-heading em { font-style: italic; color: var(--accent); }
+  .page-lede { font-size: 1.05rem; font-weight: 300; color: var(--mid); margin-top: 1.3rem; max-width: 62ch; line-height: 1.75; }
+
+  section.guides { padding: 0 5rem 7rem; }
+  .guide-timeline { margin-top: 1rem; }
+  .guide-entry {
+    display: grid; grid-template-columns: 140px 1fr;
+    gap: 3rem; padding: 2.75rem 0;
+    border-bottom: 1px solid var(--rule);
+    text-decoration: none; color: inherit;
+    transition: padding-left 0.25s ease;
+  }
+  .guide-entry:first-child { border-top: 1px solid var(--rule); }
+  .guide-entry:hover { padding-left: 0.75rem; }
+  .guide-meta { }
+  .guide-num { font-family: 'DM Serif Display', serif; font-size: 2.1rem; color: var(--gold); line-height: 1; }
+  .guide-tag { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mid); margin-top: 0.6rem; }
+  .guide-content { display: flex; flex-direction: column; }
+  .guide-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--ink); margin-bottom: 0.6rem; }
+  .guide-desc { font-size: 0.92rem; color: var(--mid); line-height: 1.7; max-width: 62ch; }
+  .guide-arrow-row { margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+  .guide-entry:hover .guide-arrow-row { color: var(--gold); }
+  .guide-arrow { transition: transform 0.2s ease; }
+  .guide-entry:hover .guide-arrow { transform: translateX(4px); }
+
+  @media (max-width: 720px) {
+    .guide-entry { grid-template-columns: 1fr; gap: 0.75rem; }
+    .page-hero { padding: 7rem 1.5rem 3rem; }
+    section.guides { padding: 0 1.5rem 4rem; }
+    nav { padding: 1.25rem 1.5rem; }
+    .nav-links { display: none; }
+  }
+
+  footer {
+    background: var(--ink); color: rgba(255,255,255,0.35);
+    padding: 2rem 5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.78rem;
+  }
+  footer a { color: rgba(255,255,255,0.35); text-decoration: none; }
+  footer a:hover { color: rgba(255,255,255,0.7); }
+  @media (max-width: 720px) { footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 2rem 1.5rem; } }
+
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">Chabila Borkar</a>
+  <ul class="nav-links">
+    <li><a href="../index.html#about">About</a></li>
+    <li><a href="../index.html#expertise">Expertise</a></li>
+    <li><a href="../index.html#experience">Experience</a></li>
+    <li><a href="../index.html#contact">Contact</a></li>
+    <li><a href="./" class="current">Guides</a></li>
+  </ul>
+</nav>
+
+<section class="page-hero">
+  <div class="section-label">A guide series</div>
+  <h1 class="page-heading">AI in <em>Business Analysis</em></h1>
+  <p class="page-lede">Five guides, written from hands-on payments and eCommerce delivery work — where AI genuinely earns its place across checkout, payment integration, testing, the full delivery lifecycle, and the customer journey, and where it still needs a human holding the pen.</p>
+</section>
+
+<section class="guides">
+  <div class="guide-timeline">
+
+    <a class="guide-entry reveal" href="ai-checkout-funnel/index.html">
+      <div class="guide-meta">
+        <div class="guide-num">01</div>
+        <div class="guide-tag">Checkout</div>
+      </div>
+      <div class="guide-content">
+        <div class="guide-title">The Checkout Funnel</div>
+        <p class="guide-desc">Cart through confirmation — where AI helps a BA diagnose drop-off, and where the judgement still has to be human. Includes RAG, human-in-the-loop, and MCP servers, plus a build path in Microsoft Foundry.</p>
+        <div class="guide-arrow-row">Read the guide <span class="guide-arrow">→</span></div>
+      </div>
+    </a>
+
+    <a class="guide-entry reveal" href="ai-payment-integration/index.html">
+      <div class="guide-meta">
+        <div class="guide-num">02</div>
+        <div class="guide-tag">Integration</div>
+      </div>
+      <div class="guide-content">
+        <div class="guide-title">Payment Integration</div>
+        <p class="guide-desc">Discovery through go-live for a PSP integration — API mapping, sandbox testing, certification, and reconciliation, with an honest line on what AI actually speeds up.</p>
+        <div class="guide-arrow-row">Read the guide <span class="guide-arrow">→</span></div>
+      </div>
+    </a>
+
+    <a class="guide-entry reveal" href="ai-uat-testing/index.html">
+      <div class="guide-meta">
+        <div class="guide-num">03</div>
+        <div class="guide-tag">Testing</div>
+      </div>
+      <div class="guide-content">
+        <div class="guide-title">UAT & Testing</div>
+        <p class="guide-desc">Test prep, execution, UAT, and release — 24 activities, each with a clear read on whether AI belongs there or not. Including the ones where the honest answer is no.</p>
+        <div class="guide-arrow-row">Read the guide <span class="guide-arrow">→</span></div>
+      </div>
+    </a>
+
+    <a class="guide-entry reveal" href="ai-delivery-lifecycle/index.html">
+      <div class="guide-meta">
+        <div class="guide-num">04</div>
+        <div class="guide-tag">Delivery</div>
+      </div>
+      <div class="guide-content">
+        <div class="guide-title">The End-to-End Delivery Lifecycle</div>
+        <p class="guide-desc">The guide that ties the series together — discovery through operate, compared across new site features, technical projects, and operational integrations.</p>
+        <div class="guide-arrow-row">Read the guide <span class="guide-arrow">→</span></div>
+      </div>
+    </a>
+
+    <a class="guide-entry reveal" href="ai-customer-journey/index.html">
+      <div class="guide-meta">
+        <div class="guide-num">05</div>
+        <div class="guide-tag">Journey</div>
+      </div>
+      <div class="guide-content">
+        <div class="guide-title">The End-to-End Customer Journey</div>
+        <p class="guide-desc">Seven stages, awareness through loyalty — because the customer never experiences checkout in isolation, and neither should the analysis.</p>
+        <div class="guide-arrow-row">Read the guide <span class="guide-arrow">→</span></div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Chabila Borkar</span>
+  <span><a href="../index.html">← Back to portfolio</a></span>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
