@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI in Business Analysis — The End-to-End Customer Journey | Chabila Borkar</title>
+<meta name="description" content="A detailed walk through the full customer journey — awareness through loyalty — with an honest line on where AI helps a BA at each stage, plus a build path in Microsoft Foundry.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12181f; --paper:#eef0ea; --paper-dim:#e2e5dd; --line:#c7cbc0;
+    --green:#2f7a55; --green-dim:#e4ede6; --amber:#b3781f; --amber-dim:#f3e6d2;
+    --ink-soft:#3a4552; --rule: 1px solid var(--line);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--ink);color:var(--paper);font-family:'Inter',sans-serif;line-height:1.6;}
+  ::selection{background:var(--amber);color:var(--ink);}
+  a{color:inherit;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;opacity:0.75;}
+  h1,h2,h3{font-family:'Newsreader',serif;font-weight:500;margin:0;}
+
+  .crumb{padding:0.9rem 3rem;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:#8992a0;border-bottom:1px solid rgba(238,240,234,0.1);}
+  @media (max-width:880px){.crumb{padding:0.8rem 1.4rem;}}
+  .crumb a{text-decoration:none;border-bottom:1px dotted #8992a0;}
+  .crumb a:hover{color:var(--paper);}
+
+  .shell{display:grid;grid-template-columns:280px 1fr;max-width:1180px;margin:0 auto;}
+  @media (max-width:880px){.shell{grid-template-columns:1fr;}}
+
+  .rail{position:sticky;top:0;align-self:start;height:100vh;padding:2.2rem 1.4rem;border-right:1px solid rgba(238,240,234,0.14);font-family:'IBM Plex Mono',monospace;display:flex;flex-direction:column;}
+  @media (max-width:880px){.rail{position:sticky;height:auto;top:0;z-index:40;background:var(--ink);border-right:none;border-bottom:1px solid rgba(238,240,234,0.14);padding:0.9rem 1.2rem;}}
+  .rail-head{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:#7d8794;margin-bottom:1.1rem;padding-bottom:1rem;border-bottom:1px dashed rgba(238,240,234,0.25);}
+  @media (max-width:880px){.rail-head{display:none;}}
+  .rail-title{color:var(--paper);font-size:0.75rem;letter-spacing:0.08em;margin-bottom:0.3rem;}
+  .stages{list-style:none;margin:0;padding:0;flex:1;}
+  @media (max-width:880px){.stages{display:flex;gap:0.4rem;overflow-x:auto;padding-bottom:0.2rem;}}
+  .stage{display:flex;align-items:baseline;gap:0.6rem;padding:0.5rem 0;font-size:0.76rem;color:#6c7684;border-bottom:1px dotted rgba(238,240,234,0.14);cursor:pointer;transition:color .3s ease;}
+  @media (max-width:880px){.stage{border-bottom:none;padding:0.4rem 0.6rem;white-space:nowrap;background:rgba(238,240,234,0.05);border-radius:3px;}}
+  .stage .n{opacity:0.55;}
+  .stage.active{color:var(--paper);}
+  .stage.active .dot{background:var(--green);box-shadow:0 0 0 3px rgba(47,122,85,.25);}
+  .dot{width:6px;height:6px;border-radius:50%;background:#4a5461;flex:none;}
+  .rail-foot{font-size:0.64rem;color:#5b6472;padding-top:1rem;border-top:1px dashed rgba(238,240,234,0.25);line-height:1.7;}
+  @media (max-width:880px){.rail-foot{display:none;}}
+
+  main{padding:0;}
+  .section{padding:4rem 3rem;border-bottom:1px solid rgba(238,240,234,0.1);}
+  @media (max-width:880px){.section{padding:2.6rem 1.4rem;}}
+
+  .hero{padding:3.2rem 3rem 3rem;}
+  @media (max-width:880px){.hero{padding:2rem 1.4rem 2rem;}}
+  .hero h1{font-size:clamp(1.9rem,3.8vw,3.1rem);line-height:1.1;max-width:17ch;font-style:italic;font-weight:500;}
+  .hero p.lede{max-width:58ch;margin-top:1.3rem;font-size:1.05rem;color:#c7cdd4;}
+  .byline{margin-top:1.8rem;display:flex;align-items:center;gap:0.7rem;font-family:'IBM Plex Mono',monospace;font-size:0.75rem;color:#9aa3ae;}
+  .byline .name{color:var(--paper);font-family:'Inter',sans-serif;font-weight:600;font-size:0.85rem;}
+  .byline .sep{opacity:0.4;}
+
+  .intro-note{margin-top:2.6rem;padding:1.5rem 1.7rem;border-left:2px solid var(--amber);background:rgba(179,120,31,0.07);max-width:64ch;font-size:0.95rem;color:#dfe1da;}
+  .intro-note p{margin:0 0 0.7rem;}
+  .intro-note p:last-child{margin-bottom:0;}
+  .intro-note .who{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--amber);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.6rem;}
+
+  .series-strip{margin-top:2.2rem;display:flex;gap:0.7rem;flex-wrap:wrap;}
+  .series-chip{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:#9aa3ae;border:1px solid rgba(238,240,234,0.18);padding:0.4rem 0.7rem;border-radius:2px;text-decoration:none;}
+  .series-chip:hover{color:var(--paper);border-color:rgba(238,240,234,0.4);}
+
+  .panel{background:var(--paper);color:var(--ink);}
+  .panel .section{border-bottom:1px solid var(--line);}
+  .panel h2{color:var(--ink);}
+  .panel .eyebrow{color:var(--ink-soft);opacity:0.6;}
+
+  .section-head{margin-bottom:1.8rem;max-width:64ch;}
+  .section-head h2{font-size:1.75rem;font-style:italic;margin-top:0.5rem;}
+  .section-head p{margin-top:0.7rem;color:var(--ink-soft);}
+  body>main>.section.enh .section-head p, body>main>.section#foundry .section-head p{color:#b7bec7;}
+
+  .funnel-list{display:flex;flex-direction:column;border-top:var(--rule);}
+  .fstage{display:grid;grid-template-columns:100px 1fr 1fr;gap:1.6rem;padding:1.5rem 0;border-bottom:var(--rule);}
+  @media (max-width:720px){.fstage{grid-template-columns:1fr;gap:0.5rem;}}
+  .fstage .tag{font-family:'IBM Plex Mono',monospace;font-size:0.66rem;color:var(--ink-soft);letter-spacing:0.05em;}
+  .fstage h3{font-size:1.08rem;font-weight:600;font-family:'Inter',sans-serif;margin-bottom:0.35rem;}
+  .col-label{font-family:'IBM Plex Mono',monospace;font-size:0.63rem;text-transform:uppercase;letter-spacing:0.1em;color:#8a9186;margin-bottom:0.4rem;}
+  .fstage p{margin:0;font-size:0.9rem;color:#333f2f;}
+  .fstage .ai-col p{color:#1f4d33;}
+
+  .see-also{margin:1.3rem 0 0;padding:1.2rem 1.4rem;border:1px dashed var(--line);font-size:0.9rem;color:var(--ink-soft);max-width:64ch;}
+  .see-also a{font-weight:600;color:#1f4d33;text-decoration:underline;text-underline-offset:2px;}
+
+  .aside{margin-top:2.2rem;max-width:64ch;font-size:0.92rem;color:#4a5749;font-style:italic;border-top:1px dashed var(--line);padding-top:1.2rem;}
+  .aside b{font-style:normal;font-weight:600;color:var(--ink);}
+
+  .foundations{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);margin-top:1.5rem;border:var(--rule);}
+  @media (max-width:720px){.foundations{grid-template-columns:1fr;}}
+  .fcard{background:var(--paper);padding:1.6rem;}
+  .fcard .num{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--green);}
+  .fcard h4{font-family:'Inter',sans-serif;font-size:1rem;font-weight:600;margin:0.5rem 0 0.4rem;}
+  .fcard p{margin:0;font-size:0.9rem;color:var(--ink-soft);}
+
+  .enh{background:var(--ink);}
+  .enh-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:2rem;}
+  @media (max-width:980px){.enh-grid{grid-template-columns:1fr;}}
+  .enh-card{border:1px solid rgba(238,240,234,0.16);padding:1.7rem 1.5rem;border-radius:2px;background:rgba(238,240,234,0.03);}
+  .enh-card .status{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.22rem 0.5rem;border-radius:2px;margin-bottom:1rem;}
+  .status.amber{background:var(--amber-dim);color:#7a5215;}
+  .status.green{background:var(--green-dim);color:#1f4d33;}
+  .enh-card h3{color:var(--paper);font-size:1.2rem;font-style:italic;margin-bottom:0.7rem;}
+  .enh-card p{color:#b7bec7;font-size:0.91rem;margin:0 0 0.9rem;}
+  .enh-card .maps-to{font-family:'IBM Plex Mono',monospace;font-size:0.67rem;color:#8992a0;border-top:1px dashed rgba(238,240,234,0.2);padding-top:0.8rem;}
+  .enh-card .maps-to b{color:var(--paper);font-weight:500;}
+
+  .steps{counter-reset:step;margin-top:2rem;display:flex;flex-direction:column;}
+  .step{display:grid;grid-template-columns:56px 1fr;gap:1.4rem;padding:1.5rem 0;border-top:1px solid rgba(238,240,234,0.12);}
+  .step:last-child{border-bottom:1px solid rgba(238,240,234,0.12);}
+  .step .idx{counter-increment:step;font-family:'IBM Plex Mono',monospace;color:var(--green);font-size:0.85rem;}
+  .step .idx::before{content:counter(step,decimal-leading-zero);}
+  .step h3{color:var(--paper);font-size:1.02rem;font-family:'Inter',sans-serif;font-weight:600;margin-bottom:0.4rem;}
+  .step p{margin:0;color:#b7bec7;font-size:0.91rem;max-width:68ch;}
+  .step code{font-family:'IBM Plex Mono',monospace;background:rgba(238,240,234,0.08);padding:0.1rem 0.35rem;border-radius:2px;font-size:0.85em;color:#dfe6ee;}
+
+  .signoff{padding:3rem 3rem 1rem;max-width:62ch;}
+  @media (max-width:880px){.signoff{padding:2.2rem 1.4rem 1rem;}}
+  .signoff p{font-size:0.95rem;color:#c7cdd4;}
+  .signoff .sig{margin-top:1.4rem;font-family:'Newsreader',serif;font-style:italic;font-size:1.15rem;}
+
+  footer{padding:1.8rem 3rem 3.4rem;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:#6c7684;display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.8rem;}
+  @media (max-width:880px){footer{padding:1.6rem 1.4rem 2.4rem;}}
+  footer a{text-decoration:underline;text-underline-offset:3px;}
+</style>
+</head>
+<body>
+
+<div class="crumb"><a href="../../index.html">← chabila.github.io</a> &nbsp;/&nbsp; guides &nbsp;/&nbsp; customer journey</div>
+
+<div class="shell">
+  <nav class="rail" aria-label="Customer journey stages">
+    <div class="rail-head">
+      <div class="rail-title">CUSTOMER JOURNEY</div>
+      GUIDE No. 005 — BA × AI
+    </div>
+    <ul class="stages" id="stageRail">
+      <li class="stage" data-target="awareness"><span class="dot"></span><span class="n">01</span> Awareness & acquisition</li>
+      <li class="stage" data-target="browse"><span class="dot"></span><span class="n">02</span> Discovery & browse</li>
+      <li class="stage" data-target="cart"><span class="dot"></span><span class="n">03</span> Consideration & cart</li>
+      <li class="stage" data-target="checkout"><span class="dot"></span><span class="n">04</span> Checkout & payment</li>
+      <li class="stage" data-target="fulfilment"><span class="dot"></span><span class="n">05</span> Fulfilment & delivery</li>
+      <li class="stage" data-target="support"><span class="dot"></span><span class="n">06</span> Post-purchase & support</li>
+      <li class="stage" data-target="loyalty"><span class="dot"></span><span class="n">07</span> Retention & loyalty</li>
+      <li class="stage" data-target="enhance"><span class="dot"></span><span class="n">08</span> Enhancements</li>
+      <li class="stage" data-target="foundry"><span class="dot"></span><span class="n">09</span> Build it</li>
+    </ul>
+    <div class="rail-foot">A living document — I update this as tooling changes.</div>
+  </nav>
+
+  <main>
+    <section class="hero" id="top">
+      <div class="eyebrow">Field notes from a payments BA</div>
+      <h1>The end-to-end customer journey, stage by stage</h1>
+      <p class="lede">Checkout gets most of a payments BA's attention because that's where the money changes hands — but a customer's journey starts long before that and doesn't end at confirmation. This is the full arc: seven stages, what a BA actually does at each, and where AI genuinely earns a place.</p>
+      <div class="byline">
+        <span class="name">Chabila Borkar</span><span class="sep">·</span>
+        <span>Senior Business Analyst, Payments & eCommerce</span>
+      </div>
+
+      <div class="intro-note">
+        <div class="who">A quick note before you dive in</div>
+        <p>The mistake I made early on was treating each stage as its own project with its own team and its own metrics — which is how you end up with a beautifully optimised checkout sitting downstream of a browse experience nobody's looked at in two years. The customer doesn't experience stages. They experience one continuous thing, and a drop at stage five sometimes traces back to a decision made at stage two.</p>
+        <p>Checkout and payment integration get a much deeper treatment in Guides 001 and 002 — here they're one stage among seven, in proportion to the rest of the journey.</p>
+      </div>
+
+      <div class="series-strip">
+        <a class="series-chip" href="../ai-checkout-funnel/index.html">Guide 001 — Checkout funnel</a>
+        <a class="series-chip" href="../ai-payment-integration/index.html">Guide 002 — Payment integration</a>
+        <a class="series-chip" href="../ai-uat-testing/index.html">Guide 003 — UAT & testing</a>
+        <a class="series-chip" href="../ai-delivery-lifecycle/index.html">Guide 004 — Delivery lifecycle</a>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section" id="awareness">
+        <div class="section-head">
+          <div class="eyebrow">Part 1 — Fundamentals</div>
+          <h2>Awareness & acquisition</h2>
+          <p>The journey starts before there's a "customer" at all — just a visitor arriving from somewhere, for some reason. A BA's job here is making sure that reason is captured accurately enough to mean something later.</p>
+        </div>
+
+        <div class="funnel-list">
+          <div class="fstage">
+            <div class="tag">WHAT'S HAPPENING</div>
+            <div>
+              <div class="col-label">What I'm actually doing</div>
+              <h3>Defining what counts as a qualified visit</h3>
+              <p>Working with marketing on campaign attribution rules, UTM tagging standards, and what "engaged" means well enough that reporting downstream is trustworthy.</p>
+            </div>
+            <div class="ai-col">
+              <div class="col-label">Where AI earns its keep</div>
+              <p>Turning a campaign brief into a first-draft tagging and tracking requirement spec — genuinely fast, and easy for a human to check against the brief.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="browse">
+        <div class="section-head">
+          <h2>Discovery & browse</h2>
+          <p>This is where most of the journey's time actually gets spent, and where a surprising amount of downstream cart and checkout behaviour is quietly decided.</p>
+        </div>
+
+        <div class="funnel-list">
+          <div class="fstage">
+            <div class="tag">WHAT'S HAPPENING</div>
+            <div>
+              <div class="col-label">What I'm actually doing</div>
+              <h3>Specifying search, filter, and ranking logic</h3>
+              <p>Writing requirements for product listing page ranking, filter/facet behaviour, and category taxonomy — the plumbing that decides what a customer actually sees.</p>
+            </div>
+            <div class="ai-col">
+              <div class="col-label">Where AI earns its keep</div>
+              <p>Drafting search relevance test cases from real query logs, and summarising session-replay drop-off patterns on the PLP into candidate causes worth investigating.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="cart">
+        <div class="section-head">
+          <h2>Consideration & cart</h2>
+          <p>The decision-making stage — cart abandonment gets studied more than almost anything else in eCommerce, for good reason.</p>
+        </div>
+
+        <div class="funnel-list">
+          <div class="fstage">
+            <div class="tag">WHAT'S HAPPENING</div>
+            <div>
+              <div class="col-label">What I'm actually doing</div>
+              <h3>Defining cart persistence, cross-sell, and wishlist rules</h3>
+              <p>Specifying how a cart survives across sessions and devices, and the business logic behind cross-sell/upsell placement.</p>
+            </div>
+            <div class="ai-col">
+              <div class="col-label">Where AI earns its keep</div>
+              <p>Clustering abandonment reasons from analytics and support tickets into root-cause candidates — the same pattern-matching-at-volume strength that shows up everywhere in this series.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="checkout">
+        <div class="section-head">
+          <h2>Checkout & payment</h2>
+          <p>Two full guides already cover this in depth, so it stays brief here — proportionate to its place as one stage in seven, not the whole journey.</p>
+        </div>
+        <div class="see-also">
+          The detailed checkout funnel breakdown lives in <a href="../ai-checkout-funnel/index.html">Guide 001</a>, and the payment integration lifecycle — PSP discovery through go-live — in <a href="../ai-payment-integration/index.html">Guide 002</a>. Both apply directly here.
+        </div>
+      </div>
+
+      <div class="section" id="fulfilment">
+        <div class="section-head">
+          <h2>Fulfilment & delivery</h2>
+          <p>The promise made at checkout gets kept — or doesn't — here. This is where OMS logic and carrier integration quietly decide customer trust for the next purchase.</p>
+        </div>
+
+        <div class="funnel-list">
+          <div class="fstage">
+            <div class="tag">WHAT'S HAPPENING</div>
+            <div>
+              <div class="col-label">What I'm actually doing</div>
+              <h3>Mapping order state transitions and carrier logic</h3>
+              <p>Documenting OMS order states, split-shipment handling, delivery promise date rules, and carrier selection logic across markets.</p>
+            </div>
+            <div class="ai-col">
+              <div class="col-label">Where AI earns its keep</div>
+              <p>A first-pass integration mapping from a carrier's API docs — the same pattern as PSP mapping in Guide 002, just a different vendor. Summarising delivery exception logs into a pattern list ops can actually act on.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="support">
+        <div class="section-head">
+          <h2>Post-purchase & support</h2>
+          <p>Where a lot of customer sentiment actually gets formed — often more than at checkout itself, because this is where something's already gone slightly wrong.</p>
+        </div>
+
+        <div class="funnel-list">
+          <div class="fstage">
+            <div class="tag">WHAT'S HAPPENING</div>
+            <div>
+              <div class="col-label">What I'm actually doing</div>
+              <h3>Defining returns/refund rules and support taxonomy</h3>
+              <p>Specifying return-reason business rules, refund eligibility logic, and the categorisation taxonomy support agents actually use day to day.</p>
+            </div>
+            <div class="ai-col">
+              <div class="col-label">Where AI earns its keep</div>
+              <p>Drafting a return-reason taxonomy from raw free-text ticket data, and summarising long support threads into a structured case note — real time saved on genuinely tedious work.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="loyalty">
+        <div class="section-head">
+          <h2>Retention & loyalty</h2>
+          <p>The stage that turns a transaction into a relationship — or fails to, which is usually more visible in the data than anyone expects.</p>
+        </div>
+
+        <div class="funnel-list">
+          <div class="fstage">
+            <div class="tag">WHAT'S HAPPENING</div>
+            <div>
+              <div class="col-label">What I'm actually doing</div>
+              <h3>Specifying loyalty tiers and re-engagement triggers</h3>
+              <p>Defining loyalty tier logic, personalisation/segmentation rules, and the triggers behind win-back campaigns.</p>
+            </div>
+            <div class="ai-col">
+              <div class="col-label">Where AI earns its keep</div>
+              <p>Drafting segment definitions from behavioural data and turning a marketing brief into a structured personalisation rule table — a first draft, always checked against actual customer data before it ships.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="aside">Seven stages, one customer. <b>The single most useful thing a BA can do across all of them is trace a metric back through the stage before it, not just the stage it appeared in.</b> AI's summarising strength makes that tracing faster — it doesn't replace the instinct to go looking.</div>
+
+        <div class="section-head" style="margin-top:3.2rem;">
+          <div class="eyebrow">Before you touch a model</div>
+          <h2>What holds true across the whole journey</h2>
+        </div>
+        <div class="foundations">
+          <div class="fcard">
+            <div class="num">01</div>
+            <h4>Journey data lives in more systems than you think</h4>
+            <p>CRM, OMS, PSP, support tool, loyalty platform — stitching a single customer's path across all of them is genuinely the job. No model does that stitching for you unless you've connected the systems.</p>
+          </div>
+          <div class="fcard">
+            <div class="num">02</div>
+            <h4>PII spans the whole journey, not just checkout</h4>
+            <p>Marketing, support, and loyalty data all carry privacy obligations of their own — this is a bigger data-handling surface than payment data alone, not a smaller one.</p>
+          </div>
+          <div class="fcard">
+            <div class="num">03</div>
+            <h4>A drop at one stage can be caused by an earlier one</h4>
+            <p>Checkout abandonment sometimes traces back to a browse-stage search relevance problem. Investigate the stage before the symptom, not just the symptom.</p>
+          </div>
+          <div class="fcard">
+            <div class="num">04</div>
+            <h4>The customer never sees your org chart</h4>
+            <p>Seven stages usually means seven different teams. The BA's real value is often just being the one person who can see the whole thing at once.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section enh" id="enhance">
+      <div class="section-head">
+        <div class="eyebrow">Part 2 — Enhancements</div>
+        <h2>Once the basics are solid, these are worth the setup time</h2>
+        <p>The same three techniques from the rest of the series, applied at the scale a full customer journey actually needs.</p>
+      </div>
+
+      <div class="enh-grid">
+        <div class="enh-card">
+          <span class="status green">Grounding</span>
+          <h3>Retrieval-Augmented Generation</h3>
+          <p>Ground the model in your own journey data — past campaign attribution reports, PLP analytics, support ticket history, loyalty programme rules — instead of general knowledge. The difference between a generic "customers abandon carts due to shipping cost" answer and one that cites your actual Q2 exit-survey data.</p>
+          <div class="maps-to">Maps to: <b>every stage</b> — grounded in the specific data that stage produces.</div>
+        </div>
+        <div class="enh-card">
+          <span class="status amber">Control</span>
+          <h3>Human-in-the-loop</h3>
+          <p>Refund approval, loyalty tier overrides, and discount/goodwill decisions carry real commercial and reputational weight. HITL means those specific actions pause for a named human, while lower-stakes drafting keeps moving without a bottleneck.</p>
+          <div class="maps-to">Maps to: <b>post-purchase support & loyalty</b> — where individual customer-facing decisions live.</div>
+        </div>
+        <div class="enh-card">
+          <span class="status green">Connection</span>
+          <h3>MCP servers</h3>
+          <p>An agent with live, permissioned access to your CRM, OMS, support platform, and marketing tool can trace a customer's actual path across all seven stages on demand — instead of you exporting five different reports and joining them by hand.</p>
+          <div class="maps-to">Maps to: <b>cross-stage investigation</b> — tracing a metric back through the journey that produced it.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="foundry">
+      <div class="section-head">
+        <div class="eyebrow">Part 3 — Hands-on</div>
+        <h2>Building this in Microsoft Foundry</h2>
+        <p>The sequence I'd follow to build one assistant that can see the whole customer journey, not just whichever system happens to be open. Microsoft Foundry (formerly Azure AI Foundry), current as of 2026.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step"><div class="idx"></div><div>
+          <h3>Create a Foundry project and connect your journey data</h3>
+          <p>Stand up a project, then connect campaign attribution reports, PLP analytics, order and delivery data, support tickets, and loyalty programme rules — via Azure Blob Storage or a data connection — ready to be indexed.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Deploy a model from the catalog</h3>
+          <p>Pick a model (e.g. <code>gpt-4o</code>) from the Foundry model catalog as your reasoning engine — swappable later without rebuilding the rest.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Ground it against your own journey history (RAG)</h3>
+          <p>Index the connected sources with Azure AI Search, add it to your agent as a knowledge source, so any answer about "why did stage X drop" is grounded in your actual cross-stage data.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Attach live systems via MCP</h3>
+          <p>From the Foundry portal's Tools menu, connect your CRM, OMS, and support platform as tool connections, so the agent can pull a specific customer's live journey rather than working from a stale export.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Add human-approval checkpoints where the stakes are real</h3>
+          <p>Flag refund approvals, loyalty overrides, and goodwill gestures as requiring approval. The workflow pauses on a <code>function_approval_request</code> and only proceeds once a named reviewer signs off.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Orchestrate it as a cross-stage workflow</h3>
+          <p>Use Foundry's workflow builder to chain retrieval → cross-stage analysis → drafting → human review, so a single query can trace a customer's path across all seven stages in one pass.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Evaluate before you trust it, then monitor</h3>
+          <p>Run Foundry's built-in groundedness and relevance evaluations before rollout, then use tracing and Application Insights to see what it's actually surfacing once it's live.</p>
+        </div></div>
+      </div>
+    </section>
+
+    <div class="signoff">
+      <p>If you've mapped your own customer journey and found a stage that doesn't fit neatly into these seven — that's usually where the interesting work is. Happy to compare notes.</p>
+      <div class="sig">— Chabila</div>
+    </div>
+
+    <footer>
+      <div>Guide No. 005 in an ongoing series. See also <a href="../ai-checkout-funnel/index.html">Guide 001</a>, <a href="../ai-payment-integration/index.html">Guide 002</a>, <a href="../ai-uat-testing/index.html">Guide 003</a>, and <a href="../ai-delivery-lifecycle/index.html">Guide 004</a>.</div>
+      <div><a href="#top">Back to top ↑</a></div>
+    </footer>
+  </main>
+</div>
+
+<script>
+  const stages = document.querySelectorAll('.stage');
+  const targets = Array.from(stages).map(s => document.getElementById(s.dataset.target)).filter(Boolean);
+  stages.forEach(s => {
+    s.addEventListener('click', () => {
+      const el = document.getElementById(s.dataset.target);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = entry.target.id;
+      const stage = document.querySelector('.stage[data-target="'+id+'"]');
+      if(!stage) return;
+      if(entry.isIntersecting){
+        stages.forEach(s => s.classList.remove('active'));
+        stage.classList.add('active');
+      }
+    });
+  }, {rootMargin: "-20% 0px -65% 0px", threshold: 0});
+  targets.forEach(t => io.observe(t));
+</script>
+
+</body>
+</html>
