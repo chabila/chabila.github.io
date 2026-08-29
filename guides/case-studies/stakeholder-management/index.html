@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stakeholder Management for BAs | Chabila Borkar</title>
+<meta name="description" content="A working framework for stakeholder management in business analysis — defining stakeholders, classifying and mapping them, and how to approach customer, business, IT, technical, legal, compliance, and finance stakeholders differently across new requirements, BAU changes, mid-scope changes, and live incidents.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12181f; --paper:#eef0ea; --paper-dim:#e2e5dd; --line:#c7cbc0;
+    --green:#2f7a55; --green-dim:#e4ede6; --amber:#b3781f; --amber-dim:#f3e6d2;
+    --ink-soft:#3a4552; --rule: 1px solid var(--line);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--ink);color:var(--paper);font-family:'Inter',sans-serif;line-height:1.6;}
+  ::selection{background:var(--amber);color:var(--ink);}
+  a{color:inherit;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;opacity:0.75;}
+  h1,h2,h3{font-family:'Newsreader',serif;font-weight:500;margin:0;}
+
+  .crumb{padding:0.9rem 3rem;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:#8992a0;border-bottom:1px solid rgba(238,240,234,0.1);}
+  @media (max-width:880px){.crumb{padding:0.8rem 1.4rem;}}
+  .crumb a{text-decoration:none;border-bottom:1px dotted #8992a0;}
+  .crumb a:hover{color:var(--paper);}
+
+  .shell{display:grid;grid-template-columns:280px 1fr;max-width:1220px;margin:0 auto;}
+  @media (max-width:880px){.shell{grid-template-columns:1fr;}}
+
+  .rail{position:sticky;top:0;align-self:start;height:100vh;padding:2.2rem 1.4rem;border-right:1px solid rgba(238,240,234,0.14);font-family:'IBM Plex Mono',monospace;display:flex;flex-direction:column;}
+  @media (max-width:880px){.rail{position:sticky;height:auto;top:0;z-index:40;background:var(--ink);border-right:none;border-bottom:1px solid rgba(238,240,234,0.14);padding:0.9rem 1.2rem;}}
+  .rail-head{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:#7d8794;margin-bottom:1.1rem;padding-bottom:1rem;border-bottom:1px dashed rgba(238,240,234,0.25);}
+  @media (max-width:880px){.rail-head{display:none;}}
+  .rail-title{color:var(--paper);font-size:0.75rem;letter-spacing:0.08em;margin-bottom:0.3rem;}
+  .stages{list-style:none;margin:0;padding:0;flex:1;}
+  @media (max-width:880px){.stages{display:flex;gap:0.4rem;overflow-x:auto;padding-bottom:0.2rem;}}
+  .stage{display:flex;align-items:baseline;gap:0.6rem;padding:0.48rem 0;font-size:0.74rem;color:#6c7684;border-bottom:1px dotted rgba(238,240,234,0.14);cursor:pointer;transition:color .3s ease;}
+  @media (max-width:880px){.stage{border-bottom:none;padding:0.4rem 0.6rem;white-space:nowrap;background:rgba(238,240,234,0.05);border-radius:3px;}}
+  .stage .n{opacity:0.55;}
+  .stage.active{color:var(--paper);}
+  .stage.active .dot{background:var(--green);box-shadow:0 0 0 3px rgba(47,122,85,.25);}
+  .dot{width:6px;height:6px;border-radius:50%;background:#4a5461;flex:none;}
+  .rail-foot{font-size:0.62rem;color:#5b6472;padding-top:1rem;border-top:1px dashed rgba(238,240,234,0.25);line-height:1.7;}
+  @media (max-width:880px){.rail-foot{display:none;}}
+
+  main{padding:0;}
+  .section{padding:4rem 3rem;border-bottom:1px solid rgba(238,240,234,0.1);}
+  @media (max-width:880px){.section{padding:2.6rem 1.4rem;}}
+
+  .hero{padding:3.2rem 3rem 3rem;}
+  @media (max-width:880px){.hero{padding:2rem 1.4rem 2rem;}}
+  .hero h1{font-size:clamp(1.9rem,3.8vw,3.1rem);line-height:1.1;max-width:19ch;font-style:italic;font-weight:500;}
+  .hero p.lede{max-width:60ch;margin-top:1.3rem;font-size:1.05rem;color:#c7cdd4;}
+  .byline{margin-top:1.8rem;display:flex;align-items:center;gap:0.7rem;font-family:'IBM Plex Mono',monospace;font-size:0.75rem;color:#9aa3ae;}
+  .byline .name{color:var(--paper);font-family:'Inter',sans-serif;font-weight:600;font-size:0.85rem;}
+  .byline .sep{opacity:0.4;}
+
+  .intro-note{margin-top:2.6rem;padding:1.5rem 1.7rem;border-left:2px solid var(--amber);background:rgba(179,120,31,0.07);max-width:66ch;font-size:0.95rem;color:#dfe1da;}
+  .intro-note p{margin:0 0 0.7rem;}
+  .intro-note p:last-child{margin-bottom:0;}
+  .intro-note .who{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--amber);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.6rem;}
+
+  .panel{background:var(--paper);color:var(--ink);}
+  .panel .section{border-bottom:1px solid var(--line);}
+  .panel h2{color:var(--ink);}
+  .panel .eyebrow{color:var(--ink-soft);opacity:0.6;}
+
+  .section-head{margin-bottom:1.8rem;max-width:66ch;}
+  .section-head h2{font-size:1.75rem;font-style:italic;margin-top:0.5rem;}
+  .section-head p{margin-top:0.7rem;color:var(--ink-soft);}
+  body>main>.section.scen .section-head p{color:#b7bec7;}
+
+  /* quadrant grid for power/interest */
+  .quad-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);margin-top:1.5rem;border:var(--rule);}
+  @media (max-width:640px){.quad-grid{grid-template-columns:1fr;}}
+  .quad{background:var(--paper);padding:1.7rem;}
+  .quad .qlabel{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--green);margin-bottom:0.5rem;}
+  .quad h4{font-family:'Inter',sans-serif;font-size:1rem;font-weight:600;margin-bottom:0.5rem;}
+  .quad p{margin:0;font-size:0.88rem;color:var(--ink-soft);}
+
+  /* frameworks list */
+  .fw-list{display:flex;flex-direction:column;border-top:var(--rule);margin-top:1.5rem;}
+  .fw-row{display:grid;grid-template-columns:180px 1fr;gap:1.6rem;padding:1.4rem 0;border-bottom:var(--rule);}
+  @media (max-width:720px){.fw-row{grid-template-columns:1fr;gap:0.4rem;}}
+  .fw-row .fw-name{font-family:'IBM Plex Mono',monospace;font-size:0.75rem;color:var(--ink-soft);letter-spacing:0.02em;}
+  .fw-row h3{font-size:1.05rem;font-weight:600;font-family:'Inter',sans-serif;margin-bottom:0.4rem;}
+  .fw-row p{margin:0;font-size:0.9rem;color:#333f2f;}
+
+  /* stakeholder persona cards */
+  .stake-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);margin-top:1.5rem;border:var(--rule);}
+  @media (max-width:900px){.stake-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:600px){.stake-grid{grid-template-columns:1fr;}}
+  .stake-card{background:var(--paper);padding:1.6rem 1.4rem;display:flex;flex-direction:column;gap:0.7rem;}
+  .stake-card .role{font-family:'Inter',sans-serif;font-size:1.02rem;font-weight:700;color:var(--ink);}
+  .stake-field{font-size:0.84rem;}
+  .stake-field .fl{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.07em;color:#8a9186;display:block;margin-bottom:0.15rem;}
+  .stake-field .fv{color:#333f2f;}
+  .stake-field.friction .fv{color:#7a5215;}
+
+  /* scenario blocks (dark) */
+  .scen{background:var(--ink);}
+  .scen-block{border:1px solid rgba(238,240,234,0.16);border-radius:2px;background:rgba(238,240,234,0.03);padding:2rem 1.9rem;margin-top:1.8rem;}
+  .scen-block .scen-tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.22rem 0.55rem;border-radius:2px;margin-bottom:1rem;background:var(--amber-dim);color:#7a5215;}
+  .scen-block h3{color:var(--paper);font-size:1.35rem;font-style:italic;margin-bottom:0.9rem;}
+  .scen-cols{display:grid;grid-template-columns:1fr 1.4fr;gap:1.8rem;margin-bottom:1.2rem;}
+  @media (max-width:760px){.scen-cols{grid-template-columns:1fr;}}
+  .scen-cols .col-label{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:#8992a0;margin-bottom:0.6rem;}
+  .who-chips{display:flex;flex-wrap:wrap;gap:0.4rem;}
+  .who-chip{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:#dfe1da;border:1px solid rgba(238,240,234,0.2);padding:0.25rem 0.55rem;border-radius:2px;}
+  .scen-cols p{margin:0;color:#b7bec7;font-size:0.91rem;}
+  .scen-watch{border-top:1px dashed rgba(238,240,234,0.2);padding-top:1rem;font-size:0.88rem;color:#c7cdd4;font-style:italic;}
+  .scen-watch b{font-style:normal;color:var(--amber);font-weight:600;}
+
+  .foundations{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);margin-top:1.5rem;border:var(--rule);}
+  @media (max-width:720px){.foundations{grid-template-columns:1fr;}}
+  .fcard{background:var(--paper);padding:1.6rem;}
+  .fcard .num{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--green);}
+  .fcard h4{font-family:'Inter',sans-serif;font-size:1rem;font-weight:600;margin:0.5rem 0 0.4rem;}
+  .fcard p{margin:0;font-size:0.9rem;color:var(--ink-soft);}
+
+  .aside{margin-top:2.2rem;max-width:66ch;font-size:0.92rem;color:#4a5749;font-style:italic;border-top:1px dashed var(--line);padding-top:1.2rem;}
+  .aside b{font-style:normal;font-weight:600;color:var(--ink);}
+
+  .signoff{padding:3rem 3rem 1rem;max-width:62ch;}
+  @media (max-width:880px){.signoff{padding:2.2rem 1.4rem 1rem;}}
+  .signoff p{font-size:0.95rem;color:#c7cdd4;}
+  .signoff .sig{margin-top:1.4rem;font-family:'Newsreader',serif;font-style:italic;font-size:1.15rem;}
+
+  footer{padding:1.8rem 3rem 3.4rem;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:#6c7684;display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.8rem;}
+  @media (max-width:880px){footer{padding:1.6rem 1.4rem 2.4rem;}}
+  footer a{text-decoration:underline;text-underline-offset:3px;}
+</style>
+</head>
+<body>
+
+<div class="crumb"><a href="../index.html">← chabila.github.io</a> &nbsp;/&nbsp; stakeholder management</div>
+
+<div class="shell">
+  <nav class="rail" aria-label="Stakeholder management sections">
+    <div class="rail-head">
+      <div class="rail-title">BA PRACTICE</div>
+      CASE STUDY — Stakeholder Management
+    </div>
+    <ul class="stages" id="stageRail">
+      <li class="stage" data-target="define"><span class="dot"></span><span class="n">01</span> What is a stakeholder</li>
+      <li class="stage" data-target="classify"><span class="dot"></span><span class="n">02</span> Classifying & mapping</li>
+      <li class="stage" data-target="types"><span class="dot"></span><span class="n">03</span> Who you're actually managing</li>
+      <li class="stage" data-target="newreq"><span class="dot"></span><span class="n">04</span> New requirements</li>
+      <li class="stage" data-target="bau"><span class="dot"></span><span class="n">05</span> Existing / BAU changes</li>
+      <li class="stage" data-target="midscope"><span class="dot"></span><span class="n">06</span> Mid-scope changes</li>
+      <li class="stage" data-target="incident"><span class="dot"></span><span class="n">07</span> Live site issues</li>
+      <li class="stage" data-target="principles"><span class="dot"></span><span class="n">08</span> Principles</li>
+    </ul>
+    <div class="rail-foot">A working framework — refined against real projects, not lifted from a textbook.</div>
+  </nav>
+
+  <main>
+    <section class="hero" id="top">
+      <div class="eyebrow">A BA practice case study</div>
+      <h1>Stakeholder management: who, and how, not just a RACI chart</h1>
+      <p class="lede">Most stakeholder management advice stops at "build a RACI." The actual skill is knowing that a legal reviewer, a developer, and a customer need three completely different conversations about the same decision — and that the right approach for a new feature request is close to wrong for a live incident.</p>
+      <div class="byline">
+        <span class="name">Chabila Borkar</span><span class="sep">·</span>
+        <span>Senior Business Analyst, Payments & eCommerce</span>
+      </div>
+
+      <div class="intro-note">
+        <div class="who">A quick note on how to read this</div>
+        <p>I've run this from both ends — in a room with an engineering team at 9am and a client steering committee at 2pm, on the same requirement. What follows is the framework I actually use, not the idealised version from a BA certification course. It starts with definitions and frameworks, then gets specific about roles and scenarios, because that's where most stakeholder advice stops being useful.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section" id="define">
+        <div class="section-head">
+          <div class="eyebrow">Part 1 — Fundamentals</div>
+          <h2>What is a stakeholder?</h2>
+          <p>A stakeholder is anyone who can affect, or is affected by, the initiative — not just the people invited to the meeting. That distinction matters more than it sounds.</p>
+        </div>
+
+        <div class="fw-list">
+          <div class="fw-row">
+            <div class="fw-name">The core definition</div>
+            <div>
+              <h3>Affects, or is affected by</h3>
+              <p>A stakeholder has an interest in the outcome or the influence to shape it — sometimes both, sometimes neither obviously, which is exactly why mapping matters more than gut feel.</p>
+            </div>
+          </div>
+          <div class="fw-row">
+            <div class="fw-name">Stakeholder vs. sponsor</div>
+            <div>
+              <h3>Not every stakeholder funds the work</h3>
+              <p>A sponsor holds budget and ultimate accountability. A stakeholder might have neither, and still be essential — a compliance officer with veto power over a specific clause isn't funding anything.</p>
+            </div>
+          </div>
+          <div class="fw-row">
+            <div class="fw-name">Stakeholder vs. user</div>
+            <div>
+              <h3>Not every stakeholder uses the thing</h3>
+              <p>An end customer is a stakeholder because they're affected by the outcome. A finance controller reviewing revenue impact is a stakeholder without ever touching the product.</p>
+            </div>
+          </div>
+          <div class="fw-row">
+            <div class="fw-name">The common mistake</div>
+            <div>
+              <h3>Conflating "loud" with "important"</h3>
+              <p>The stakeholder who emails the most isn't automatically the one whose sign-off actually matters. Confusing volume with influence is the single most common way stakeholder management goes wrong.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="classify">
+        <div class="section-head">
+          <h2>Classifying & mapping</h2>
+          <p>Three frameworks I actually use, each doing a different job — none of them replaces judgement, but together they stop you relying on gut feel alone.</p>
+        </div>
+
+        <div class="fw-list" style="border-top:none;">
+          <div class="fw-row" style="border-top:var(--rule);">
+            <div class="fw-name">Power / Interest Grid<br><span style="opacity:0.6;">(Mendelow's Matrix)</span></div>
+            <div>
+              <h3>The starting point for any new initiative</h3>
+              <p>Plots stakeholders on two axes — how much influence they have, and how much they care about this specific outcome. Four quadrants fall out of it, shown below.</p>
+            </div>
+          </div>
+          <div class="fw-row">
+            <div class="fw-name">RACI</div>
+            <div>
+              <h3>Per decision, not per person</h3>
+              <p>Responsible, Accountable, Consulted, Informed — the mistake most teams make is building one RACI for the whole project. Build it per deliverable or decision; the same person is often Accountable on one decision and merely Informed on the next.</p>
+            </div>
+          </div>
+          <div class="fw-row">
+            <div class="fw-name">Salience Model<br><span style="opacity:0.6;">(power, legitimacy, urgency)</span></div>
+            <div>
+              <h3>For stakeholders whose influence is situational</h3>
+              <p>Power/interest alone misses stakeholders like legal or compliance, who have low day-to-day interest but become highly salient — and non-negotiable — the moment a specific regulatory question arises. Salience captures that swing.</p>
+            </div>
+          </div>
+          <div class="fw-row">
+            <div class="fw-name">Stakeholder register</div>
+            <div>
+              <h3>The living document underneath all three</h3>
+              <p>Name, role, interest, influence, preferred communication channel, engagement strategy, escalation path — reviewed at every phase, because stakeholders move between quadrants as the project moves through its lifecycle.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-head" style="margin-top:2.8rem;">
+          <h2 style="font-size:1.4rem;">The power/interest grid in practice</h2>
+        </div>
+        <div class="quad-grid">
+          <div class="quad">
+            <div class="qlabel">High power · High interest</div>
+            <h4>Manage closely</h4>
+            <p>Your sponsor, your lead architect on a major redesign. Engage frequently, involve in real decisions, never surprise them.</p>
+          </div>
+          <div class="quad">
+            <div class="qlabel">High power · Low interest</div>
+            <h4>Keep satisfied</h4>
+            <p>A senior exec who cares about the outcome but not the detail. Short, infrequent, high-level updates — don't bury them in detail they didn't ask for.</p>
+          </div>
+          <div class="quad">
+            <div class="qlabel">Low power · High interest</div>
+            <h4>Keep informed</h4>
+            <p>A support team who'll live with the change daily but can't block it. Regular updates build goodwill and surface real operational risk early.</p>
+          </div>
+          <div class="quad">
+            <div class="qlabel">Low power · Low interest</div>
+            <h4>Monitor</h4>
+            <p>Minimal effort — but check periodically, because low interest today doesn't mean low interest once the change actually lands on their desk.</p>
+          </div>
+        </div>
+
+        <div class="aside">The grid is a snapshot, not a verdict. <b>The single biggest failure mode in stakeholder mapping is treating the quadrant as permanent</b> — someone in "Monitor" during discovery can land in "Manage Closely" by go-live, and the register needs to catch that shift before it catches you.</div>
+      </div>
+
+      <div class="section" id="types">
+        <div class="section-head">
+          <h2>Who you're actually managing</h2>
+          <p>Eleven roles that show up on almost every delivery I've worked, and what actually works with each — not the generic "communicate clearly" advice that applies to everyone and helps no one.</p>
+        </div>
+
+        <div class="stake-grid">
+          <div class="stake-card">
+            <div class="role">Customer / end user</div>
+            <div class="stake-field"><span class="fl">Cares about</span><span class="fv">Whether it solves their actual problem, with minimal friction.</span></div>
+            <div class="stake-field"><span class="fl">Engage via</span><span class="fv">User research, journey mapping, plain language — never internal jargon.</span></div>
+            <div class="stake-field friction"><span class="fl">Common friction</span><span class="fv">Rarely in the room; the requirement is a stand-in for a conversation that didn't happen.</span></div>
+          </div>
+          <div class="stake-card">
+            <div class="role">Business / sponsor</div>
+            <div class="stake-field"><span class="fl">Cares about</span><span class="fv">ROI, timeline, risk to revenue.</span></div>
+            <div class="stake-field"><span class="fl">Engage via</span><span class="fv">Business case language, KPI framing, executive summary before detail.</span></div>
+            <div class="stake-field friction"><span class="fl">Common friction</span><span class="fv">Wants certainty before scope is fully known — manage that expectation early, not at the review.</span></div>
+          </div>
+          <div class="stake-card">
+            <div class="role">IT / operations</div>
+            <div class="stake-field"><span class="fl">Cares about</span><span class="fv">Supportability and operational load after go-live.</span></div>
+            <div class="stake-field"><span class="fl">Engage via</span><span class="fv">Runbooks, operational readiness reviews, explicit ownership boundaries.</span></div>
+            <div class="stake-field friction"><span class="fl">Common friction</span><span class="fv">Brought in too late, inheriting decisions they never had a chance to shape.</span></div>
+          </div>
+          <div class="stake-card">
+            <div class="role">Technical / developers</div>
+            <div class="stake-field"><span class="fl">Cares about</span><span class="fv">Unambiguous, testable requirements — not a solution disguised as one.</span></div>
+            <div class="stake-field"><span class="fl">Engage via</span><span class="fv">Clear acceptance criteria, and direct access to ask "why", not just "what".</span></div>
+            <div class="stake-field friction"><span class="fl">Common friction</span><span class="fv">Vague requirements create rework; devs need the rationale to judge edge cases the spec missed.</span></div>
+          </div>
+          <div class="stake-card">
+            <div class="role">Architects</div>
+            <div class="stake-field"><span class="fl">Cares about</span><span class="fv">Long-term maintainability and consistency with platform standards.</span></div>
+            <div class="stake-field"><span class="fl">Engage via</span><span class="fv">Architecture Decision Records, involvement before solutioning is locked in.</span></div>
+            <div class="stake-field friction"><span class="fl">Common friction</span><span class="fv">Looped in after a solution is already assumed, forcing a rework of the underlying design.</span></div>
+          </div>
+          <div class="stake-card">
+            <div class="role">QA / test</div>
+            <div class="stake-field"><span class="fl">Cares about</span><span class="fv">Testability, edge cases, and enough lead time to plan coverage.</span></div>
+            <div class="stake-field"><span class="fl">Engage via</span><span class="fv">Involve at the acceptance-criteria stage, not just when test cases are due.</span></div>
+            <div class="stake-field friction"><span class="fl">Common friction</span><span class="fv">Acceptance criteria written without QA input often aren't actually testable as written.</span></div>
+          </div>
+          <div class="stake-card">
+            <div class="role">Product Owner</div>
+            <div class="stake-field"><span class="fl">Cares about</span><span class="fv">Backlog priority, value delivered per sprint, protecting scope.</span></div>
+            <div class="stake-field"><span class="fl">Engage via</span><span class="fv">Transparent trade-off conversations grounded in priority rationale.</span></div>
+            <div class="stake-field friction"><span class="fl">Common friction</span><span class="fv">Overlap with the BA role is ambiguous on some teams — agree early who owns "what" versus "how it's specified".</span></div>
+          </div>
+          <div class="stake-card">
+            <div class="role">Legal</div>
+            <div class="stake-field"><span class="fl">Cares about</span><span class="fv">Contractual exposure, liability, regulatory wording accuracy.</span></div>
+            <div class="stake-field"><span class="fl">Engage via</span><span class="fv">Bring in early on anything customer-facing or contractual — share actual proposed wording, not a summary.</span></div>
+            <div class="stake-field friction"><span class="fl">Common friction</span><span class="fv">Treated as a rubber-stamp at the end instead of an early input, causing late-stage rewrites.</span></div>
+          </div>
+          <div class="stake-card">
+            <div class="role">Compliance</div>
+            <div class="stake-field"><span class="fl">Cares about</span><span class="fv">Regulatory obligations and a clean audit trail.</span></div>
+            <div class="stake-field"><span class="fl">Engage via</span><span class="fv">Documented decision rationale, early flagging of anything touching a regulated process.</span></div>
+            <div class="stake-field friction"><span class="fl">Common friction</span><span class="fv">Concerns surface after build has started, because they weren't looped in during requirements.</span></div>
+          </div>
+          <div class="stake-card">
+            <div class="role">Payments team</div>
+            <div class="stake-field"><span class="fl">Cares about</span><span class="fv">Settlement accuracy, transaction success rates, PSP relationship terms.</span></div>
+            <div class="stake-field"><span class="fl">Engage via</span><span class="fv">Reconciliation data and a clear before/after view of transaction flow impact.</span></div>
+            <div class="stake-field friction"><span class="fl">Common friction</span><span class="fv">"Front-end only" changes often carry routing or reconciliation implications this team needs to weigh in on.</span></div>
+          </div>
+          <div class="stake-card">
+            <div class="role">Finance</div>
+            <div class="stake-field"><span class="fl">Cares about</span><span class="fv">Revenue recognition impact, budget tracking, accurate reporting.</span></div>
+            <div class="stake-field"><span class="fl">Engage via</span><span class="fv">Explicit articulation of financial impact — e.g., how a discount logic change shifts recognition timing.</span></div>
+            <div class="stake-field friction"><span class="fl">Common friction</span><span class="fv">Only consulted once something breaks their reporting, rather than proactively at design time.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section scen" id="newreq">
+      <div class="section-head">
+        <div class="eyebrow">Part 2 — By scenario across the lifecycle</div>
+        <h2>New requirements</h2>
+        <p>The widest net you'll cast in the whole lifecycle — and the stage where under-consulting costs the most later.</p>
+      </div>
+
+      <div class="scen-block">
+        <span class="scen-tag">Discovery</span>
+        <h3>Widen before you narrow</h3>
+        <div class="scen-cols">
+          <div>
+            <div class="col-label">Who's central</div>
+            <div class="who-chips">
+              <span class="who-chip">Business / customer</span>
+              <span class="who-chip">Architects</span>
+              <span class="who-chip">Product Owner</span>
+              <span class="who-chip">Legal / Compliance (if regulated)</span>
+            </div>
+          </div>
+          <div>
+            <div class="col-label">How to approach it</div>
+            <p>Talk to more stakeholders than you think you need before converging. Ask "why" before "what" — the business/customer conversation should shape the requirement, not just confirm one you'd already assumed. Sequence matters: understand the need first, sanity-check feasibility with architects and technical leads second, prioritise with the PO third, and loop in legal/compliance early if it touches anything regulated.</p>
+          </div>
+        </div>
+        <div class="scen-watch"><b>Watch for:</b> jumping straight to developers with a half-formed idea, skipping the business rationale that would have shaped a better requirement in the first place.</div>
+      </div>
+    </section>
+
+    <section class="section panel" id="bau">
+      <div class="section-head">
+        <div class="eyebrow">Part 2 — continued</div>
+        <h2>Existing / BAU changes</h2>
+        <p>Routine enhancement requests to something already live — where the skill is knowing how little ceremony is actually needed.</p>
+      </div>
+
+      <div class="fw-list">
+        <div class="fw-row">
+          <div class="fw-name">Who's central</div>
+          <div>
+            <h3>The team already accountable for that area</h3>
+            <p>Usually a narrower set than a new initiative — the dev/QA pairing who owns that part of the system, plus the business stakeholder who can confirm the value is still real.</p>
+          </div>
+        </div>
+        <div class="fw-row">
+          <div class="fw-name">How to approach it</div>
+          <div>
+            <h3>Lighter touch, reused context</h3>
+            <p>Check the existing RAID log and decision history before re-discovering from scratch. Confirm with the accountable business stakeholder, then route directly to dev/QA — no need to reassemble the full discovery cast for a small, well-understood change.</p>
+          </div>
+        </div>
+        <div class="fw-row">
+          <div class="fw-name">Watch for</div>
+          <div>
+            <h3>Ceremony creep</h3>
+            <p>Treating every small change with the same process as a new initiative slows delivery and quietly irritates stakeholders who've seen this exact pattern before — proportionality is part of managing them well.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section scen" id="midscope">
+      <div class="section-head">
+        <div class="eyebrow">Part 2 — continued</div>
+        <h2>Mid-scope changes</h2>
+        <p>Scope shifting while delivery is already underway — the scenario where transparency matters more than speed.</p>
+      </div>
+
+      <div class="scen-block">
+        <span class="scen-tag">In flight</span>
+        <h3>Show the cost before you agree to it</h3>
+        <div class="scen-cols">
+          <div>
+            <div class="col-label">Who's central</div>
+            <div class="who-chips">
+              <span class="who-chip">Product Owner</span>
+              <span class="who-chip">Architects / developers</span>
+              <span class="who-chip">Original requesting stakeholder</span>
+            </div>
+          </div>
+          <div>
+            <div class="col-label">How to approach it</div>
+            <p>Capture the change formally as a change request rather than absorbing it quietly. Assess impact with the technical team first, then present the trade-off — time, rework, risk — to the business/PO before proceeding. Get explicit sign-off, not silent acceptance. Check the change still serves the original requester's actual need, not just the new idea that arrived mid-delivery.</p>
+          </div>
+        </div>
+        <div class="scen-watch"><b>Watch for:</b> absorbing scope quietly to avoid a difficult conversation — it erodes your ability to say no next time, and the cost doesn't disappear, it just becomes invisible until it isn't.</div>
+      </div>
+    </section>
+
+    <section class="section panel" id="incident">
+      <div class="section-head">
+        <div class="eyebrow">Part 2 — continued</div>
+        <h2>Live site issues</h2>
+        <p>The scenario that looks nothing like the other three — speed and calm replace thoroughness, and the BA's job is as much about managing communication as understanding the fix.</p>
+      </div>
+
+      <div class="fw-list">
+        <div class="fw-row">
+          <div class="fw-name">Who's central</div>
+          <div>
+            <h3>Everyone, in parallel, not in sequence</h3>
+            <p>IT/ops for diagnosis, technical/developers for the fix, business for customer-impact assessment, legal/compliance if there's a data or regulatory angle, customer-facing teams for comms — all moving at once, not queued one after another.</p>
+          </div>
+        </div>
+        <div class="fw-row">
+          <div class="fw-name">How to approach it</div>
+          <div>
+            <h3>Short, factual, on a cadence</h3>
+            <p>Separate "what we know" from "what we're investigating" in every update. A regular short status beats an occasional comprehensive one — stakeholders in an incident want to know you're on it, not read a full root-cause analysis mid-fire. Save the complete RCA and formal sign-off for after resolution.</p>
+          </div>
+        </div>
+        <div class="fw-row">
+          <div class="fw-name">Watch for</div>
+          <div>
+            <h3>Disappearing into the fix</h3>
+            <p>It's tempting to go heads-down with the technical team and let communication lapse. Managing the stakeholder update cadence is equally the job during an incident — not a distraction from the real work.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-head" style="margin-top:3.2rem;">
+        <div class="eyebrow">Underneath all four scenarios</div>
+        <h2>Principles that hold regardless of scenario</h2>
+      </div>
+      <div class="foundations">
+        <div class="fcard">
+          <div class="num">01</div>
+          <h4>The register is alive, not a one-time exercise</h4>
+          <p>Revisit it at every phase. Power and interest shift constantly — someone irrelevant at discovery can be the single blocker at go-live.</p>
+        </div>
+        <div class="fcard">
+          <div class="num">02</div>
+          <h4>Loud isn't the same as important</h4>
+          <p>The frameworks in Part 1 exist precisely to catch this. Don't let the most vocal stakeholder set your priority by volume alone.</p>
+        </div>
+        <div class="fcard">
+          <div class="num">03</div>
+          <h4>Match the artefact to the audience</h4>
+          <p>A business case for the sponsor, an ADR for the architect, a runbook for ops — the same decision, three completely different documents, each earning its keep for a different reader.</p>
+        </div>
+        <div class="fcard">
+          <div class="num">04</div>
+          <h4>Silence is not agreement</h4>
+          <p>Especially true of legal and compliance. Get explicit sign-off, not the absence of an objection — the difference matters enormously the first time something goes wrong.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="signoff">
+      <p>If you've got a stakeholder scenario that doesn't fit neatly into these four — that's usually the interesting one. Happy to compare notes.</p>
+      <div class="sig">— Chabila</div>
+    </div>
+
+    <footer>
+      <div>A standalone case study. See also the <a href="guides/index.html">AI in Business Analysis guide series</a> and the <a href="insurance-alignment/index.html">insurance industry alignment case study</a>.</div>
+      <div><a href="#top">Back to top ↑</a></div>
+    </footer>
+  </main>
+</div>
+
+<script>
+  const stages = document.querySelectorAll('.stage');
+  const targets = Array.from(stages).map(s => document.getElementById(s.dataset.target)).filter(Boolean);
+  stages.forEach(s => {
+    s.addEventListener('click', () => {
+      const el = document.getElementById(s.dataset.target);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = entry.target.id;
+      const stage = document.querySelector('.stage[data-target="'+id+'"]');
+      if(!stage) return;
+      if(entry.isIntersecting){
+        stages.forEach(s => s.classList.remove('active'));
+        stage.classList.add('active');
+      }
+    });
+  }, {rootMargin: "-20% 0px -65% 0px", threshold: 0});
+  targets.forEach(t => io.observe(t));
+</script>
+
+</body>
+</html>

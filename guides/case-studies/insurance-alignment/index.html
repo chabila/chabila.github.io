@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insurance Industry BA Alignment | Chabila Borkar</title>
+<meta name="description" content="How payments and eCommerce business analysis experience maps directly onto the insurance value chain — quote-to-bind, policy administration, claims, and renewals — with a detailed look at where AI embeds across the insurance BA lifecycle.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12181f; --paper:#eef0ea; --paper-dim:#e2e5dd; --line:#c7cbc0;
+    --green:#2f7a55; --green-dim:#e4ede6; --amber:#b3781f; --amber-dim:#f3e6d2;
+    --ink-soft:#3a4552; --rule: 1px solid var(--line);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--ink);color:var(--paper);font-family:'Inter',sans-serif;line-height:1.6;}
+  ::selection{background:var(--amber);color:var(--ink);}
+  a{color:inherit;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;opacity:0.75;}
+  h1,h2,h3{font-family:'Newsreader',serif;font-weight:500;margin:0;}
+
+  .crumb{padding:0.9rem 3rem;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:#8992a0;border-bottom:1px solid rgba(238,240,234,0.1);}
+  @media (max-width:880px){.crumb{padding:0.8rem 1.4rem;}}
+  .crumb a{text-decoration:none;border-bottom:1px dotted #8992a0;}
+  .crumb a:hover{color:var(--paper);}
+
+  .shell{display:grid;grid-template-columns:280px 1fr;max-width:1220px;margin:0 auto;}
+  @media (max-width:880px){.shell{grid-template-columns:1fr;}}
+
+  .rail{position:sticky;top:0;align-self:start;height:100vh;padding:2.2rem 1.4rem;border-right:1px solid rgba(238,240,234,0.14);font-family:'IBM Plex Mono',monospace;display:flex;flex-direction:column;}
+  @media (max-width:880px){.rail{position:sticky;height:auto;top:0;z-index:40;background:var(--ink);border-right:none;border-bottom:1px solid rgba(238,240,234,0.14);padding:0.9rem 1.2rem;}}
+  .rail-head{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:#7d8794;margin-bottom:1.1rem;padding-bottom:1rem;border-bottom:1px dashed rgba(238,240,234,0.25);}
+  @media (max-width:880px){.rail-head{display:none;}}
+  .rail-title{color:var(--paper);font-size:0.75rem;letter-spacing:0.08em;margin-bottom:0.3rem;}
+  .stages{list-style:none;margin:0;padding:0;flex:1;}
+  @media (max-width:880px){.stages{display:flex;gap:0.4rem;overflow-x:auto;padding-bottom:0.2rem;}}
+  .stage{display:flex;align-items:baseline;gap:0.6rem;padding:0.48rem 0;font-size:0.74rem;color:#6c7684;border-bottom:1px dotted rgba(238,240,234,0.14);cursor:pointer;transition:color .3s ease;}
+  @media (max-width:880px){.stage{border-bottom:none;padding:0.4rem 0.6rem;white-space:nowrap;background:rgba(238,240,234,0.05);border-radius:3px;}}
+  .stage .n{opacity:0.55;}
+  .stage.active{color:var(--paper);}
+  .stage.active .dot{background:var(--green);box-shadow:0 0 0 3px rgba(47,122,85,.25);}
+  .dot{width:6px;height:6px;border-radius:50%;background:#4a5461;flex:none;}
+  .rail-foot{font-size:0.62rem;color:#5b6472;padding-top:1rem;border-top:1px dashed rgba(238,240,234,0.25);line-height:1.7;}
+  @media (max-width:880px){.rail-foot{display:none;}}
+
+  main{padding:0;}
+  .section{padding:4rem 3rem;border-bottom:1px solid rgba(238,240,234,0.1);}
+  @media (max-width:880px){.section{padding:2.6rem 1.4rem;}}
+
+  .hero{padding:3.2rem 3rem 3rem;}
+  @media (max-width:880px){.hero{padding:2rem 1.4rem 2rem;}}
+  .hero h1{font-size:clamp(1.9rem,3.8vw,3.1rem);line-height:1.1;max-width:19ch;font-style:italic;font-weight:500;}
+  .hero p.lede{max-width:60ch;margin-top:1.3rem;font-size:1.05rem;color:#c7cdd4;}
+  .byline{margin-top:1.8rem;display:flex;align-items:center;gap:0.7rem;font-family:'IBM Plex Mono',monospace;font-size:0.75rem;color:#9aa3ae;}
+  .byline .name{color:var(--paper);font-family:'Inter',sans-serif;font-weight:600;font-size:0.85rem;}
+  .byline .sep{opacity:0.4;}
+
+  .intro-note{margin-top:2.6rem;padding:1.5rem 1.7rem;border-left:2px solid var(--amber);background:rgba(179,120,31,0.07);max-width:66ch;font-size:0.95rem;color:#dfe1da;}
+  .intro-note p{margin:0 0 0.7rem;}
+  .intro-note p:last-child{margin-bottom:0;}
+  .intro-note .who{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--amber);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.6rem;}
+
+  .panel{background:var(--paper);color:var(--ink);}
+  .panel .section{border-bottom:1px solid var(--line);}
+  .panel h2{color:var(--ink);}
+  .panel .eyebrow{color:var(--ink-soft);opacity:0.6;}
+
+  .section-head{margin-bottom:1.8rem;max-width:66ch;}
+  .section-head h2{font-size:1.75rem;font-style:italic;margin-top:0.5rem;}
+  .section-head p{margin-top:0.7rem;color:var(--ink-soft);}
+  body>main>.section.enh .section-head p, body>main>.section#foundry .section-head p, body>main>.section#regulatory .section-head p{color:#b7bec7;}
+
+  /* domain mapping table */
+  .map-table{border-top:2px solid var(--ink);margin-top:0.5rem;}
+  .map-head{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;padding:0.7rem 0;border-bottom:var(--rule);}
+  @media (max-width:720px){.map-head{display:none;}}
+  .map-head .mh{font-family:'IBM Plex Mono',monospace;font-size:0.64rem;text-transform:uppercase;letter-spacing:0.08em;color:#6b7566;}
+  .map-row{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;padding:1.15rem 0;border-bottom:var(--rule);align-items:start;}
+  @media (max-width:720px){
+    .map-row{grid-template-columns:1fr;gap:0.35rem;padding:1.3rem 0;}
+    .map-row .mcell::before{content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:#8a9186;margin-bottom:0.2rem;}
+  }
+  .map-row .mcell{font-size:0.9rem;color:#333f2f;}
+  .map-row .mcell.from{color:#4a5749;}
+  .map-row .mcell.to{color:#1f4d33;font-weight:500;}
+  .map-row .mcell.to .term{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:0.85em;}
+
+  .funnel-list{display:flex;flex-direction:column;border-top:var(--rule);}
+  .fstage{display:grid;grid-template-columns:100px 1fr 1fr;gap:1.6rem;padding:1.5rem 0;border-bottom:var(--rule);}
+  @media (max-width:720px){.fstage{grid-template-columns:1fr;gap:0.5rem;}}
+  .fstage .tag{font-family:'IBM Plex Mono',monospace;font-size:0.66rem;color:var(--ink-soft);letter-spacing:0.05em;}
+  .fstage h3{font-size:1.08rem;font-weight:600;font-family:'Inter',sans-serif;margin-bottom:0.35rem;}
+  .col-label{font-family:'IBM Plex Mono',monospace;font-size:0.63rem;text-transform:uppercase;letter-spacing:0.1em;color:#8a9186;margin-bottom:0.4rem;}
+  .fstage p{margin:0;font-size:0.9rem;color:#333f2f;}
+  .fstage .ai-col p{color:#1f4d33;}
+
+  .aside{margin-top:2.2rem;max-width:66ch;font-size:0.92rem;color:#4a5749;font-style:italic;border-top:1px dashed var(--line);padding-top:1.2rem;}
+  .aside b{font-style:normal;font-weight:600;color:var(--ink);}
+
+  .foundations{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);margin-top:1.5rem;border:var(--rule);}
+  @media (max-width:720px){.foundations{grid-template-columns:1fr;}}
+  .fcard{background:var(--paper);padding:1.6rem;}
+  .fcard .num{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--green);}
+  .fcard h4{font-family:'Inter',sans-serif;font-size:1rem;font-weight:600;margin:0.5rem 0 0.4rem;}
+  .fcard p{margin:0;font-size:0.9rem;color:var(--ink-soft);}
+
+  .enh{background:var(--ink);}
+  .enh-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:2rem;}
+  @media (max-width:980px){.enh-grid{grid-template-columns:1fr;}}
+  .enh-card{border:1px solid rgba(238,240,234,0.16);padding:1.7rem 1.5rem;border-radius:2px;background:rgba(238,240,234,0.03);}
+  .enh-card .status{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.22rem 0.5rem;border-radius:2px;margin-bottom:1rem;}
+  .status.amber{background:var(--amber-dim);color:#7a5215;}
+  .status.green{background:var(--green-dim);color:#1f4d33;}
+  .enh-card h3{color:var(--paper);font-size:1.2rem;font-style:italic;margin-bottom:0.7rem;}
+  .enh-card p{color:#b7bec7;font-size:0.91rem;margin:0 0 0.9rem;}
+  .enh-card .maps-to{font-family:'IBM Plex Mono',monospace;font-size:0.67rem;color:#8992a0;border-top:1px dashed rgba(238,240,234,0.2);padding-top:0.8rem;}
+  .enh-card .maps-to b{color:var(--paper);font-weight:500;}
+
+  /* regulatory section */
+  .reg{background:var(--ink);}
+  .reg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem;margin-top:2rem;}
+  @media (max-width:820px){.reg-grid{grid-template-columns:1fr;}}
+  .reg-card{border:1px solid rgba(238,240,234,0.16);padding:1.6rem 1.5rem;border-radius:2px;background:rgba(238,240,234,0.03);}
+  .reg-card .reg-name{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--amber);letter-spacing:0.04em;margin-bottom:0.6rem;}
+  .reg-card h4{color:var(--paper);font-size:1.05rem;font-family:'Inter',sans-serif;font-weight:600;margin-bottom:0.5rem;}
+  .reg-card p{color:#b7bec7;font-size:0.88rem;margin:0;}
+
+  .steps{counter-reset:step;margin-top:2rem;display:flex;flex-direction:column;}
+  .step{display:grid;grid-template-columns:56px 1fr;gap:1.4rem;padding:1.5rem 0;border-top:1px solid rgba(238,240,234,0.12);}
+  .step:last-child{border-bottom:1px solid rgba(238,240,234,0.12);}
+  .step .idx{counter-increment:step;font-family:'IBM Plex Mono',monospace;color:var(--green);font-size:0.85rem;}
+  .step .idx::before{content:counter(step,decimal-leading-zero);}
+  .step h3{color:var(--paper);font-size:1.02rem;font-family:'Inter',sans-serif;font-weight:600;margin-bottom:0.4rem;}
+  .step p{margin:0;color:#b7bec7;font-size:0.91rem;max-width:68ch;}
+  .step code{font-family:'IBM Plex Mono',monospace;background:rgba(238,240,234,0.08);padding:0.1rem 0.35rem;border-radius:2px;font-size:0.85em;color:#dfe6ee;}
+
+  .signoff{padding:3rem 3rem 1rem;max-width:62ch;}
+  @media (max-width:880px){.signoff{padding:2.2rem 1.4rem 1rem;}}
+  .signoff p{font-size:0.95rem;color:#c7cdd4;}
+  .signoff .sig{margin-top:1.4rem;font-family:'Newsreader',serif;font-style:italic;font-size:1.15rem;}
+
+  footer{padding:1.8rem 3rem 3.4rem;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:#6c7684;display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.8rem;}
+  @media (max-width:880px){footer{padding:1.6rem 1.4rem 2.4rem;}}
+  footer a{text-decoration:underline;text-underline-offset:3px;}
+</style>
+</head>
+<body>
+
+<div class="crumb"><a href="../index.html">← chabila.github.io</a> &nbsp;/&nbsp; insurance alignment</div>
+
+<div class="shell">
+  <nav class="rail" aria-label="Insurance alignment sections">
+    <div class="rail-head">
+      <div class="rail-title">DOMAIN TRANSFER</div>
+      CASE STUDY — Payments × Insurance
+    </div>
+    <ul class="stages" id="stageRail">
+      <li class="stage" data-target="why"><span class="dot"></span><span class="n">01</span> Why this transfers</li>
+      <li class="stage" data-target="mapping"><span class="dot"></span><span class="n">02</span> Domain mapping</li>
+      <li class="stage" data-target="newbusiness"><span class="dot"></span><span class="n">03</span> New business</li>
+      <li class="stage" data-target="admin"><span class="dot"></span><span class="n">04</span> Policy admin & billing</li>
+      <li class="stage" data-target="claims"><span class="dot"></span><span class="n">05</span> Claims</li>
+      <li class="stage" data-target="renewals"><span class="dot"></span><span class="n">06</span> Renewals & retention</li>
+      <li class="stage" data-target="enhance"><span class="dot"></span><span class="n">07</span> Where AI embeds</li>
+      <li class="stage" data-target="regulatory"><span class="dot"></span><span class="n">08</span> Regulatory context</li>
+      <li class="stage" data-target="foundry"><span class="dot"></span><span class="n">09</span> Build it</li>
+    </ul>
+    <div class="rail-foot">A working case study — updated as I go deeper into the domain.</div>
+  </nav>
+
+  <main>
+    <section class="hero" id="top">
+      <div class="eyebrow">A domain-transfer case study</div>
+      <h1>Where payments & eCommerce BA experience meets insurance</h1>
+      <p class="lede">Strip away the vocabulary and a policy lifecycle is an order lifecycle; a bordereaux is a reconciliation report; a quote-to-bind funnel is a checkout funnel with an underwriter in the loop instead of a fraud check. This is a detailed look at where my background actually lines up with insurance BA work — and where AI fits once it does.</p>
+      <div class="byline">
+        <span class="name">Chabila Borkar</span><span class="sep">·</span>
+        <span>Senior Business Analyst, Payments & eCommerce</span>
+      </div>
+
+      <div class="intro-note">
+        <div class="who">A quick note on how to read this</div>
+        <p>I haven't shipped a policy administration system. What I have done is spend seven years in the parts of retail technology that turn out to be structurally identical to insurance's core processes: order-to-cash, reconciliation across three systems that don't agree with each other, funnel drop-off analysis, and regulatory compliance work that doesn't forgive a sloppy requirement. This case study is me being honest about exactly where that maps, in the industry's own language, not a generic "transferable skills" gesture.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section" id="why">
+        <div class="section-head">
+          <div class="eyebrow">Part 1</div>
+          <h2>Why this transfers, not just "soft skills"</h2>
+          <p>Insurance and eCommerce payments look unrelated from the outside — one sells cover, one sells products. Underneath, both run on the same three structural problems: a multi-step conversion funnel with drop-off at every stage, a system-of-record that has to reconcile against money actually moving, and a regulatory layer that treats a wrong requirement as a compliance incident, not just a bug.</p>
+        </div>
+      </div>
+
+      <div class="section" id="mapping">
+        <div class="section-head">
+          <h2>The domain mapping</h2>
+          <p>Same underlying BA problem, different industry vocabulary. This is the translation table I'd hand a hiring manager who's wondering whether payments experience actually says anything about insurance readiness.</p>
+        </div>
+
+        <div class="map-table">
+          <div class="map-head">
+            <div class="mh">Payments & eCommerce</div>
+            <div class="mh">Insurance equivalent</div>
+          </div>
+
+          <div class="map-row">
+            <div class="mcell from" data-label="Payments & eCommerce">Checkout funnel (cart → payment → confirmation)</div>
+            <div class="mcell to" data-label="Insurance equivalent">Quote-to-bind funnel — <span class="term">quote → application → underwriting decision → bind → policy issuance</span></div>
+          </div>
+          <div class="map-row">
+            <div class="mcell from" data-label="Payments & eCommerce">Cart abandonment analysis</div>
+            <div class="mcell to" data-label="Insurance equivalent">Quote abandonment / conversion analysis — why a prospect gets a quote and never binds</div>
+          </div>
+          <div class="map-row">
+            <div class="mcell from" data-label="Payments & eCommerce">PSP integration (Adyen, Klarna, Stripe)</div>
+            <div class="mcell to" data-label="Insurance equivalent">Premium collection & billing integration — direct debit mandates, instalment plans, card-on-file for renewals</div>
+          </div>
+          <div class="map-row">
+            <div class="mcell from" data-label="Payments & eCommerce">Order Management System (OMS) / order lifecycle</div>
+            <div class="mcell to" data-label="Insurance equivalent">Policy Administration System (<span class="term">PAS</span>) — New Business, Mid-Term Adjustment / Endorsement, Renewal, Cancellation, Lapse</div>
+          </div>
+          <div class="map-row">
+            <div class="mcell from" data-label="Payments & eCommerce">Order-to-cash reconciliation</div>
+            <div class="mcell to" data-label="Insurance equivalent">Premium-to-cash and <span class="term">bordereaux</span> reconciliation — broker/MGA-reported premium and claims data reconciled against what the insurer actually received or paid</div>
+          </div>
+          <div class="map-row">
+            <div class="mcell from" data-label="Payments & eCommerce">Returns & refunds</div>
+            <div class="mcell to" data-label="Insurance equivalent">Policy cancellations, pro-rata premium refunds, statutory cooling-off period reversals</div>
+          </div>
+          <div class="map-row">
+            <div class="mcell from" data-label="Payments & eCommerce">Fulfilment & delivery</div>
+            <div class="mcell to" data-label="Insurance equivalent">Claims fulfilment — <span class="term">FNOL</span> (First Notice of Loss) → triage → loss adjusting → settlement / indemnity payment</div>
+          </div>
+          <div class="map-row">
+            <div class="mcell from" data-label="Payments & eCommerce">Chargeback & fraud handling</div>
+            <div class="mcell to" data-label="Insurance equivalent">Claims fraud detection, <span class="term">SIU</span> (Special Investigations Unit) referral, subrogation and recovery</div>
+          </div>
+          <div class="map-row">
+            <div class="mcell from" data-label="Payments & eCommerce">PCI-DSS / card data compliance</div>
+            <div class="mcell to" data-label="Insurance equivalent"><span class="term">Solvency II</span>, <span class="term">IFRS 17</span>, FCA/PRA regulation, <span class="term">IDD</span> (Insurance Distribution Directive), Consumer Duty</div>
+          </div>
+          <div class="map-row">
+            <div class="mcell from" data-label="Payments & eCommerce">Carrier / logistics integration</div>
+            <div class="mcell to" data-label="Insurance equivalent">Reinsurance placement — <span class="term">treaty</span> and <span class="term">facultative</span> arrangements, panel capacity management</div>
+          </div>
+          <div class="map-row">
+            <div class="mcell from" data-label="Payments & eCommerce">Customer journey (awareness → loyalty)</div>
+            <div class="mcell to" data-label="Insurance equivalent">Policyholder lifecycle — prospect → policyholder → renewal → claim → retention or lapse, multi-policy cross-sell</div>
+          </div>
+          <div class="map-row">
+            <div class="mcell from" data-label="Payments & eCommerce">UAT on checkout & payment scenarios</div>
+            <div class="mcell to" data-label="Insurance equivalent">Rating engine testing, underwriting referral rule testing, Insurance Premium Tax (<span class="term">IPT</span>) calculation accuracy</div>
+          </div>
+        </div>
+
+        <div class="aside">The vocabulary is genuinely different — and worth learning properly, not glossing over. But <b>the analytical instinct is the same one I've used for seven years: find where two systems disagree about a status or an amount, and fix the requirement that let them disagree.</b></div>
+      </div>
+
+      <div class="section" id="newbusiness">
+        <div class="section-head">
+          <div class="eyebrow">Part 2 — Across the policy lifecycle</div>
+          <h2>New business: quote to bind</h2>
+          <p>The insurance equivalent of a checkout funnel, with an underwriter standing where a fraud check would sit.</p>
+        </div>
+        <div class="funnel-list">
+          <div class="fstage">
+            <div class="tag">WHAT'S HAPPENING</div>
+            <div>
+              <div class="col-label">What a BA is doing</div>
+              <h3>Specifying rating inputs and underwriting referral rules</h3>
+              <p>Defining what data the rating engine needs, which answers trigger an automatic decline or refer-to-underwriter, and what a compliant IPID (Insurance Product Information Document) has to contain before a quote can even be shown.</p>
+            </div>
+            <div class="ai-col">
+              <div class="col-label">Where AI earns its keep</div>
+              <p>Drafting a first-pass referral rule table from underwriting guidelines, and summarising quote-abandonment analytics into candidate friction points — the same shape of work as checkout drop-off analysis, aimed at a different funnel.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="admin">
+        <div class="section-head">
+          <h2>Policy administration & billing</h2>
+          <p>Where the policy record has to stay perfectly in sync with what the customer actually agreed to — and what they're actually being charged.</p>
+        </div>
+        <div class="funnel-list">
+          <div class="fstage">
+            <div class="tag">WHAT'S HAPPENING</div>
+            <div>
+              <div class="col-label">What a BA is doing</div>
+              <h3>Defining endorsement and instalment billing rules</h3>
+              <p>Specifying pro-rata premium recalculation on a mid-term adjustment, direct debit failure and grace-period handling, and how a missed payment eventually triggers cancellation without breaching Consumer Duty fair-treatment expectations.</p>
+            </div>
+            <div class="ai-col">
+              <div class="col-label">Where AI earns its keep</div>
+              <p>Turning a PAS vendor's endorsement API docs into a first-pass field mapping — structurally identical to PSP integration mapping — and flagging bordereaux reconciliation mismatches across thousands of broker-reported lines for investigation.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="claims">
+        <div class="section-head">
+          <h2>Claims</h2>
+          <p>The moment the product is actually delivered — and the stage where a slow or wrong decision does the most reputational damage.</p>
+        </div>
+        <div class="funnel-list">
+          <div class="fstage">
+            <div class="tag">WHAT'S HAPPENING</div>
+            <div>
+              <div class="col-label">What a BA is doing</div>
+              <h3>Specifying FNOL intake, triage, and reserve-setting rules</h3>
+              <p>Defining what information FNOL capture needs, the severity/complexity rules that route a claim to straight-through processing versus a loss adjuster, and the reserve-setting logic that estimates likely payout early.</p>
+            </div>
+            <div class="ai-col">
+              <div class="col-label">Where AI earns its keep</div>
+              <p>Summarising a loss adjuster's free-text notes into a structured case file, and clustering historic claims by likely fraud indicators to support (never replace) an SIU referral decision — genuinely high-leverage, and exactly where the human decision matters most.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="renewals">
+        <div class="section-head">
+          <h2>Renewals & retention</h2>
+          <p>Where UK insurance regulation changed the rules more than almost any other stage in the last few years.</p>
+        </div>
+        <div class="funnel-list">
+          <div class="fstage">
+            <div class="tag">WHAT'S HAPPENING</div>
+            <div>
+              <div class="col-label">What a BA is doing</div>
+              <h3>Specifying re-rating and fair-value renewal pricing checks</h3>
+              <p>Since the FCA's price-walking ban, a renewal price can no longer exceed what an equivalent new customer would pay — which means the renewal engine needs an explicit fair-value check built in, not bolted on afterwards.</p>
+            </div>
+            <div class="ai-col">
+              <div class="col-label">Where AI earns its keep</div>
+              <p>Drafting the fair-value comparison logic from the regulatory requirement, and summarising retention/lapse patterns into candidate causes — the renewal-stage equivalent of customer-journey retention analysis in eCommerce.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-head" style="margin-top:3.2rem;">
+          <div class="eyebrow">Before you touch a model</div>
+          <h2>What holds true across the insurance value chain</h2>
+        </div>
+        <div class="foundations">
+          <div class="fcard">
+            <div class="num">01</div>
+            <h4>Policy wording is the contract, not a guideline</h4>
+            <p>Any AI-drafted answer touching coverage or claims has to be checked against the actual contractual wording. This is a stricter version of "AI drafts, human verifies" than most of payments — the wrong answer here can be a breach, not just an error.</p>
+          </div>
+          <div class="fcard">
+            <div class="num">02</div>
+            <h4>The bordereaux is where the money actually reconciles</h4>
+            <p>MGA, broker, and insurer relationships live or die on an accurate bordereaux. It's the direct insurance analogue of settlement reconciliation in payments — same discipline, different document.</p>
+          </div>
+          <div class="fcard">
+            <div class="num">03</div>
+            <h4>Consumer Duty changed the renewal playbook</h4>
+            <p>Insurers can no longer charge loyal customers more than new ones at renewal. Any renewal pricing requirement written today has to build the fair-value check in from the start, not retrofit it.</p>
+          </div>
+          <div class="fcard">
+            <div class="num">04</div>
+            <h4>Claims data often carries sensitive personal data</h4>
+            <p>Health and injury details in claims files mean data-handling obligations here are frequently heavier than general eCommerce PII, closer in weight to healthcare data governance.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section enh" id="enhance">
+      <div class="section-head">
+        <div class="eyebrow">Part 3 — Where AI embeds</div>
+        <h2>The same three techniques, applied to a stricter contract</h2>
+        <p>RAG, human-in-the-loop, and MCP servers show up across the whole AI-in-BA series — insurance just raises the stakes on all three, because the artefact a model might get wrong is a binding contract, not a product description.</p>
+      </div>
+
+      <div class="enh-grid">
+        <div class="enh-card">
+          <span class="status green">Grounding</span>
+          <h3>Retrieval-Augmented Generation</h3>
+          <p>Ground the model in actual policy wordings, the underwriting manual, and the FCA Handbook sections that apply — not general insurance knowledge. The difference between a plausible-sounding coverage answer and one that cites the specific exclusion clause in the actual policy document.</p>
+          <div class="maps-to">Maps to: <b>claims & underwriting</b> — where an ungrounded answer risks misstating a contractual term.</div>
+        </div>
+        <div class="enh-card">
+          <span class="status amber">Control</span>
+          <h3>Human-in-the-loop</h3>
+          <p>Underwriting decisions above a sum-insured threshold, claims settlement above a delegated authority limit, and any customer complaint — these are the checkpoints where a named human has to sign off, full stop, no matter how confident the model is.</p>
+          <div class="maps-to">Maps to: <b>underwriting authority limits & complaints</b> — where FCA accountability rules mean a person, not a model, owns the decision.</div>
+        </div>
+        <div class="enh-card">
+          <span class="status green">Connection</span>
+          <h3>MCP servers</h3>
+          <p>An agent connected live to the PAS (Guidewire, Duck Creek, Sapiens), the claims management system, and the broker portal can pull a policy's actual current status and claims history — instead of a BA stitching together three exports to answer one question.</p>
+          <div class="maps-to">Maps to: <b>policy servicing & claims handling</b> — live status across systems that rarely talk to each other natively.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reg" id="regulatory">
+      <div class="section-head">
+        <div class="eyebrow">Part 4 — The regulatory layer</div>
+        <h2>Why insurance BA work carries a heavier compliance load</h2>
+        <p>Payments has PSD2 and PCI-DSS. Insurance stacks a prudential and conduct regime on top of its own version of both — this is the layer that makes "AI drafts, human verifies" non-negotiable rather than best practice.</p>
+      </div>
+
+      <div class="reg-grid">
+        <div class="reg-card">
+          <div class="reg-name">SOLVENCY II</div>
+          <h4>Capital adequacy & technical provisions</h4>
+          <p>Sets how much capital an insurer must hold against its risks. BA work touching reserving or pricing has to respect the technical provisions framework underneath it.</p>
+        </div>
+        <div class="reg-card">
+          <div class="reg-name">IFRS 17</div>
+          <h4>Insurance contract accounting</h4>
+          <p>A major recent overhaul of how insurance contracts are recognised and measured financially — any requirement touching premium recognition timing now has to account for it.</p>
+        </div>
+        <div class="reg-card">
+          <div class="reg-name">FCA CONSUMER DUTY</div>
+          <h4>Fair value & the price-walking ban</h4>
+          <p>Requires products to deliver fair value and bans charging renewing customers more than equivalent new customers — directly shapes renewal pricing requirements.</p>
+        </div>
+        <div class="reg-card">
+          <div class="reg-name">IDD</div>
+          <h4>Insurance Distribution Directive</h4>
+          <p>Governs how products are sold and disclosed, including the IPID requirement at point of quote — a direct input into new-business requirements.</p>
+        </div>
+        <div class="reg-card">
+          <div class="reg-name">GDPR & SENSITIVE DATA</div>
+          <h4>Health and injury data in claims</h4>
+          <p>Claims files routinely contain special-category data under GDPR, raising the bar on access controls and retention rules beyond general eCommerce PII handling.</p>
+        </div>
+        <div class="reg-card">
+          <div class="reg-name">FCA / PRA</div>
+          <h4>Conduct & prudential regulation</h4>
+          <p>The FCA governs conduct (how customers are treated) while the PRA governs prudential soundness (can the insurer pay claims) — two different regulators, two different sets of requirements to satisfy simultaneously.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="foundry">
+      <div class="section-head">
+        <div class="eyebrow">Part 5 — Hands-on</div>
+        <h2>Building this in Microsoft Foundry</h2>
+        <p>The sequence I'd follow to build an assistant that supports insurance BA work end to end, respecting the stricter contractual and regulatory stakes. Microsoft Foundry (formerly Azure AI Foundry), current as of 2026.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step"><div class="idx"></div><div>
+          <h3>Create a Foundry project and connect policy and regulatory documents</h3>
+          <p>Stand up a project, then connect policy wordings, the underwriting manual, and relevant FCA Handbook sections — via Azure Blob Storage or a data connection — ready to be indexed.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Deploy a model from the catalog</h3>
+          <p>Pick a model (e.g. <code>gpt-4o</code>) from the Foundry model catalog as your reasoning engine — swappable later without rebuilding the rest.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Ground it against your own policy wordings (RAG)</h3>
+          <p>Index the connected documents with Azure AI Search, add it to your agent as a knowledge source, so any coverage or claims answer cites the actual clause it's drawing from.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Attach live systems via MCP</h3>
+          <p>From the Foundry portal's Tools menu, connect the PAS and claims management system as tool connections, so the agent can pull a specific policy's live status and claims history rather than working from a stale export.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Add human-approval checkpoints at underwriting and claims authority limits</h3>
+          <p>Flag any decision above a defined sum-insured or settlement authority threshold as requiring approval. The workflow pauses on a <code>function_approval_request</code> and only proceeds once a named underwriter or claims handler signs off.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Orchestrate it as a lifecycle-aware workflow</h3>
+          <p>Use Foundry's workflow builder to chain retrieval → drafting → human review across new business, servicing, and claims as distinct stages within one workflow, not three disconnected tools.</p>
+        </div></div>
+        <div class="step"><div class="idx"></div><div>
+          <h3>Evaluate before you trust it, then monitor</h3>
+          <p>Run Foundry's built-in groundedness and relevance evaluations before rollout — especially critical here, given the contractual stakes — then use tracing and Application Insights to monitor what it's actually doing once live.</p>
+        </div></div>
+      </div>
+    </section>
+
+    <div class="signoff">
+      <p>If you're hiring for insurance BA work and wondering whether payments experience actually transfers — I hope this made the case in your own industry's language rather than asking you to take it on faith. Happy to talk it through.</p>
+      <div class="sig">— Chabila</div>
+    </div>
+
+    <footer>
+      <div>A standalone case study. See also the <a href="../guides/index.html">AI in Business Analysis guide series</a>.</div>
+      <div><a href="#top">Back to top ↑</a></div>
+    </footer>
+  </main>
+</div>
+
+<script>
+  const stages = document.querySelectorAll('.stage');
+  const targets = Array.from(stages).map(s => document.getElementById(s.dataset.target)).filter(Boolean);
+  stages.forEach(s => {
+    s.addEventListener('click', () => {
+      const el = document.getElementById(s.dataset.target);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = entry.target.id;
+      const stage = document.querySelector('.stage[data-target="'+id+'"]');
+      if(!stage) return;
+      if(entry.isIntersecting){
+        stages.forEach(s => s.classList.remove('active'));
+        stage.classList.add('active');
+      }
+    });
+  }, {rootMargin: "-20% 0px -65% 0px", threshold: 0});
+  targets.forEach(t => io.observe(t));
+</script>
+
+</body>
+</html>
