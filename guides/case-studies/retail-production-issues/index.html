@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Production Issues in Retail: The BA's Role | Chabila Borkar</title>
+<meta name="description" content="A detailed look at the BA's role across common retail production incidents — checkout failures, site outages, inventory sync issues, pricing errors, fulfilment integration failures, and fraud spikes — with a clear contrast between peak periods like Black Friday and normal operation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12181f; --paper:#eef0ea; --paper-dim:#e2e5dd; --line:#c7cbc0;
+    --green:#2f7a55; --green-dim:#e4ede6; --amber:#b3781f; --amber-dim:#f3e6d2;
+    --ink-soft:#3a4552; --rule: 1px solid var(--line);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--ink);color:var(--paper);font-family:'Inter',sans-serif;line-height:1.6;}
+  ::selection{background:var(--amber);color:var(--ink);}
+  a{color:inherit;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;opacity:0.75;}
+  h1,h2,h3{font-family:'Newsreader',serif;font-weight:500;margin:0;}
+
+  .crumb{padding:0.9rem 3rem;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:#8992a0;border-bottom:1px solid rgba(238,240,234,0.1);}
+  @media (max-width:880px){.crumb{padding:0.8rem 1.4rem;}}
+  .crumb a{text-decoration:none;border-bottom:1px dotted #8992a0;}
+  .crumb a:hover{color:var(--paper);}
+
+  .shell{display:grid;grid-template-columns:280px 1fr;max-width:1220px;margin:0 auto;}
+  @media (max-width:880px){.shell{grid-template-columns:1fr;}}
+
+  .rail{position:sticky;top:0;align-self:start;height:100vh;padding:2.2rem 1.4rem;border-right:1px solid rgba(238,240,234,0.14);font-family:'IBM Plex Mono',monospace;display:flex;flex-direction:column;}
+  @media (max-width:880px){.rail{position:sticky;height:auto;top:0;z-index:40;background:var(--ink);border-right:none;border-bottom:1px solid rgba(238,240,234,0.14);padding:0.9rem 1.2rem;}}
+  .rail-head{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:#7d8794;margin-bottom:1.1rem;padding-bottom:1rem;border-bottom:1px dashed rgba(238,240,234,0.25);}
+  @media (max-width:880px){.rail-head{display:none;}}
+  .rail-title{color:var(--paper);font-size:0.75rem;letter-spacing:0.08em;margin-bottom:0.3rem;}
+  .stages{list-style:none;margin:0;padding:0;flex:1;}
+  @media (max-width:880px){.stages{display:flex;gap:0.4rem;overflow-x:auto;padding-bottom:0.2rem;}}
+  .stage{display:flex;align-items:baseline;gap:0.6rem;padding:0.46rem 0;font-size:0.72rem;color:#6c7684;border-bottom:1px dotted rgba(238,240,234,0.14);cursor:pointer;transition:color .3s ease;}
+  @media (max-width:880px){.stage{border-bottom:none;padding:0.4rem 0.6rem;white-space:nowrap;background:rgba(238,240,234,0.05);border-radius:3px;}}
+  .stage .n{opacity:0.55;}
+  .stage.active{color:var(--paper);}
+  .stage.active .dot{background:var(--green);box-shadow:0 0 0 3px rgba(47,122,85,.25);}
+  .dot{width:6px;height:6px;border-radius:50%;background:#4a5461;flex:none;}
+  .rail-foot{font-size:0.62rem;color:#5b6472;padding-top:1rem;border-top:1px dashed rgba(238,240,234,0.25);line-height:1.7;}
+  @media (max-width:880px){.rail-foot{display:none;}}
+
+  main{padding:0;}
+  .section{padding:4rem 3rem;border-bottom:1px solid rgba(238,240,234,0.1);}
+  @media (max-width:880px){.section{padding:2.6rem 1.4rem;}}
+
+  .hero{padding:3.2rem 3rem 3rem;}
+  @media (max-width:880px){.hero{padding:2rem 1.4rem 2rem;}}
+  .hero h1{font-size:clamp(1.9rem,3.8vw,3.1rem);line-height:1.1;max-width:19ch;font-style:italic;font-weight:500;}
+  .hero p.lede{max-width:60ch;margin-top:1.3rem;font-size:1.05rem;color:#c7cdd4;}
+  .byline{margin-top:1.8rem;display:flex;align-items:center;gap:0.7rem;font-family:'IBM Plex Mono',monospace;font-size:0.75rem;color:#9aa3ae;}
+  .byline .name{color:var(--paper);font-family:'Inter',sans-serif;font-weight:600;font-size:0.85rem;}
+  .byline .sep{opacity:0.4;}
+
+  .intro-note{margin-top:2.6rem;padding:1.5rem 1.7rem;border-left:2px solid var(--amber);background:rgba(179,120,31,0.07);max-width:66ch;font-size:0.95rem;color:#dfe1da;}
+  .intro-note p{margin:0 0 0.7rem;}
+  .intro-note p:last-child{margin-bottom:0;}
+  .intro-note .who{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--amber);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.6rem;}
+
+  .panel{background:var(--paper);color:var(--ink);}
+  .panel .section{border-bottom:1px solid var(--line);}
+  .panel h2{color:var(--ink);}
+  .panel .eyebrow{color:var(--ink-soft);opacity:0.6;}
+
+  .section-head{margin-bottom:1.8rem;max-width:66ch;}
+  .section-head h2{font-size:1.75rem;font-style:italic;margin-top:0.5rem;}
+  .section-head p{margin-top:0.7rem;color:var(--ink-soft);}
+  body>main>.section.dark .section-head p{color:#b7bec7;}
+
+  /* peak vs non-peak comparison table */
+  .cmp-table{border-top:2px solid var(--ink);margin-top:0.5rem;}
+  .cmp-head{display:grid;grid-template-columns:170px 1fr 1fr;gap:1.2rem;padding:0.7rem 0;border-bottom:var(--rule);}
+  @media (max-width:720px){.cmp-head{display:none;}}
+  .cmp-head .ch{font-family:'IBM Plex Mono',monospace;font-size:0.64rem;text-transform:uppercase;letter-spacing:0.08em;}
+  .cmp-head .ch.peak{color:#7a5215;}
+  .cmp-head .ch.nonpeak{color:#1f4d33;}
+  .cmp-row{display:grid;grid-template-columns:170px 1fr 1fr;gap:1.2rem;padding:1.1rem 0;border-bottom:var(--rule);align-items:start;}
+  @media (max-width:720px){
+    .cmp-row{grid-template-columns:1fr;gap:0.35rem;padding:1.3rem 0;}
+    .cmp-row .ccell::before{content:attr(data-label);display:block;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:#8a9186;margin-bottom:0.2rem;}
+  }
+  .cmp-row .dim{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--ink-soft);padding-top:0.1rem;}
+  .cmp-row .ccell{font-size:0.88rem;color:#333f2f;}
+  .cmp-row .ccell.peak{color:#7a5215;}
+
+  /* scenario blocks */
+  .scenario{border-top:2px solid var(--ink);padding-top:2rem;margin-top:2.6rem;}
+  .scenario:first-of-type{margin-top:1rem;}
+  .scenario .stag{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.6rem;}
+  .scenario h3{font-size:1.5rem;font-style:italic;margin-bottom:0.9rem;}
+  .scenario .whats{font-size:0.92rem;color:#4a5749;margin-bottom:1.4rem;max-width:68ch;}
+  .role-block{margin-bottom:1.4rem;}
+  .role-block .col-label{font-family:'IBM Plex Mono',monospace;font-size:0.63rem;text-transform:uppercase;letter-spacing:0.1em;color:#8a9186;margin-bottom:0.5rem;}
+  .role-block p{margin:0;font-size:0.93rem;color:#1f4d33;max-width:70ch;}
+  .pnp-callout{
+    margin-top:1.4rem;border:1px solid var(--line);border-radius:2px;overflow:hidden;
+  }
+  .pnp-half{padding:1rem 1.3rem;font-size:0.87rem;}
+  .pnp-half.nonpeak{background:var(--green-dim);color:#1f4d33;}
+  .pnp-half.peak{background:var(--amber-dim);color:#7a5215;border-top:1px solid var(--line);}
+  .pnp-label{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;display:block;}
+
+  .foundations{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);margin-top:1.5rem;border:var(--rule);}
+  @media (max-width:720px){.foundations{grid-template-columns:1fr;}}
+  .fcard{background:var(--paper);padding:1.6rem;}
+  .fcard .num{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--green);}
+  .fcard h4{font-family:'Inter',sans-serif;font-size:1rem;font-weight:600;margin:0.5rem 0 0.4rem;}
+  .fcard p{margin:0;font-size:0.9rem;color:var(--ink-soft);}
+
+  .aside{margin-top:2.2rem;max-width:66ch;font-size:0.92rem;color:#4a5749;font-style:italic;border-top:1px dashed var(--line);padding-top:1.2rem;}
+  .aside b{font-style:normal;font-weight:600;color:var(--ink);}
+
+  .signoff{padding:3rem 3rem 1rem;max-width:62ch;}
+  @media (max-width:880px){.signoff{padding:2.2rem 1.4rem 1rem;}}
+  .signoff p{font-size:0.95rem;color:#c7cdd4;}
+  .signoff .sig{margin-top:1.4rem;font-family:'Newsreader',serif;font-style:italic;font-size:1.15rem;}
+
+  footer{padding:1.8rem 3rem 3.4rem;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:#6c7684;display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.8rem;}
+  @media (max-width:880px){footer{padding:1.6rem 1.4rem 2.4rem;}}
+  footer a{text-decoration:underline;text-underline-offset:3px;}
+</style>
+</head>
+<body>
+
+<div class="crumb"><a href="../index.html">← chabila.github.io</a> &nbsp;/&nbsp; production issues in retail</div>
+
+<div class="shell">
+  <nav class="rail" aria-label="Production issues sections">
+    <div class="rail-head">
+      <div class="rail-title">INCIDENT RESPONSE</div>
+      CASE STUDY — Production Issues in Retail
+    </div>
+    <ul class="stages" id="stageRail">
+      <li class="stage" data-target="why"><span class="dot"></span><span class="n">01</span> Why this is a BA's job</li>
+      <li class="stage" data-target="peaknonpeak"><span class="dot"></span><span class="n">02</span> Peak vs. non-peak</li>
+      <li class="stage" data-target="checkout"><span class="dot"></span><span class="n">03</span> Checkout & payment failures</li>
+      <li class="stage" data-target="performance"><span class="dot"></span><span class="n">04</span> Site performance & outages</li>
+      <li class="stage" data-target="inventory"><span class="dot"></span><span class="n">05</span> Inventory sync issues</li>
+      <li class="stage" data-target="pricing"><span class="dot"></span><span class="n">06</span> Pricing & promo errors</li>
+      <li class="stage" data-target="fulfilment"><span class="dot"></span><span class="n">07</span> Carrier & fulfilment failures</li>
+      <li class="stage" data-target="fraud"><span class="dot"></span><span class="n">08</span> Fraud spikes & security</li>
+      <li class="stage" data-target="principles"><span class="dot"></span><span class="n">09</span> Principles</li>
+    </ul>
+    <div class="rail-foot">Written from war rooms, not incident-management theory.</div>
+  </nav>
+
+  <main>
+    <section class="hero" id="top">
+      <div class="eyebrow">A BA practice case study</div>
+      <h1>Production issues in retail: what the BA is actually doing</h1>
+      <p class="lede">When a checkout breaks at 2am on a Tuesday, the response looks nothing like when it breaks at 2am on Black Friday — same fault, completely different job. This walks through six production scenarios a retail BA actually faces, what the role looks like in detail in each one, and exactly how peak season changes the calculus.</p>
+      <div class="byline">
+        <span class="name">Chabila Borkar</span><span class="sep">·</span>
+        <span>Senior Business Analyst, Payments & eCommerce</span>
+      </div>
+
+      <div class="intro-note">
+        <div class="who">A quick note on how to read this</div>
+        <p>Engineering fixes the code. The BA's job during an incident is different and just as critical: translating a technical fault into a business decision someone can actually act on, fast enough that the decision doesn't become the bottleneck. This is what that looks like across the incidents that come up again and again in retail, and why the exact same fault demands a completely different response depending on when it happens.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section" id="why">
+        <div class="section-head">
+          <div class="eyebrow">Part 1 — Fundamentals</div>
+          <h2>Why this is a BA's job, not just engineering's</h2>
+          <p>A production incident generates two problems at once: a technical one and a business one. Engineering owns the first. Someone has to own the second — translating severity into impact, impact into priority, and priority into a decision someone with authority can actually make under pressure. That's the BA's seat at the table, and it's every bit as time-critical as the fix itself.</p>
+        </div>
+      </div>
+
+      <div class="section" id="peaknonpeak">
+        <div class="section-head">
+          <h2>Peak vs. non-peak: the fundamental shift</h2>
+          <p>This is the distinction that changes everything else in this guide. The same incident, the same root cause, gets an entirely different BA response depending on which side of this line it falls on.</p>
+        </div>
+
+        <div class="cmp-table">
+          <div class="cmp-head">
+            <div></div>
+            <div class="ch nonpeak">Non-peak</div>
+            <div class="ch peak">Peak (Black Friday / Cyber Monday)</div>
+          </div>
+          <div class="cmp-row">
+            <div class="dim">Response expectation</div>
+            <div class="ccell" data-label="Non-peak">Hours are often acceptable for lower-severity issues, following the standard severity matrix.</div>
+            <div class="ccell peak" data-label="Peak">Minutes. Every minute of degraded checkout is quantifiable, real-time lost revenue.</div>
+          </div>
+          <div class="cmp-row">
+            <div class="dim">Escalation structure</div>
+            <div class="ccell" data-label="Non-peak">Normal on-call rotation, standard severity-based paging.</div>
+            <div class="ccell peak" data-label="Peak">Dedicated war room, all-hands bridge, executive visibility from minute one.</div>
+          </div>
+          <div class="cmp-row">
+            <div class="dim">Communication cadence</div>
+            <div class="ccell" data-label="Non-peak">As-needed updates; a status page update if customer-facing.</div>
+            <div class="ccell peak" data-label="Peak">Continuous, tight cadence — often every 15 minutes — to a pre-agreed stakeholder list.</div>
+          </div>
+          <div class="cmp-row">
+            <div class="dim">Root cause vs. fix</div>
+            <div class="ccell" data-label="Non-peak">Full root-cause analysis is usually prioritised before a permanent fix ships.</div>
+            <div class="ccell peak" data-label="Peak">Fastest safe mitigation first; full RCA explicitly deferred until after peak, with the resulting debt documented, not forgotten.</div>
+          </div>
+          <div class="cmp-row">
+            <div class="dim">Change freeze</div>
+            <div class="ccell" data-label="Non-peak">None — normal deployment cadence continues.</div>
+            <div class="ccell peak" data-label="Peak">Typically already in effect — any fix has to respect the freeze scope or go through an emergency exception process.</div>
+          </div>
+          <div class="cmp-row">
+            <div class="dim">Fix philosophy</div>
+            <div class="ccell" data-label="Non-peak">Prefer the correct long-term fix — there's time to do it properly.</div>
+            <div class="ccell peak" data-label="Peak">Prefer the safest minimal mitigation now; the "correct" fix is a scheduled follow-up, not a same-day expectation.</div>
+          </div>
+          <div class="cmp-row">
+            <div class="dim">Decision authority</div>
+            <div class="ccell" data-label="Non-peak">Normal governance — can often wait for the next scheduled review if not urgent.</div>
+            <div class="ccell peak" data-label="Peak">Pre-agreed emergency authority, established before peak began — not decided live, under pressure, for the first time.</div>
+          </div>
+        </div>
+
+        <div class="aside">The single biggest predictor of how well a peak incident goes isn't how the war room performs on the day — <b>it's whether the failover runbooks, decision authority, and change-freeze exceptions were defined weeks earlier, when nobody was under pressure to get them right.</b></div>
+      </div>
+    </section>
+
+    <section class="section dark scenario-wrap">
+      <div class="section-head">
+        <div class="eyebrow">Part 2 — Scenario by scenario</div>
+        <h2>Six production issues, and the BA's role in detail</h2>
+        <p>Each of these follows the same shape: what's actually happening, what the BA is doing in detail while it's happening, and how peak season changes that response specifically for this scenario.</p>
+      </div>
+
+      <div class="scenario" id="checkout">
+        <div class="stag">Scenario 01</div>
+        <h3>Checkout & payment failures</h3>
+        <p class="whats">A PSP timeout spike, an elevated decline rate, or a checkout step throwing errors — customers reach the final step and can't complete a purchase.</p>
+        <div class="role-block">
+          <div class="col-label">The BA's role in detail</div>
+          <p>First job is establishing whether the fault sits with the PSP or with the merchant's own integration, pulling transaction logs and the PSP's status page in parallel with engineering rather than waiting for their verdict. The real value-add is translating a raw number — "12% decline rate" — into a business statement everyone in the room can act on: roughly how much revenue is being lost per hour if this continues. That's what actually gets a failover decision moving. If failing over to a secondary PSP is on the table, the BA defines exactly what "working" means for that failover — which payment methods, which markets — so engineering and QA aren't verifying against a guess. Customer-facing messaging (a banner, pausing a specific payment method proactively) is also a BA-owned call, made jointly with support and comms, since it's a business risk decision, not a technical one.</p>
+        </div>
+        <div class="pnp-callout">
+          <div class="pnp-half nonpeak"><span class="pnp-label">Non-peak</span>Usually a single-PSP issue handled through standard vendor escalation — pause the affected method for a few hours, wait for their fix, no drama.</div>
+          <div class="pnp-half peak"><span class="pnp-label">Peak</span>The failover decision has to happen in minutes with revenue bleeding by the second. If a failover runbook wasn't built and tested before peak, the BA is now improvising a routing decision live — exactly the situation pre-peak planning exists to prevent.</div>
+        </div>
+      </div>
+
+      <div class="scenario" id="performance">
+        <div class="stag">Scenario 02</div>
+        <h3>Site performance & availability</h3>
+        <p class="whats">Page load times degrade under load, or specific journeys start timing out — sometimes short of a full outage, which makes it harder to triage than a clean "the site is down."</p>
+        <div class="role-block">
+          <div class="col-label">The BA's role in detail</div>
+          <p>Translates raw technical severity (response time, error rate) into which customer journeys are actually broken — checkout still working while browse is slow is a completely different priority than the reverse, and that distinction usually isn't obvious from a dashboard alone. Works with ops to weigh a stopgap like disabling a resource-heavy feature (personalised recommendations, for instance) against letting the degradation continue, a trade-off that's a genuine business call, not purely a technical one. Keeps a real-time incident timeline throughout, since that becomes the backbone of both the eventual RCA and any customer-facing SLA conversation afterward.</p>
+        </div>
+        <div class="pnp-callout">
+          <div class="pnp-half nonpeak"><span class="pnp-label">Non-peak</span>A slow page is a bug ticket, scheduled into the next sprint like any other defect.</div>
+          <div class="pnp-half peak"><span class="pnp-label">Peak</span>The same slowness at ten times the traffic is existential. The BA's role shifts to actively deciding which non-essential features to sacrifice to protect the checkout path — a call almost never made outside of peak.</div>
+        </div>
+      </div>
+
+      <div class="scenario" id="inventory">
+        <div class="stag">Scenario 03</div>
+        <h3>Inventory & stock sync issues</h3>
+        <p class="whats">The OMS and the website disagree on stock levels — overselling (the site says available when it isn't) or the reverse (marked out of stock while units actually sit in the warehouse).</p>
+        <div class="role-block">
+          <div class="col-label">The BA's role in detail</div>
+          <p>Establishes the blast radius first — how many SKUs, how many orders already placed against stock that doesn't exist — by querying order and inventory data directly rather than waiting for a summary. Works with fulfilment to decide the remediation path for affected orders already placed: cancel and refund, source from another location, or delay with proactive communication. Drafts that customer communication itself, because "your item is out of stock" needs a very different tone and offer depending on whether it's a low-value item or something the customer specifically waited for.</p>
+        </div>
+        <div class="pnp-callout">
+          <div class="pnp-half nonpeak"><span class="pnp-label">Non-peak</span>Overselling typically affects a handful of orders — resolved with a manual apology and refund, low drama.</div>
+          <div class="pnp-half peak"><span class="pnp-label">Peak</span>The same fault can affect thousands of orders within minutes given transaction volume. Priority shifts immediately to pulling the SKU from sale to stop the bleeding — individual order remediation waits until the immediate cause is actually closed.</div>
+        </div>
+      </div>
+
+      <div class="scenario" id="pricing">
+        <div class="stag">Scenario 04</div>
+        <h3>Pricing & promotion errors</h3>
+        <p class="whats">A promo code applies the wrong discount, prices display incorrectly, or discounts stack in a way nobody intended.</p>
+        <div class="role-block">
+          <div class="col-label">The BA's role in detail</div>
+          <p>Has to surface the uncomfortable commercial question fast: honour the incorrect price already applied to live orders, or cancel them? That's a brand and legal risk decision as much as a technical one, and the BA is usually the one framing that trade-off clearly enough for whoever holds the authority to actually decide — often legal or commercial leadership, brought in immediately rather than after the fact. Equally important is confirming actual scope quickly: one promo code, or the whole pricing engine — because the response differs enormously and guessing wrong wastes the most valuable early minutes.</p>
+        </div>
+        <div class="pnp-callout">
+          <div class="pnp-half nonpeak"><span class="pnp-label">Non-peak</span>A pricing bug affecting a few dozen orders is usually just honoured as goodwill — low commercial risk, low ceremony.</div>
+          <div class="pnp-half peak"><span class="pnp-label">Peak</span>The same bug at Black Friday volume can represent material financial exposure within minutes, meaning the honour-or-cancel decision needs to escalate to much more senior stakeholders, much faster, than it would on an ordinary Tuesday.</div>
+        </div>
+      </div>
+
+      <div class="scenario" id="fulfilment">
+        <div class="stag">Scenario 05</div>
+        <h3>Carrier & fulfilment integration failures</h3>
+        <p class="whats">A carrier's tracking API goes down, or the fulfilment integration stops syncing order status between systems.</p>
+        <div class="role-block">
+          <div class="col-label">The BA's role in detail</div>
+          <p>Assesses immediately whether this is customer-visible (tracking info simply not updating) or operational (orders genuinely stalled in fulfilment) — these carry completely different urgency and get conflated far too often in the first confused minutes of an incident. If the automated sync is down for an extended period, coordinates a manual workaround with ops and the warehouse team, and defines precisely what data needs reconciling once the integration is restored, so nothing about order state gets silently lost in the gap.</p>
+        </div>
+        <div class="pnp-callout">
+          <div class="pnp-half nonpeak"><span class="pnp-label">Non-peak</span>A few hours of carrier downtime is an inconvenience, resolved with a delayed batch sync once service resumes — no lasting impact.</div>
+          <div class="pnp-half peak"><span class="pnp-label">Peak</span>The same downtime layered on peak volume risks a fulfilment backlog that can take days to clear even after the root cause is fixed — the BA has to push for proactive delivery-delay communication well before customers notice anything themselves.</div>
+        </div>
+      </div>
+
+      <div class="scenario" id="fraud">
+        <div class="stag">Scenario 06</div>
+        <h3>Fraud spikes & security incidents</h3>
+        <p class="whats">A card-testing attack (automated small transactions validating stolen card numbers) or a suspected exposure of customer data.</p>
+        <div class="role-block">
+          <div class="col-label">The BA's role in detail</div>
+          <p>Works closely with the fraud/risk team to establish what's actually happening — a card-testing spike can look almost identical to legitimate demand at a glance, and misreading which one it is wastes critical time in either direction. If the incident touches customer data, the role shifts heavily toward coordinating with legal and compliance on notification obligations and timelines, which are often the single highest-stakes deadlines anywhere in the incident, regulatory rather than technical.</p>
+        </div>
+        <div class="pnp-callout">
+          <div class="pnp-half nonpeak"><span class="pnp-label">Non-peak</span>A fraud spike is usually isolated and manageable through normal fraud-rule tuning, without much drama.</div>
+          <div class="pnp-half peak"><span class="pnp-label">Peak</span>A card-testing attack during Black Friday can be genuinely hard to distinguish from legitimate demand in real time — and being too aggressive with fraud rules risks blocking real customers during the highest-revenue hours of the year, a tension that barely exists the rest of the year.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section" id="principles">
+        <div class="section-head">
+          <div class="eyebrow">Part 3</div>
+          <h2>Principles that hold across every scenario</h2>
+        </div>
+        <div class="foundations">
+          <div class="fcard">
+            <div class="num">01</div>
+            <h4>The BA's job in an incident is translation, not diagnosis</h4>
+            <p>Engineering diagnoses the fault. The BA translates its severity into business impact and turns that into a decision someone can actually make — a different skill, equally time-critical.</p>
+          </div>
+          <div class="fcard">
+            <div class="num">02</div>
+            <h4>Peak readiness is built before peak, not during it</h4>
+            <p>Failover runbooks, pre-agreed decision authority, and war-room structure all need to exist before Black Friday. Inventing them live is what turns a bad incident into a very bad one.</p>
+          </div>
+          <div class="fcard">
+            <div class="num">03</div>
+            <h4>A quick fix during peak is a decision, not a shortcut</h4>
+            <p>Document the technical debt explicitly the moment it's created, or it quietly becomes permanent the week after peak ends and everyone moves on to the next priority.</p>
+          </div>
+          <div class="fcard">
+            <div class="num">04</div>
+            <h4>The post-incident write-up is where the next incident gets shorter</h4>
+            <p>RCA discipline pays off precisely when you're too busy to want to do it — skip it once and the same root cause resurfaces at the worst possible time next peak.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="signoff">
+      <p>If you've run a Black Friday war room and have a scenario that didn't make this list — I'd genuinely like to hear it. This is a working document, not a finished one.</p>
+      <div class="sig">— Chabila</div>
+    </div>
+
+    <footer>
+      <div>A standalone case study. See also the <a href="guides/index.html">AI in Business Analysis guide series</a>, <a href="stakeholder-management/index.html">stakeholder management</a>, and the <a href="insurance-alignment/index.html">insurance alignment case study</a>.</div>
+      <div><a href="#top">Back to top ↑</a></div>
+    </footer>
+  </main>
+</div>
+
+<script>
+  const stages = document.querySelectorAll('.stage');
+  const targets = Array.from(stages).map(s => document.getElementById(s.dataset.target)).filter(Boolean);
+  stages.forEach(s => {
+    s.addEventListener('click', () => {
+      const el = document.getElementById(s.dataset.target);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = entry.target.id;
+      const stage = document.querySelector('.stage[data-target="'+id+'"]');
+      if(!stage) return;
+      if(entry.isIntersecting){
+        stages.forEach(s => s.classList.remove('active'));
+        stage.classList.add('active');
+      }
+    });
+  }, {rootMargin: "-20% 0px -65% 0px", threshold: 0});
+  targets.forEach(t => io.observe(t));
+</script>
+
+</body>
+</html>
