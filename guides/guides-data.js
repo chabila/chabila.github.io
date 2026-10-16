@@ -29,11 +29,11 @@ const GUIDES = [
   { title: "The Order Journey",                   url: "ai-order-journey/",        category: "AI in Business Analysis" },
 
   // ── Payments ──
-  { title: "Payment Providers & PSP Integration", url: "payment-providers/",       category: "Payments" },
+  { title: "Payment Providers & PSP Integration", url: "case-studies/payment-providers/",       category: "Payments" },
 
   // ── Case studies ──
   { title: "Insurance Industry BA Alignment",     url: "case-studies/insurance-alignment/",       category: "Case studies" },
-  { title: "Stakeholder Management",              url: "../stakeholder-management/",    category: "Case studies" },
-  { title: "Production Issues in Retail",         url: "../production-issues-retail/",  category: "Case studies" },
-  { title: "Platform Migration: SAP Commerce Cloud to Centra", url: "../platform-migration/", category: "Case studies", isNew: true },
+  { title: "Stakeholder Management",              url: "case-studies/stakeholder-management/",    category: "Case studies" },
+  { title: "Production Issues in Retail",         url: "case-studies/production-issues-retail/",  category: "Case studies" },
+  { title: "Platform Migration: SAP Commerce Cloud to Centra", url: "case-studies/platform-migration/", category: "Case studies", isNew: true },
 ];
