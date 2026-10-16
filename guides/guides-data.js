@@ -32,7 +32,7 @@ const GUIDES = [
   { title: "Payment Providers & PSP Integration", url: "payment-providers/",       category: "Payments" },
 
   // ── Case studies ──
-  { title: "Insurance Industry BA Alignment",     url: "../insurance-alignment/",       category: "Case studies" },
+  { title: "Insurance Industry BA Alignment",     url: "case-studies/insurance-alignment/",       category: "Case studies" },
   { title: "Stakeholder Management",              url: "../stakeholder-management/",    category: "Case studies" },
   { title: "Production Issues in Retail",         url: "../production-issues-retail/",  category: "Case studies" },
   { title: "Platform Migration: SAP Commerce Cloud to Centra", url: "../platform-migration/", category: "Case studies", isNew: true },
