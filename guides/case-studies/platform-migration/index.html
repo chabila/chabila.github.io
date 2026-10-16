@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Platform Migration: SAP Commerce Cloud to Centra | Chabila Borkar</title>
+<meta name="description" content="A BA's playbook for migrating from SAP Commerce Cloud to Centra: scope, source-to-target mapping, RASCI, stakeholder conflict, feasibility, brand and market governance, escalation and contingency.">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#12181f;--paper:#eef0ea;--line:#c7cbc0;--green:#2f7a55;--gd:#e4ede6;--amber:#b3781f;--ad:#f3e6d2;--red:#a8432f;--rd:#f2ddd7;--soft:#3a4552}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--paper);font-family:Inter,sans-serif;line-height:1.6}
+a{color:inherit}h1,h2,h3{font-family:Newsreader,serif;font-weight:500;margin:0}
+.mono,.eyebrow{font-family:'IBM Plex Mono',monospace}
+.eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+.crumb{padding:.9rem 3rem;font:.72rem 'IBM Plex Mono',monospace;color:#8992a0;border-bottom:1px solid rgba(238,240,234,.1)}
+.crumb a{text-decoration:none;border-bottom:1px dotted #8992a0}
+.shell{display:grid;grid-template-columns:260px 1fr;max-width:1220px;margin:0 auto}
+.rail{position:sticky;top:0;align-self:start;height:100vh;padding:2rem 1.3rem;border-right:1px solid rgba(238,240,234,.14);font-family:'IBM Plex Mono',monospace}
+.rail-h{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#7d8794;padding-bottom:1rem;margin-bottom:.6rem;border-bottom:1px dashed rgba(238,240,234,.25)}
+.rail ul{list-style:none;margin:0;padding:0}
+.st{display:flex;gap:.6rem;padding:.42rem 0;font-size:.72rem;color:#6c7684;border-bottom:1px dotted rgba(238,240,234,.14);cursor:pointer}
+.st.on{color:var(--paper)}.st i{font-style:normal;opacity:.55}
+.sec{padding:3.6rem 3rem;border-bottom:1px solid rgba(238,240,234,.1)}
+.hero{padding:3rem 3rem 2.6rem}
+.hero h1{font-size:clamp(1.9rem,3.6vw,3rem);line-height:1.1;font-style:italic;max-width:20ch}
+.lede{max-width:62ch;margin-top:1.2rem;font-size:1.04rem;color:#c7cdd4}
+.by{margin-top:1.5rem;font:.75rem 'IBM Plex Mono',monospace;color:#9aa3ae}.by b{color:var(--paper);font-family:Inter;font-size:.85rem}
+.note{margin-top:2rem;padding:1.3rem 1.5rem;border-left:2px solid var(--amber);background:rgba(179,120,31,.07);max-width:68ch;font-size:.93rem;color:#dfe1da}
+.note .eyebrow{color:var(--amber);margin-bottom:.5rem}.note p{margin:0 0 .6rem}.note p:last-child{margin:0}
+.panel{background:var(--paper);color:var(--ink)}.panel .sec{border-color:var(--line)}
+.panel .eyebrow{color:var(--soft);opacity:.6}
+.hd{max-width:68ch;margin-bottom:1.5rem}.hd h2{font-size:1.7rem;font-style:italic;margin-top:.4rem}
+.hd p{margin:.6rem 0 0;color:var(--soft)}.dk .hd p{color:#b7bec7}
+.dk{background:var(--ink)}
+.tw{overflow-x:auto;margin-top:1rem}
+table{border-collapse:collapse;width:100%;font-size:.82rem;min-width:640px}
+th{font:600 .62rem 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.07em;text-align:left;color:#6b7566;padding:.6rem .7rem;border-bottom:2px solid var(--ink)}
+td{padding:.7rem;border-bottom:1px solid var(--line);vertical-align:top;color:#333f2f}
+td:first-child{font-weight:600;color:var(--ink)}
+.dk table{color:#b7bec7}.dk th{color:#8992a0;border-color:rgba(238,240,234,.4)}
+.dk td{border-color:rgba(238,240,234,.14);color:#b7bec7}.dk td:first-child{color:var(--paper)}
+.f{display:inline-block;font:600 .6rem 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.05em;padding:.15rem .45rem;border-radius:2px;white-space:nowrap}
+.fd{background:var(--gd);color:#1f4d33}.ft{background:var(--ad);color:#7a5215}.fu{background:var(--rd);color:#7d2f1f}.fg{background:#e1e3e8;color:#3a4552}
+.legend{display:flex;gap:.8rem;flex-wrap:wrap;font-size:.78rem;color:var(--soft);margin-top:.4rem}
+.rasci td{text-align:center;font:500 .8rem 'IBM Plex Mono',monospace;padding:.55rem .3rem}
+.rasci td:first-child{text-align:left;font-family:Inter;font-size:.82rem}.rasci th{text-align:center;padding:.6rem .3rem}.rasci th:first-child{text-align:left}
+.rasci .A,.rasci .AR{background:var(--gd);color:#1f4d33;font-weight:700}.rasci .R{color:var(--green);font-weight:700}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:1.2rem}
+.card{background:var(--paper);padding:1.4rem}.card .n{font:.7rem 'IBM Plex Mono',monospace;color:var(--green)}
+.card h4{font:600 .98rem Inter;margin:.4rem 0}.card p{margin:0;font-size:.88rem;color:var(--soft)}
+.aside{margin-top:1.8rem;max-width:68ch;font-size:.92rem;color:#4a5749;font-style:italic;border-top:1px dashed var(--line);padding-top:1rem}
+.aside b{font-style:normal;color:var(--ink)}.dk .aside{color:#b7bec7;border-color:rgba(238,240,234,.2)}.dk .aside b{color:var(--paper)}
+.sign{padding:2.6rem 3rem 1rem;max-width:62ch;color:#c7cdd4;font-size:.95rem}.sign i{display:block;margin-top:1rem;font:italic 1.15rem Newsreader,serif;color:var(--paper)}
+footer{padding:1.6rem 3rem 3rem;font:.72rem 'IBM Plex Mono',monospace;color:#6c7684;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.8rem}
+footer a{text-decoration:underline;text-underline-offset:3px}
+@media(max-width:880px){.shell{grid-template-columns:1fr}.rail{position:sticky;height:auto;z-index:40;background:var(--ink);padding:.7rem 1rem;border:0;border-bottom:1px solid rgba(238,240,234,.14)}.rail-h{display:none}.rail ul{display:flex;gap:.4rem;overflow-x:auto}.st{white-space:nowrap;border:0;background:rgba(238,240,234,.05);padding:.4rem .6rem;border-radius:3px}.sec,.hero,.sign,footer,.crumb{padding-left:1.3rem;padding-right:1.3rem}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="crumb"><a href="../index.html">← chabila.github.io</a> &nbsp;/&nbsp; platform migration</div>
+<div class="shell">
+<nav class="rail" aria-label="Sections"><div class="rail-h">CASE STUDY<br>SAP Commerce Cloud → Centra</div>
+<ul id="rail">
+<li class="st" data-t="scope"><i>01</i> Scope</li>
+<li class="st" data-t="data"><i>02</i> Data mapping</li>
+<li class="st" data-t="process"><i>03</i> Process & business rules</li>
+<li class="st" data-t="ready"><i>04</i> Validation & readiness</li>
+<li class="st" data-t="owner"><i>05</i> Issue ownership</li>
+<li class="st" data-t="raci"><i>06</i> Stakeholders & RASCI</li>
+<li class="st" data-t="conflict"><i>07</i> Conflict & assumptions</li>
+<li class="st" data-t="feas"><i>08</i> Feasibility</li>
+<li class="st" data-t="gov"><i>09</i> Brand & market governance</li>
+<li class="st" data-t="esc"><i>10</i> Escalation & contingency</li>
+</ul></nav>
+<main>
+<section class="hero" id="top">
+<div class="eyebrow">A BA practice case study</div>
+<h1>Migrating from SAP Commerce Cloud to Centra</h1>
+<p class="lede">Moving from a monolithic, all-in-one commerce suite to a headless platform is less a lift-and-shift than a decision about what the business still wants. This is how I would run it as the BA: what to scope, how to map, who owns what, and what to do when the plan meets reality.</p>
+<div class="by"><b>Chabila Borkar</b> · Senior Business Analyst, Payments &amp; eCommerce</div>
+<div class="note"><div class="eyebrow">How to read this</div>
+<p>This is an illustrative multi-brand, multi-market scenario, not a claim that I have delivered a Centra migration. The SAP Commerce Cloud side comes from years of delivery on it; the Centra side is based on Centra's public developer documentation. Treat the Centra specifics as the starting point for discovery, not a substitute for it.</p></div>
+</section>
+
+<section class="panel">
+<div class="sec" id="scope">
+<div class="hd"><div class="eyebrow">Part 1</div><h2>Defining scope</h2>
+<p>Centra is headless: it has no CMS, templates or themes, and exposes everything through APIs. SAP Commerce Cloud bundled several things Centra will not, so the first scoping job is finding what silently needs a new home.</p></div>
+<div class="tw"><table><tr><th>Bucket</th><th>Examples</th><th>Scope decision</th></tr>
+<tr><td>In scope: migrates</td><td>Products, variants, prices, stock, customers, markets, campaigns, payment and shipping config</td><td>Mapped, loaded, reconciled</td></tr>
+<tr><td>Needs a new owner</td><td>Content management, site search, storefront front end, URL redirects</td><td>Not in Centra; needs a CMS, search tool and frontend build, each with an owner and budget</td></tr>
+<tr><td>Deferred</td><td>Full order history older than an agreed window, rarely used promotions</td><td>Archive or phase 2, signed off by Finance and Legal</td></tr>
+<tr><td>Out of scope</td><td>ERP redesign, new loyalty scheme</td><td>Logged in change control, not absorbed</td></tr></table></div>
+<div class="aside"><b>The most expensive scope mistake is the capability nobody listed because it was never a separate line item in SAP.</b> Search, CMS and preview are the usual ones.</div>
+</div>
+
+<div class="sec" id="data">
+<div class="hd"><h2>Source-to-target data mapping</h2>
+<p>Every source entity gets a flag. The flag decides the effort, the owner and the risk.</p></div>
+<div class="legend"><span><span class="f fd">Direct</span> one-to-one</span><span><span class="f ft">Transform</span> reshaped or merged</span><span><span class="f fu">Unresolved</span> business rule open</span><span><span class="f fg">No equivalent</span> gap</span></div>
+<div class="tw"><table><tr><th>SAP Commerce Cloud</th><th>Centra</th><th>Flag</th><th>Note</th></tr>
+<tr><td>Base product + variant products</td><td>Product → Variant → Size</td><td><span class="f ft">Transform</span></td><td>Centra always has Variant (often colour) and Size, even for one-size items. SAP variant dimensions must be re-cut.</td></tr>
+<tr><td>Product attributes, descriptions</td><td>Product fields and custom attributes</td><td><span class="f fd">Direct</span></td><td>Localised text per language needs a per-market check.</td></tr>
+<tr><td>Catalog and catalog version (Staged/Online)</td><td>Display activation and status</td><td><span class="f ft">Transform</span></td><td>No staged/online catalog model; Displays act as the presentation layer.</td></tr>
+<tr><td>Categories</td><td>Display grouping / categories</td><td><span class="f ft">Transform</span></td><td>Confirm the exact construct in discovery.</td></tr>
+<tr><td>Price rows</td><td>Pricelist prices</td><td><span class="f ft">Transform</span></td><td>Pricelist controls currency and what can be bought; one pricelist per currency per market geography.</td></tr>
+<tr><td>Customer groups</td><td>Markets / pricelists</td><td><span class="f fu">Unresolved</span></td><td>VIP and staff pricing rules must be restated, not assumed.</td></tr>
+<tr><td>Promotions</td><td>Campaigns and vouchers</td><td><span class="f fu">Unresolved</span></td><td>Stacking and priority behaviour differs; see rules below.</td></tr>
+<tr><td>Stock levels per warehouse</td><td>Warehouse inventory</td><td><span class="f fd">Direct</span></td><td>Freeze window needed at cutover.</td></tr>
+<tr><td>Base store / base site</td><td>Store and Market</td><td><span class="f ft">Transform</span></td><td>Market controls visibility; pricelist controls buyability.</td></tr>
+<tr><td>Customer accounts</td><td>Customers</td><td><span class="f ft">Transform</span></td><td>Password hashes are typically not portable; plan a reset journey and consent re-capture.</td></tr>
+<tr><td>Saved payment tokens</td><td>PSP-held tokens</td><td><span class="f ft">Transform</span></td><td>Moves between PSP accounts, not between platforms. Needs the PSP and Security.</td></tr>
+<tr><td>CMS pages and components</td><td>None (headless)</td><td><span class="f fg">No equivalent</span></td><td>External CMS required.</td></tr>
+<tr><td>Solr search and facets</td><td>None</td><td><span class="f fg">No equivalent</span></td><td>External search required.</td></tr></table></div>
+</div>
+
+<div class="sec" id="process">
+<div class="hd"><h2>Process mapping and unresolved business rules</h2>
+<p>Data mapping tells you what moves. Process mapping tells you whether the business still works afterwards. The register below is the single most useful artefact in the programme: every open rule has an owner and a deadline.</p></div>
+<div class="tw"><table><tr><th>Open rule</th><th>Why unresolved</th><th>Decides</th><th>Needed by</th></tr>
+<tr><td>Promotion stacking and priority</td><td>SAP's promotion engine behaviour was never written down; Centra campaigns may not replicate it</td><td>Brand/Market lead, with Finance</td><td>Before build of campaigns</td></tr>
+<tr><td>Staff and VIP discount eligibility</td><td>Logic lives in customer groups and custom code</td><td>Brand/Market lead</td><td>Before pricelist design</td></tr>
+<tr><td>Price rounding and tax-inclusive display per market</td><td>Differs by market; inherited, not documented</td><td>Finance</td><td>Before UAT</td></tr>
+<tr><td>Partial refund and return allocation</td><td>Order-level vs line-level handling differs</td><td>Product owner, with Payments</td><td>Before payment config</td></tr>
+<tr><td>Guest vs registered checkout</td><td>Markets want different rules</td><td>Brand/Market lead</td><td>Before frontend build</td></tr></table></div>
+<div class="aside">Mark each process <b>as-is, to-be or retired</b>. Retired processes are a quiet win: some SAP behaviours exist only because of SAP.</div>
+</div>
+</section>
+
+<section class="sec dk" id="ready">
+<div class="hd"><div class="eyebrow">Part 2</div><h2>Validation and readiness</h2>
+<p>Readiness is evidence, not opinion. Each gate has criteria agreed before anyone is asked to pass it.</p></div>
+<div class="tw"><table><tr><th>Gate</th><th>What is checked</th><th>Evidence</th></tr>
+<tr><td>Mapping sign-off</td><td>Every entity flagged; no unowned unresolved rules</td><td>Signed mapping document, rule register</td></tr>
+<tr><td>Data load rehearsal</td><td>Record counts, product-to-size integrity, price totals per pricelist, stock totals per warehouse, customer counts</td><td>Reconciliation report with variances explained</td></tr>
+<tr><td>Business UAT</td><td>Per brand and market: browse, basket, promotions, checkout, payment, refund</td><td>Executed scripts, defects triaged</td></tr>
+<tr><td>Non-functional</td><td>Load, failover, peak behaviour</td><td>Test results against agreed thresholds</td></tr>
+<tr><td>Cutover rehearsal</td><td>Timed runbook, rollback tested</td><td>Rehearsal log with actual vs planned</td></tr>
+<tr><td>Go/no-go</td><td>All gates met or consciously accepted</td><td>Sponsor decision recorded</td></tr></table></div>
+</section>
+
+<section class="panel">
+<div class="sec" id="owner">
+<div class="hd"><h2>Issue ownership</h2>
+<p>Most migration issues stall because nobody can say whose they are. Classify first, then route.</p></div>
+<div class="tw"><table><tr><th>Issue type</th><th>First owner</th><th>Decision owner</th></tr>
+<tr><td>Source data quality</td><td>Product / PIM owner</td><td>Product owner</td></tr>
+<tr><td>Mapping error</td><td>BA</td><td>BA, reviewed by Architect</td></tr>
+<tr><td>Load script defect</td><td>Developer</td><td>Tech lead</td></tr>
+<tr><td>Platform limitation</td><td>Architect with Centra</td><td>Steering committee if scope changes</td></tr>
+<tr><td>Open business rule</td><td>BA (frames options)</td><td>Brand/Market lead or Finance</td></tr>
+<tr><td>Market-specific variance</td><td>Market lead</td><td>Design authority</td></tr></table></div>
+</div>
+
+<div class="sec" id="raci">
+<div class="hd"><h2>Stakeholders and the RASCI matrix</h2>
+<p>RASCI adds Support to RACI: R responsible, A accountable, S supports, C consulted, I informed. Support matters here because the BA and the vendor rarely own a decision but are rarely absent from one. One A per row.</p></div>
+<div class="tw"><table class="rasci"><tr><th>Activity</th><th>Sponsor</th><th>BA</th><th>Brand / Market</th><th>Product / PIM</th><th>Finance</th><th>Architect</th><th>Dev</th><th>QA</th><th>Centra</th></tr>
+<tr><td>Scope and change control</td><td class="A">A</td><td class="R">R</td><td>C</td><td>C</td><td>C</td><td>S</td><td>C</td><td>I</td><td>C</td></tr>
+<tr><td>Source-to-target mapping</td><td>I</td><td class="AR">A/R</td><td>C</td><td>C</td><td>C</td><td>S</td><td>S</td><td>I</td><td>C</td></tr>
+<tr><td>Open rule decisions</td><td>I</td><td>S</td><td class="A">A</td><td class="R">R</td><td>C</td><td>C</td><td>I</td><td>I</td><td>I</td></tr>
+<tr><td>Data cleansing</td><td>I</td><td>S</td><td>C</td><td class="AR">A/R</td><td>C</td><td>I</td><td>S</td><td>I</td><td>I</td></tr>
+<tr><td>Load and reconciliation</td><td>I</td><td>S</td><td>I</td><td>C</td><td>C</td><td>C</td><td class="AR">A/R</td><td>S</td><td>C</td></tr>
+<tr><td>Market and pricelist setup</td><td>I</td><td>S</td><td class="A">A</td><td>C</td><td>C</td><td>C</td><td class="R">R</td><td>I</td><td>S</td></tr>
+<tr><td>Payment and tax config</td><td>I</td><td>S</td><td>C</td><td>I</td><td class="A">A</td><td>C</td><td class="R">R</td><td>C</td><td>S</td></tr>
+<tr><td>UAT</td><td>I</td><td class="R">R</td><td class="A">A</td><td>C</td><td>C</td><td>I</td><td>S</td><td>S</td><td>I</td></tr>
+<tr><td>Go/no-go</td><td class="A">A</td><td class="R">R</td><td>C</td><td>C</td><td>C</td><td>C</td><td>C</td><td>C</td><td>C</td></tr></table></div>
+<div class="aside">Build the matrix <b>per decision, not per person</b>, and get each Accountable to say yes out loud. A matrix nobody has agreed to is a drawing.</div>
+</div>
+
+<div class="sec" id="conflict">
+<div class="hd"><h2>Stakeholder conflict and challenging assumptions</h2>
+<p>Conflict in a migration is rarely personal. It is usually two legitimate interests that the old platform let coexist and the new one forces into the open.</p></div>
+<div class="tw"><table><tr><th>Assumption heard</th><th>Why it is risky</th><th>How I challenge it</th></tr>
+<tr><td>"Centra will behave exactly like SAP"</td><td>Different promotion, catalog and pricing models</td><td>Ask for the rule as a test case; run it in Centra and show the result, not an opinion</td></tr>
+<tr><td>"Search and content come with the platform"</td><td>Centra is headless; neither is included</td><td>Show the scope table; ask who owns and funds each</td></tr>
+<tr><td>"We will migrate every order since launch"</td><td>Cost and reconciliation effort rise with volume</td><td>Ask what decision the old orders support; propose an archive plus a defined window</td></tr>
+<tr><td>"All brands need their own checkout"</td><td>Multiplies build, test and support</td><td>Separate position from interest; offer configurable variance inside shared guardrails</td></tr></table></div>
+<div class="grid2">
+<div class="card"><div class="n">Brand vs. central</div><h4>Differentiation vs. cost</h4><p>Name the trade-off in money and time. Let the Accountable stakeholder choose with the cost visible.</p></div>
+<div class="card"><div class="n">Finance vs. market</div><h4>Rounding, tax display, refunds</h4><p>Put both rules side by side on a real order. Finance decides; the market gets the reasoning.</p></div>
+<div class="card"><div class="n">Product vs. engineering</div><h4>Attribute model</h4><p>Show the field in the target. Disagreements about structure dissolve when the data is on screen.</p></div>
+<div class="card"><div class="n">Always</div><h4>Log the decision</h4><p>Who, what, why, what was rejected. Most repeat conflicts are decisions nobody wrote down.</p></div>
+</div>
+</div>
+
+<div class="sec" id="feas">
+<div class="hd"><h2>When developers say it is technically infeasible</h2>
+<p>"Cannot" is the start of a conversation, not the end of one. The BA's job is to find out which kind of cannot it is.</p></div>
+<div class="tw"><table><tr><th>Verdict</th><th>Meaning</th><th>What the BA does next</th></tr>
+<tr><td><span class="f fd">Feasible</span></td><td>Works natively</td><td>Confirm acceptance criteria</td></tr>
+<tr><td><span class="f ft">Workaround</span></td><td>Possible with configuration or middleware</td><td>Get effort and the business trade-off; take options to the owner</td></tr>
+<tr><td><span class="f fu">Needs vendor or custom build</span></td><td>Outside standard capability</td><td>Cost it, ask Centra directly, raise as a scope decision</td></tr>
+<tr><td><span class="f fg">Not feasible</span></td><td>Constraint is real</td><td>Reframe the requirement: change the process, descope or accept the impact</td></tr></table></div>
+<div class="aside">Ask three questions every time: <b>what exactly is the constraint, what are the options, and what does each cost?</b> Then translate the answer into business impact for the person who owns the decision. Never carry a "no" to the business without options attached.</div>
+</div>
+
+<div class="sec" id="gov">
+<div class="hd"><h2>Governance across brand and market variance</h2>
+<p>Centra can serve several brands and markets from one instance, which is exactly why variance needs rules. Without them, every market becomes a bespoke project.</p></div>
+<div class="tw"><table><tr><th>Layer</th><th>Examples</th><th>Who decides</th></tr>
+<tr><td>Global core</td><td>Data model, checkout flow, payment standards, security</td><td>Design authority; changes are exceptional</td></tr>
+<tr><td>Configurable</td><td>Markets, pricelists, campaigns, shipping options, language</td><td>Brand/Market lead within guardrails</td></tr>
+<tr><td>Local</td><td>Legal wording, local payment methods, local promotions</td><td>Market lead, with Legal and Compliance</td></tr></table></div>
+<div class="aside">Run a <b>variance register</b>: each request logged, classified into a layer, costed and approved or declined. Review it at a fixed cadence so variance is a decision, not a drift.</div>
+</div>
+</section>
+
+<section class="sec dk" id="esc">
+<div class="hd"><div class="eyebrow">Part 3</div><h2>Escalation and contingency planning</h2>
+<p>Decide the escalation path and the fallback before they are needed. Nobody designs these well mid-incident.</p></div>
+<div class="tw"><table><tr><th>Level</th><th>Who</th><th>Time-box</th><th>Trigger</th></tr>
+<tr><td>L1</td><td>Workstream leads</td><td>24h</td><td>Blocked item, unclear owner</td></tr>
+<tr><td>L2</td><td>Programme manager and product owner</td><td>48h</td><td>Cross-workstream or cross-brand conflict</td></tr>
+<tr><td>L3</td><td>Steering committee</td><td>Next session or ad hoc</td><td>Scope, budget, timeline or compliance impact</td></tr></table></div>
+<p style="max-width:68ch;color:#b7bec7;font-size:.9rem;margin-top:1rem">Escalate with options, not problems: state the issue, the impact, two or three choices with costs, and your recommendation.</p>
+<div class="tw"><table><tr><th>Risk</th><th>Trigger</th><th>Contingency</th></tr>
+<tr><td>Data load fails reconciliation</td><td>Variance above agreed threshold in rehearsal</td><td>Hold go-live; fix and re-rehearse</td></tr>
+<tr><td>Critical defect after cutover</td><td>Orders or payments failing</td><td>Rollback runbook, tested in rehearsal</td></tr>
+<tr><td>Market not ready</td><td>Gate criteria unmet</td><td>Phased rollout: pilot market first, others follow</td></tr>
+<tr><td>Peak trading approaching</td><td>Cutover within the freeze window</td><td>Move the date; do not migrate into peak (see the <a href="../production-issues-retail/">peak vs. non-peak case study</a>)</td></tr>
+<tr><td>Legacy platform needed longer</td><td>Parallel running required</td><td>Agreed read-only period and cost approved up front</td></tr></table></div>
+<div class="aside">A rollback plan that was never rehearsed is a hope. <b>Rehearse the rollback as seriously as the cutover.</b></div>
+</section>
+
+<div class="sign">If you have run a migration where the plan and reality diverged, I would like to compare notes.<i>— Chabila</i></div>
+<footer><div>See also the <a href="../guides/">guides and case studies</a> and <a href="../stakeholder-management/">stakeholder management</a>.</div><div><a href="#top">Back to top ↑</a></div></footer>
+</main>
+</div>
+<script>
+const st=[...document.querySelectorAll('.st')],tg=st.map(s=>document.getElementById(s.dataset.t));
+st.forEach(s=>s.onclick=()=>document.getElementById(s.dataset.t).scrollIntoView({behavior:'smooth'}));
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){st.forEach(x=>x.classList.remove('on'));document.querySelector('.st[data-t="'+e.target.id+'"]').classList.add('on')}}),{rootMargin:'-20% 0px -65% 0px'});
+tg.forEach(t=>t&&io.observe(t));
+</script>
+</body>
+</html>
