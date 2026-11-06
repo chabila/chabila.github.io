@@ -36,4 +36,7 @@ const GUIDES = [
   { title: "Stakeholder Management",              url: "case-studies/stakeholder-management/",    category: "Case studies" },
   { title: "Production Issues in Retail",         url: "case-studies/production-issues-retail/",  category: "Case studies" },
   { title: "Platform Migration: SAP Commerce Cloud to Centra", url: "case-studies/platform-migration/", category: "Case studies", isNew: true },
+
+ // ── Diagrams ──
+  { title: "BPMN 2.0 Step by Step", url: "/diagrams/bpmn-step-by-step/", category: "Diagrams", isNew: true },
 ];

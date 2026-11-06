@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BPMN 2.0 Step by Step: From Simple to Complex | Chabila Borkar</title>
+<meta name="description" content="Learn BPMN 2.0 by building one refund process in five levels, from a simple sequence to swimlanes, parallel gateways, message flows, timers and sub-processes, with modelling tips for experienced practitioners.">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#12181f;--paper:#eef0ea;--line:#c7cbc0;--green:#2f7a55;--gd:#e4ede6;--amber:#b3781f;--ad:#f3e6d2;--soft:#3a4552}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--paper);font-family:Inter,sans-serif;line-height:1.6}
+a{color:inherit}h1,h2,h3{font-family:Newsreader,serif;font-weight:500;margin:0}
+.eyebrow{font:.72rem 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+.crumb{padding:.9rem 3rem;font:.72rem 'IBM Plex Mono',monospace;color:#8992a0;border-bottom:1px solid rgba(238,240,234,.1)}
+.crumb a{text-decoration:none;border-bottom:1px dotted #8992a0}
+.shell{display:grid;grid-template-columns:250px 1fr;max-width:1220px;margin:0 auto}
+.rail{position:sticky;top:0;align-self:start;height:100vh;padding:2rem 1.3rem;border-right:1px solid rgba(238,240,234,.14);font-family:'IBM Plex Mono',monospace}
+.rail-h{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#7d8794;padding-bottom:1rem;margin-bottom:.6rem;border-bottom:1px dashed rgba(238,240,234,.25)}
+.rail ul{list-style:none;margin:0;padding:0}
+.st{display:flex;gap:.6rem;padding:.42rem 0;font-size:.72rem;color:#6c7684;border-bottom:1px dotted rgba(238,240,234,.14);cursor:pointer}
+.st.on{color:var(--paper)}.st i{font-style:normal;opacity:.55}
+.sec{padding:3.4rem 3rem;border-bottom:1px solid rgba(238,240,234,.1)}
+.hero{padding:3rem 3rem 2.6rem}
+.hero h1{font-size:clamp(1.9rem,3.6vw,3rem);line-height:1.1;font-style:italic;max-width:20ch}
+.lede{max-width:62ch;margin-top:1.2rem;font-size:1.04rem;color:#c7cdd4}
+.by{margin-top:1.5rem;font:.75rem 'IBM Plex Mono',monospace;color:#9aa3ae}.by b{color:var(--paper);font-family:Inter;font-size:.85rem}
+.note{margin-top:2rem;padding:1.3rem 1.5rem;border-left:2px solid var(--amber);background:rgba(179,120,31,.07);max-width:68ch;font-size:.93rem;color:#dfe1da}
+.note .eyebrow{color:var(--amber);margin-bottom:.5rem}.note p{margin:0 0 .5rem}.note p:last-child{margin:0}
+.panel{background:var(--paper);color:var(--ink)}.panel .sec{border-color:var(--line)}
+.panel .eyebrow{color:var(--soft);opacity:.6}
+.hd{max-width:68ch;margin-bottom:1.3rem}.hd h2{font-size:1.65rem;font-style:italic;margin-top:.4rem}
+.hd p{margin:.6rem 0 0;color:var(--soft)}.dk .hd p{color:#b7bec7}
+.dk{background:var(--ink)}
+.add{display:inline-block;font:.64rem 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.08em;background:var(--gd);color:#1f4d33;padding:.2rem .5rem;border-radius:2px;margin-right:.5rem}
+.fig{background:#fff;border:1px solid var(--line);margin:1rem 0;overflow-x:auto}
+.fig svg{display:block;width:100%;height:auto}
+.fig text{font-family:Inter,sans-serif}.tl{font-size:11.5px;fill:#12181f}.el{font-size:11px;fill:#3a4552}.ln{font-size:12px;font-weight:700}
+.cap{font-size:.78rem;color:var(--soft);margin:-.3rem 0 1rem}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-top:.8rem}
+.cols h4{font:600 .66rem 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.08em;color:var(--green);margin:0 0 .4rem}
+.cols p,.cols ul{margin:0;font-size:.88rem;color:#333f2f;padding-left:0}.cols ul{list-style:none}.cols li{margin-bottom:.35rem}
+.pro{border-left:2px solid var(--amber);background:var(--ad);padding:.8rem 1rem;font-size:.86rem;color:#5a3d0e;margin-top:1rem}
+.pro b{font:600 .64rem 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.08em}
+.tw{overflow-x:auto;margin-top:1rem}
+table{border-collapse:collapse;width:100%;font-size:.82rem;min-width:600px}
+th{font:600 .62rem 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.07em;text-align:left;color:#6b7566;padding:.6rem .7rem;border-bottom:2px solid var(--ink)}
+td{padding:.65rem .7rem;border-bottom:1px solid var(--line);vertical-align:top;color:#333f2f}td:first-child{font-weight:600;color:var(--ink)}
+.dk th{color:#8992a0;border-color:rgba(238,240,234,.4)}.dk td{border-color:rgba(238,240,234,.14);color:#b7bec7}.dk td:first-child{color:var(--paper)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:1rem}
+.card{background:var(--paper);padding:1.3rem}.card h4{font:600 .98rem Inter;margin:0 0 .5rem}.card ul{margin:0;padding-left:1.1rem;font-size:.87rem;color:var(--soft)}.card li{margin-bottom:.35rem}
+.sign{padding:2.6rem 3rem 1rem;max-width:62ch;color:#c7cdd4;font-size:.95rem}.sign i{display:block;margin-top:1rem;font:italic 1.15rem Newsreader,serif;color:var(--paper)}
+footer{padding:1.6rem 3rem 3rem;font:.72rem 'IBM Plex Mono',monospace;color:#6c7684;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.8rem}
+footer a{text-decoration:underline;text-underline-offset:3px}
+@media(max-width:880px){.shell{grid-template-columns:1fr}.rail{position:sticky;height:auto;z-index:40;background:var(--ink);padding:.7rem 1rem;border:0;border-bottom:1px solid rgba(238,240,234,.14)}.rail-h{display:none}.rail ul{display:flex;gap:.4rem;overflow-x:auto}.st{white-space:nowrap;border:0;background:rgba(238,240,234,.05);padding:.4rem .6rem;border-radius:3px}.sec,.hero,.sign,footer,.crumb{padding-left:1.3rem;padding-right:1.3rem}.cols,.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="crumb"><a href="../../index.html">← chabila.github.io</a> &nbsp;/&nbsp; diagrams &nbsp;/&nbsp; BPMN 2.0</div>
+<div class="shell">
+<nav class="rail" aria-label="Sections"><div class="rail-h">DIAGRAMS<br>BPMN 2.0 step by step</div>
+<ul>
+<li class="st" data-t="basics"><i>00</i> The building blocks</li>
+<li class="st" data-t="l1"><i>01</i> Level 1: sequence</li>
+<li class="st" data-t="l2"><i>02</i> Level 2: decisions</li>
+<li class="st" data-t="l3"><i>03</i> Level 3: swimlanes</li>
+<li class="st" data-t="l4"><i>04</i> Level 4: parallel & messages</li>
+<li class="st" data-t="l5"><i>05</i> Level 5: exceptions & sub-processes</li>
+<li class="st" data-t="ref"><i>06</i> Reference</li>
+<li class="st" data-t="tips"><i>07</i> Pro tips & mistakes</li>
+<li class="st" data-t="take"><i>08</i> Takeaways</li>
+</ul></nav>
+<main>
+<section class="hero" id="top">
+<div class="eyebrow">Diagrams · Guide 01</div>
+<h1>BPMN 2.0, built one level at a time</h1>
+<p class="lede">We model one everyday process, a retail refund request, and make it more realistic in five steps. Each level adds one idea and highlights it in green, so you can see exactly what changed. Beginners can stop at any level; experienced modellers will find the conventions and pitfalls in the later sections.</p>
+<div class="by"><b>Chabila Borkar</b> · Senior Business Analyst, Payments &amp; eCommerce</div>
+<div class="note"><div class="eyebrow">How to read the diagrams</div><p>Green outlines and arrows are new at that level. Circles are events, rounded rectangles are tasks, diamonds are gateways, and dashed lines are message flows. You can recreate every diagram in a free tool such as bpmn.io or Camunda Modeler.</p></div>
+</section>
+
+<section class="panel">
+<div class="sec" id="basics">
+<div class="hd"><div class="eyebrow">Start here</div><h2>The four building blocks</h2>
+<p>BPMN has over a hundred symbols, but almost every useful diagram is made from four families.</p></div>
+<div class="tw"><table><tr><th>Family</th><th>Looks like</th><th>Means</th><th>Naming rule</th></tr>
+<tr><td>Events</td><td>Circle (thin start, double intermediate, thick end)</td><td>Something that happens: it starts, interrupts or ends the process</td><td>Noun + past participle: "Refund issued"</td></tr>
+<tr><td>Activities</td><td>Rounded rectangle</td><td>Work that is done</td><td>Verb + object: "Review request"</td></tr>
+<tr><td>Gateways</td><td>Diamond</td><td>A decision or a split/merge in the flow</td><td>Question on the gateway, answers on the arrows</td></tr>
+<tr><td>Flows</td><td>Arrows</td><td>Order of work (solid) or messages between participants (dashed)</td><td>Label only when leaving a gateway</td></tr></table></div>
+</div>
+
+<div class="sec" id="l1">
+<div class="hd"><div class="eyebrow">Level 1</div><h2>A simple sequence</h2><p>Start, do the work, end. This is already a valid BPMN diagram.</p></div>
+<p><span class="add">New</span>Start event, two tasks, end event, sequence flows.</p>
+<div class="fig" id="d1"></div>
+<div class="cols"><div><h4>Steps to draw it</h4><ul><li>1. Place a start event on the left.</li><li>2. Add tasks in the order the work happens.</li><li>3. Finish with an end event that names the outcome.</li><li>4. Connect them with solid arrows, left to right.</li></ul></div>
+<div><h4>Why it matters</h4><p>A process with one start and a named end tells the reader where it begins and how you know it is done. Naming the end state ("Refund issued", not "End") is the habit that separates clear diagrams from vague ones.</p></div></div>
+</div>
+
+<div class="sec" id="l2">
+<div class="hd"><div class="eyebrow">Level 2</div><h2>Adding a decision</h2><p>Real processes branch. An exclusive gateway sends the flow down exactly one path.</p></div>
+<p><span class="add">New</span>Exclusive (XOR) gateway, labelled flows, a second end event.</p>
+<div class="fig" id="d2"></div>
+<div class="cols"><div><h4>Steps</h4><ul><li>1. Insert a diamond with an X after the task that produces the answer.</li><li>2. Write the question on the gateway: "Eligible?"</li><li>3. Label every outgoing arrow with an answer.</li><li>4. Give each outcome its own end event.</li></ul></div>
+<div><h4>Why it matters</h4><p>Separate end events show that "rejected" and "issued" are different outcomes, which makes reporting and testing far easier than a single shared end.</p></div></div>
+<div class="pro"><b>Pro note</b> Every gateway answer must be mutually exclusive and cover all cases. If you cannot label the arrows "Yes/No" or with distinct values, the rule is not yet defined; that gap is a requirement to chase.</div>
+</div>
+
+<div class="sec" id="l3">
+<div class="hd"><div class="eyebrow">Level 3</div><h2>Swimlanes: who does what</h2><p>The same logic, now with responsibility. A pool is the process; lanes are the participants or roles inside it.</p></div>
+<p><span class="add">New</span>Pool with three lanes: Customer, Customer Service, Finance.</p>
+<div class="fig" id="d3"></div>
+<div class="cols"><div><h4>Steps</h4><ul><li>1. Draw one pool and split it into a lane per role.</li><li>2. Move each task into the lane that performs it.</li><li>3. Let arrows cross lane borders when work is handed over.</li><li>4. Name lanes by role, not by person.</li></ul></div>
+<div><h4>Why it matters</h4><p>Swimlanes expose handovers, which is where delays and errors hide. Count the lane crossings: each one is a place to ask who owns the wait.</p></div></div>
+<div class="pro"><b>Pro note</b> Sequence flow stays inside one pool; lanes are only partitions. When the customer is a separate organisation you do not control, model them as their own pool and connect with message flows (next level).</div>
+</div>
+
+<div class="sec" id="l4">
+<div class="hd"><div class="eyebrow">Level 4</div><h2>Parallel work and messages</h2><p>Some steps happen at the same time, and participants communicate. Both need their own symbols.</p></div>
+<p><span class="add">New</span>Parallel gateways (split and join), a dashed message flow, extra tasks and end events.</p>
+<div class="fig" id="d4"></div>
+<div class="cols"><div><h4>Steps</h4><ul><li>1. After approval, add a parallel split (diamond with +).</li><li>2. Put the simultaneous tasks on separate branches.</li><li>3. Close with a parallel join so the flow waits for every branch.</li><li>4. Show the confirmation email as a dashed message flow to the customer.</li></ul></div>
+<div><h4>Why it matters</h4><p>A parallel split starts all branches; a parallel join waits for all of them. That wait is the difference between "refund done" and "refund done and order updated".</p></div></div>
+<div class="pro"><b>Pro note</b> Match your splits and joins: an exclusive split closed by a parallel join deadlocks, and a parallel split closed by an exclusive merge runs the rest twice. If only some branches may run, use an inclusive (OR) gateway and join it with another.</div>
+</div>
+
+<div class="sec" id="l5">
+<div class="hd"><div class="eyebrow">Level 5</div><h2>Exceptions and sub-processes</h2><p>Production processes need deadlines, escalation and a way to hide detail without losing it.</p></div>
+<p><span class="add">New</span>Non-interrupting timer boundary event, escalation path, collapsed sub-process (the + marker).</p>
+<div class="fig" id="d5"></div>
+<div class="cols"><div><h4>Steps</h4><ul><li>1. Attach a timer to the edge of "Review request": three days.</li><li>2. Run an escalation path from the timer to a team lead.</li><li>3. Make it non-interrupting (dashed ring) so the review continues.</li><li>4. Collapse the detailed refund steps into one sub-process with the + marker.</li></ul></div>
+<div><h4>Why it matters</h4><p>Boundary events model exceptions on a task without cluttering the main flow. Collapsed sub-processes let one page stay readable while the detail lives in a linked diagram.</p></div></div>
+<div class="pro"><b>Pro note</b> A solid ring timer interrupts the task and cancels it; a dashed ring runs in parallel. Choosing wrongly changes the business rule. Also prefer a boundary timer to a gateway that polls a date.</div>
+</div>
+</section>
+
+<section class="sec dk" id="ref">
+<div class="hd"><div class="eyebrow">Reference</div><h2>What else BPMN 2.0 offers</h2><p>Use these when the story demands them, not to look thorough.</p></div>
+<div class="tw"><table><tr><th>Group</th><th>Elements</th><th>Use when</th></tr>
+<tr><td>Event types</td><td>None, message, timer, error, escalation, signal, conditional, link, terminate</td><td>Starts and catches that depend on something external; terminate ends everything at once</td></tr>
+<tr><td>Task types</td><td>User, service, script, send, receive, manual, business rule</td><td>Making automation or system ownership explicit</td></tr>
+<tr><td>Containers</td><td>Sub-process, call activity, event sub-process, transaction, ad-hoc</td><td>Hiding detail, reusing a process, or handling an event anywhere inside</td></tr>
+<tr><td>Markers</td><td>Loop, multi-instance (parallel or sequential), compensation</td><td>Repeating work, one-per-item work, undoing completed work</td></tr>
+<tr><td>Gateways</td><td>Exclusive, parallel, inclusive, event-based, complex</td><td>Event-based waits for whichever event arrives first</td></tr>
+<tr><td>Artefacts</td><td>Data object, data store, group, text annotation</td><td>Showing information used by tasks, or adding commentary without behaviour</td></tr></table></div>
+</section>
+
+<section class="panel">
+<div class="sec" id="tips">
+<div class="hd"><div class="eyebrow">For experienced modellers</div><h2>Conventions and common mistakes</h2></div>
+<div class="grid2">
+<div class="card"><h4>Conventions that age well</h4><ul><li>Flow left to right; avoid crossing lines.</li><li>Verb-object for tasks, state for events, question for gateways.</li><li>Roughly seven to ten elements per diagram; collapse the rest.</li><li>Pick a modelling level on purpose: descriptive, analytic or executable.</li><li>Keep a naming glossary so the same step has one name everywhere.</li></ul></div>
+<div class="card"><h4>Mistakes I see most</h4><ul><li>Gateways with unlabelled or overlapping answers.</li><li>Unmatched split and join types.</li><li>Sequence flow drawn between pools instead of message flow.</li><li>Lanes named after individuals or whole departments instead of roles.</li><li>Modelling every exception, burying the main path.</li><li>Dead ends: a branch with no end event.</li></ul></div>
+<div class="card"><h4>If it must run in an engine</h4><ul><li>BPMN saves as XML with a diagram-interchange section for layout.</li><li>Add IDs, conditions and implementation details, which a descriptive model omits.</li><li>Camunda and Flowable run it; validate against the engine's supported subset.</li></ul></div>
+<div class="card"><h4>BA habits that help</h4><ul><li>Walk the diagram with each lane owner and ask what is missing.</li><li>Trace one real case through it, including a failure.</li><li>Record the open business rules each gateway exposes.</li></ul></div>
+</div>
+</div>
+
+<div class="sec" id="take">
+<div class="hd"><div class="eyebrow">Takeaways</div><h2>What to take away</h2></div>
+<div class="grid2">
+<div class="card"><h4>If you are new to BPMN</h4><ul><li>Start with events, tasks, gateways and arrows. That covers most diagrams.</li><li>Add detail one idea at a time, as these five levels did.</li><li>Name outcomes, not just steps.</li><li>Redraw rather than patch when a diagram gets messy.</li></ul></div>
+<div class="card"><h4>If you already model</h4><ul><li>Match split and join types, and choose boundary events over polling.</li><li>Decide pool versus lane by who you control.</li><li>Use collapsed sub-processes to keep one page readable.</li><li>Treat each gateway as a requirement-gathering prompt.</li></ul></div>
+</div>
+</div>
+</section>
+
+<div class="sign">More diagram types will follow in this section. If you want a particular one covered next, tell me.<i>— Chabila</i></div>
+<footer><div>See also the <a href="../../guides/">guides and case studies</a>.</div><div><a href="#top">Back to top ↑</a></div></footer>
+</main>
+</div>
+<script>
+const NS='http://www.w3.org/2000/svg',INK='#12181f',GR='#2f7a55';
+const Z={t:[55,28],sub:[55,28],s:[16,16],e:[16,16],tm:[13,13],g:[22,22],p:[22,22]};
+const el=(n,a,p)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e};
+const an=(n,s)=>{const[w,h]=Z[n.t];return s=='l'?[n.x-w,n.y]:s=='r'?[n.x+w,n.y]:s=='t'?[n.x,n.y-h]:[n.x,n.y+h]};
+function txt(p,s,x,y,m,cls,mid){const w=[];let c='';s.split(' ').forEach(v=>{if((c+' '+v).trim().length>m&&c){w.push(c);c=v}else c=(c+' '+v).trim()});w.push(c);
+ const t=el('text',{x,'text-anchor':'middle',class:cls},p),y0=mid?y-(w.length-1)*7+4:y;w.forEach((l,i)=>{el('tspan',{x,y:y0+i*13},t).textContent=l})}
+function draw(id,W,H,lv){
+ const box=document.getElementById(id),svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box),nw=new Set(lv.nw||[]);
+ svg.style.minWidth=Math.round(W*.8)+'px';
+ const d=el('defs',{},svg);['k','g'].forEach(c=>{const m=el('marker',{id:id+c,viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:7,markerHeight:7,orient:'auto'},d);el('path',{d:'M0 0L10 5L0 10z',fill:c=='k'?INK:GR},m)});
+ if(lv.lanes){el('rect',{x:1,y:1,width:W-2,height:H-2,fill:'#fff',stroke:INK},svg);
+  lv.lanes.forEach(([n,y,h],i)=>{if(i)el('line',{x1:1,x2:W-1,y1:y,y2:y,stroke:INK},svg);el('text',{transform:`translate(19 ${y+h/2}) rotate(-90)`,'text-anchor':'middle',class:'ln',fill:nw.has('lanes')?GR:INK},svg).textContent=n});
+  el('line',{x1:32,x2:32,y1:1,y2:H-1,stroke:INK},svg)}
+ const N=Object.fromEntries(lv.n.map(n=>[n.id,n])),h='lr';
+ lv.e.forEach(([a,b,sa='r',sb='l',lab,dash])=>{
+  const P=an(N[a],sa),Q=an(N[b],sb);let d;
+  if(h.includes(sa)&&h.includes(sb)){const mx=(P[0]+Q[0])/2;d=P[1]==Q[1]?`M${P} L${Q}`:`M${P} H${mx} V${Q[1]} H${Q[0]}`}
+  else if(h.includes(sa))d=`M${P} H${Q[0]} V${Q[1]}`;
+  else if(h.includes(sb))d=`M${P} V${Q[1]} H${Q[0]}`;
+  else{const my=(P[1]+Q[1])/2;d=P[0]==Q[0]?`M${P} L${Q}`:`M${P} V${my} H${Q[0]} V${Q[1]}`}
+  const g=nw.has(a)||nw.has(b);
+  el('path',{d,fill:'none',stroke:g?GR:INK,'stroke-width':1.5,'marker-end':`url(#${id}${g?'g':'k'})`,...(dash?{'stroke-dasharray':'6 4'}:{})},svg);
+  if(lab)el('text',{x:P[0]+(sa=='l'?-6:6),y:P[1]+(sa=='b'?16:-6),class:'el','text-anchor':sa=='l'?'end':'start'},svg).textContent=lab});
+ lv.n.forEach(n=>{const g=nw.has(n.id),st=g?GR:INK,w=g?2.2:1.5,{x,y,t}=n;
+  if(t=='t'||t=='sub'){el('rect',{x:x-55,y:y-28,width:110,height:56,rx:8,fill:'#fff',stroke:st,'stroke-width':w},svg);txt(svg,n.l,x,y,15,'tl',1);
+   if(t=='sub'){el('rect',{x:x-7,y:y+15,width:14,height:11,fill:'#fff',stroke:st},svg);el('path',{d:`M${x-4} ${y+20.5}H${x+4}M${x} ${y+17}V${y+24}`,stroke:st},svg)}}
+  else if(t=='s'||t=='e'){el('circle',{cx:x,cy:y,r:16,fill:'#fff',stroke:st,'stroke-width':t=='e'?4:w},svg);txt(svg,n.l,x,y+32,16,'el')}
+  else if(t=='tm'){el('circle',{cx:x,cy:y,r:13,fill:'#fff',stroke:st,'stroke-width':w,'stroke-dasharray':'3 2'},svg);el('circle',{cx:x,cy:y,r:9,fill:'none',stroke:st},svg);el('path',{d:`M${x} ${y-6}V${y}L${x+4} ${y+3}`,fill:'none',stroke:st},svg)}
+  else{el('path',{d:`M${x} ${y-22}L${x+22} ${y}L${x} ${y+22}L${x-22} ${y}z`,fill:'#fff',stroke:st,'stroke-width':w},svg);
+   el('path',{d:t=='p'?`M${x-9} ${y}H${x+9}M${x} ${y-9}V${y+9}`:`M${x-8} ${y-8}L${x+8} ${y+8}M${x+8} ${y-8}L${x-8} ${y+8}`,stroke:st,'stroke-width':2.5},svg);
+   if(n.l)txt(svg,n.l,x,y-30,20,'el')}})}
+const tk=(id,x,y,l)=>({id,t:'t',x,y,l}),st=(id,x,y,l)=>({id,t:'s',x,y,l}),en=(id,x,y,l)=>({id,t:'e',x,y,l}),gx=(id,x,y,l)=>({id,t:'g',x,y,l}),gp=(id,x,y)=>({id,t:'p',x,y});
+
+const L1={nw:['s1','t1','t2','e1'],n:[st('s1',60,60,'Refund requested'),tk('t1',190,60,'Review request'),tk('t2',330,60,'Issue refund'),en('e1',450,60,'Refund issued')],e:[['s1','t1'],['t1','t2'],['t2','e1']]};
+const L2={nw:['g1','t3','e2'],n:[st('s1',60,80,'Refund requested'),tk('t1',190,80,'Review request'),gx('g1',320,80,'Eligible?'),tk('t2',460,80,'Issue refund'),en('e1',590,80,'Refund issued'),tk('t3',320,190,'Send rejection notice'),en('e2',460,190,'Request rejected')],e:[['s1','t1'],['t1','g1'],['g1','t2','r','l','Yes'],['t2','e1'],['g1','t3','b','t','No'],['t3','e2']]};
+const L3={nw:['lanes'],lanes:[['Customer',0,120],['Customer Service',120,180],['Finance',300,120]],n:[st('s1',90,60,'Needs refund'),tk('t1',210,60,'Submit refund request'),tk('t2',330,170,'Review request'),gx('g1',470,170,'Eligible?'),tk('t4',470,250,'Send rejection notice'),en('e2',600,250,'Request rejected'),tk('t3',760,360,'Issue refund'),en('e1',890,360,'Refund issued')],e:[['s1','t1'],['t1','t2','r','t'],['t2','g1'],['g1','t4','b','t','No'],['t4','e2'],['g1','t3','r','t','Yes'],['t3','e1']]};
+const L4={nw:['p1','p2','t5','t6','e3','e4'],lanes:L3.lanes,n:L3.n.filter(n=>n.id!='e1').concat([gp('p1',640,170),tk('t5',760,170,'Update order status'),gp('p2',890,170),en('e3',980,170,'Refund completed'),tk('t6',760,60,'Receive confirmation'),en('e4',890,60,'Customer informed')]),
+ e:L3.e.filter((_,i)=>i<5).concat([['g1','p1','r','l','Yes'],['p1','t5'],['p1','t3','b','l'],['t5','p2'],['t3','p2','r','b'],['p2','e3'],['t5','t6','t','b','Confirmation email',1],['t6','e4']])};
+const L5={nw:['tm1','t7','e5','t3'],lanes:L3.lanes,n:L4.n.map(n=>n.id=='t3'?{...n,t:'sub',l:'Process refund'}:n).concat([{id:'tm1',t:'tm',x:330,y:198},tk('t7',330,262,'Escalate to team lead'),en('e5',215,262,'Escalated')]),
+ e:L4.e.concat([['tm1','t7','b','t','after 3 days'],['t7','e5','l','r']])};
+draw('d1',520,130,L1);draw('d2',640,250,L2);draw('d3',1040,420,L3);draw('d4',1040,420,L4);draw('d5',1040,420,L5);
+const S=[...document.querySelectorAll('.st')];
+S.forEach(s=>s.onclick=()=>document.getElementById(s.dataset.t).scrollIntoView({behavior:'smooth'}));
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){S.forEach(x=>x.classList.remove('on'));const m=document.querySelector('.st[data-t="'+e.target.id+'"]');m&&m.classList.add('on')}}),{rootMargin:'-20% 0px -65% 0px'});
+S.forEach(s=>io.observe(document.getElementById(s.dataset.t)));
+</script>
+</body>
+</html>
