@@ -16,7 +16,8 @@
 const CATEGORY_ORDER = [
   "AI in Business Analysis",
   "Payments",
-  "Case studies"
+  "Case studies",
+  "Diagrams"
 ];
 
 const GUIDES = [
